@@ -11,10 +11,10 @@ import me.neoblade298.neotabletop.GameSession;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class CmdTabletopPublic extends Subcommand {
+public class CmdTabletopPrivate extends Subcommand {
 
 	// /tt public
-	public CmdTabletopPublic(String key, String desc, String perm, SubcommandRunner runner) {
+	public CmdTabletopPrivate(String key, String desc, String perm, SubcommandRunner runner) {
 		super(key, desc, perm, runner);
 	}
 

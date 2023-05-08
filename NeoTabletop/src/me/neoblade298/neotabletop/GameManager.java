@@ -80,4 +80,12 @@ public class GameManager implements Listener {
 	public static boolean sessionExists(String name) {
 		return lobbies.containsKey(name.toLowerCase()) || instances.containsKey(name.toLowerCase());
 	}
+	
+	public static HashMap<String, GameLobby> getLobbies() {
+		return lobbies;
+	}
+	
+	public static HashMap<String, GameInstance> getInstances() {
+		return instances;
+	}
 }
