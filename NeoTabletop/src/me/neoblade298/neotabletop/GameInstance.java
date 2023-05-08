@@ -11,9 +11,9 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 public abstract class GameInstance extends GameSession {
 	protected HashMap<String, GamePlayer> players = new HashMap<String, GamePlayer>();
 	protected HashSet<ProxiedPlayer> spectators = new HashSet<ProxiedPlayer>();
-	public GameInstance(String name, Game game, UUID host, HashSet<UUID> players) {
-		super(name, game, host);
-		for (UUID uuid : players) {
+	public GameInstance(String name, Game game, UUID host, GameLobby lobby) {
+		super(name, game, host, lobby.getParameters());
+		for (UUID uuid : lobby.getPlayers()) {
 			ProxiedPlayer p = ProxyServer.getInstance().getPlayer(uuid);
 			this.players.put(p.getName().toLowerCase(), new GamePlayer(uuid, name, p));
 		}

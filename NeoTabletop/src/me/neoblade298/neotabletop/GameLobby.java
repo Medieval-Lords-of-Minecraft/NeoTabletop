@@ -1,5 +1,6 @@
 package me.neoblade298.neotabletop;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
 
@@ -105,6 +106,11 @@ public abstract class GameLobby extends GameSession {
 			ProxiedPlayer p = ProxyServer.getInstance().getPlayer(uuid);
 			Util.msg(p, msg);
 		}
+	}
+	
+	@Override
+	public void displayInfo(ProxiedPlayer p) {
+		game.getDescription()
 	}
 	
 	public HashSet<UUID> getPlayers() {
