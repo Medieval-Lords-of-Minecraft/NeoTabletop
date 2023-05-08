@@ -29,14 +29,14 @@ public abstract class GameInstance extends GameSession {
 		}
 		
 		if (!players.containsKey(name.toLowerCase())) {
-			Util.msg(p, "&cThat player isn't in your lobby!");
+			Util.msg(p, "&cThat player isn't in your game!");
 			return;
 		}
 		
 		GamePlayer gp = players.remove(name.toLowerCase());
 		handleLeave(gp);
 		GameManager.removeFromSession(gp.getUniqueId());
-		broadcast("&e" + p.getName() + " &7was kicked from the lobby!");
+		broadcast("&e" + p.getName() + " &7was kicked from the game!");
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public abstract class GameInstance extends GameSession {
 			broadcast("&e" + p.getName() + " &7stopped spectating!");
 		}
 		else {
-			Util.msg(p, "&cSomething went wrong! You were unable to leave lobby &e" + name + "&c.");
+			Util.msg(p, "&cSomething went wrong! You were unable to leave game &e" + name + "&c.");
 			return;
 		}
 		

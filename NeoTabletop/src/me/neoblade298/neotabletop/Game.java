@@ -11,11 +11,12 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public abstract class Game {
-	protected String name, desc;
+	protected String key, name, desc;
 	protected int minPlayers = 1, maxPlayers = 4;
 	protected BaseComponent[][] manual;
 	public Game(File baseDir) {
 		BungeeCore.loadFiles(new File(baseDir, "config.yml"), (cfg, file) -> {
+			key = cfg.getString("key");
 			name = cfg.getString("name");
 			desc = cfg.getString("description");
 			minPlayers = cfg.getInt("min-players");
@@ -24,6 +25,11 @@ public abstract class Game {
 		BungeeCore.loadFiles(new File(baseDir, "manual.yml"), (cfg, file) -> {
 			manual = MessagingManager.parsePage(cfg);
 		});
+		
+		GameManager.registerGame(this);
+	}
+	public String getKey() {
+		return key;
 	}
 	public String getName() {
 		return name;
@@ -44,7 +50,18 @@ public abstract class Game {
 		Util.msg(p, "&7<< &6" + name + "&7>>", false);
 		Util.msg(p, desc, false);
 		Util.msg(p, "&7=====", false);
-		p.sendMessage(SharedUtil.createText("&8[&7Click to read the manual for the game!&8]", "Click here to read the manual!", "tt manual " + name).create());
+		p.sendMessage(SharedUtil.createText("&8[&7Click to read the manual for the game!&8]", "Click here to read the manual!", "tt manual " + key).create());
+	}
+	public void displayManual(ProxiedPlayer p) {
+		displayManual(p, 1);
+	}
+	public void displayManual(ProxiedPlayer p, int page) {
+		page--;
+		if (page < 0 || page + 1 >= manual.length) {
+			Util.msg(p, "&cThat page in the manual doesn't exist! Choose between page 1-" + manual.length + ".");
+			return;
+		}
+		p.sendMessage(manual[page]);
 	}
 	public abstract GameLobby createLobby(String name, UUID uuid, boolean isPublic);
 }

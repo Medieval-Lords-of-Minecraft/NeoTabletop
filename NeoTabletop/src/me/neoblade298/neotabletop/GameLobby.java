@@ -34,15 +34,15 @@ public abstract class GameLobby extends GameSession {
 
 	public abstract GameInstance onStart();
 
-	public void invitePlayer(ProxiedPlayer s, String username) {
-		if (!s.getUniqueId().equals(host)) {
-			Util.msg(s, "&cOnly the host may invite other players!");
+	public void invitePlayer(ProxiedPlayer inviter, String username) {
+		if (!inviter.getUniqueId().equals(host)) {
+			Util.msg(inviter, "&cOnly the host may invite other players!");
 			return;
 		}
 
 		ProxiedPlayer recipient = ProxyServer.getInstance().getPlayer(username);
 		if (recipient == null) {
-			Util.msg(s, "&cThat player isn't online!");
+			Util.msg(inviter, "&cThat player isn't online!");
 			return;
 		}
 
@@ -51,7 +51,7 @@ public abstract class GameLobby extends GameSession {
 
 		Util.msg(recipient, "You've been invited to lobby &e" + name + " &7for &e" + game.getName() + "&7!");
 		
-		s.sendMessage(SharedUtil.createText("&8[&aClick here to accept the invite!&8]", "Click to accept invite", "tt join " + name).create());
+		inviter.sendMessage(SharedUtil.createText("&8[&aClick here to accept the invite!&8]", "Click to accept invite", "tt join " + name).create());
 	}
 
 	public void addPlayer(ProxiedPlayer p) {

@@ -8,7 +8,6 @@ import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neocore.shared.commands.Arg;
 import me.neoblade298.neocore.shared.commands.SubcommandRunner;
 import me.neoblade298.neocore.shared.util.SharedUtil;
-import me.neoblade298.neotabletop.GameInstance;
 import me.neoblade298.neotabletop.GameLobby;
 import me.neoblade298.neotabletop.GameManager;
 import net.md_5.bungee.api.CommandSender;
@@ -18,20 +17,18 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class CmdTabletopLobbies extends Subcommand {
 
-	// /tt spectate [name]
+	// /tt lobbies
 	public CmdTabletopLobbies(String key, String desc, String perm, SubcommandRunner runner) {
 		super(key, desc, perm, runner);
-		args.add(new Arg("name"));
 	}
 
 	@Override
 	public void run(CommandSender s, String[] args) {
 		ProxiedPlayer p = (ProxiedPlayer) s;
-		Util.msg(p, "&7List of lobbies:");
-		ComponentBuilder b = new ComponentBuilder();
+		ComponentBuilder b = SharedUtil.createText("&7List of Lobbies:", null, null);
 		for (Entry<String, GameLobby> ent : GameManager.getLobbies().entrySet()) {
 			GameLobby lob = ent.getValue();
-			SharedUtil.appendText(b, "&7- &c" + lob.getName() + " &7(&6"
+			SharedUtil.appendText(b, "\n&7- &c" + lob.getName() + " &7(&6"
 					+ lob.getGame().getName() + "&7)",
 					createHoverText(lob),
 					lob.isPublic() && !lob.isFull() ? "tt join " + lob.getName() : null);

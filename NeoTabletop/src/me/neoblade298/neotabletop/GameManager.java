@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import me.neoblade298.neocore.bungee.util.Util;
+import me.neoblade298.neotabletop.thecrew.TheCrew;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
@@ -14,6 +15,12 @@ public class GameManager implements Listener {
 	private static HashMap<String, GameLobby> lobbies = new HashMap<String, GameLobby>();
 	private static HashMap<String, GameInstance> instances = new HashMap<String, GameInstance>();
 	private static HashMap<UUID, GameSession> inSession = new HashMap<UUID, GameSession>(); // Can be lobby or instance
+	private static HashMap<String, Game> games = new HashMap<String, Game>();
+	
+	public GameManager() {
+		// Creating instance of game registers it to games via Game.java
+		new TheCrew();
+	}
 	
 	// Kick player out of lobbies on disconnect, disband lobby if host is kicked
     @EventHandler
@@ -87,5 +94,17 @@ public class GameManager implements Listener {
 	
 	public static HashMap<String, GameInstance> getInstances() {
 		return instances;
+	}
+	
+	public static Game getGame(String name) {
+		return games.get(name);
+	}
+	
+	public static HashMap<String, Game> getGames() {
+		return games;
+	}
+	
+	public static void registerGame(Game g) {
+		games.put(g.getKey(), g);
 	}
 }

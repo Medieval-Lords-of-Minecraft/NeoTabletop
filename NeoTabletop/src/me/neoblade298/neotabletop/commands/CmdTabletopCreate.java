@@ -6,6 +6,7 @@ import me.neoblade298.neocore.bungee.commands.Subcommand;
 import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neocore.shared.commands.Arg;
 import me.neoblade298.neocore.shared.commands.SubcommandRunner;
+import me.neoblade298.neotabletop.Game;
 import me.neoblade298.neotabletop.GameLobby;
 import me.neoblade298.neotabletop.GameManager;
 import me.neoblade298.neotabletop.GameSession;
@@ -47,12 +48,13 @@ public class CmdTabletopCreate extends Subcommand {
 			Util.msg(s, "&cThe name &e" + args[1] + "&c is already taken!");
 			return;
 		}
-		
-		switch (game) {
-		case "the_crew":
-			GameManager.createLobby(args[1], p, TheCrew.inst(), isPublic);
-			break;
+		Game g = GameManager.getGame(game);
+		if (g == null) {
+			Util.msg(s, "&cThat game doesn't exist! Try using /tt games to see a full list!");
+			return;
 		}
+
+		GameManager.createLobby(args[1], p, g, isPublic);
 	}
 
 }

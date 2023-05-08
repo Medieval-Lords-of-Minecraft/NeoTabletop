@@ -3,6 +3,8 @@ package me.neoblade298.neotabletop;
 import java.util.HashMap;
 import java.util.UUID;
 
+import me.neoblade298.neocore.bungee.util.Util;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public abstract class GameSession {
@@ -28,6 +30,16 @@ public abstract class GameSession {
 	}
 	public UUID getHost() {
 		return host;
+	}
+	public void setHost(ProxiedPlayer cmdUser, String username) {
+		ProxiedPlayer p = ProxyServer.getInstance().getPlayer(username);
+		if (p == null) {
+			Util.msg(cmdUser, "&cThat player isn't online!");
+			return;
+		}
+		
+		host = p.getUniqueId();
+		broadcast("&e" + cmdUser.getName() + " &7set the game's host to &e" + p.getName());
 	}
 	public HashMap<String, GameParameter> getParameters() {
 		return params;
