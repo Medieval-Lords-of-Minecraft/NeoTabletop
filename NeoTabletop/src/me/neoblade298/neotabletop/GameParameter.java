@@ -1,12 +1,12 @@
 package me.neoblade298.neotabletop;
 
 public class GameParameter {
-	private String key, desc;
+	private String key, name, desc;
 	private Object defaultVal;
 	private Object val;
 	private GameParameterSetter setter;
 	
-	public GameParameter(String key, String desc, Object defaultVal, GameParameterSetter setter) {
+	public GameParameter(String key, String name, String desc, Object defaultVal, GameParameterSetter setter) {
 		this.key = key;
 		this.desc = desc;
 		this.defaultVal = defaultVal;
@@ -15,6 +15,10 @@ public class GameParameter {
 	
 	public String getKey() {
 		return key;
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 	public String getDescription() {

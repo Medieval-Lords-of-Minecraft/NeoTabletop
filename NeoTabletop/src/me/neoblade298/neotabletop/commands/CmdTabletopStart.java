@@ -4,19 +4,18 @@ import java.util.UUID;
 
 import me.neoblade298.neocore.bungee.commands.Subcommand;
 import me.neoblade298.neocore.bungee.util.Util;
-import me.neoblade298.neocore.shared.commands.Arg;
 import me.neoblade298.neocore.shared.commands.SubcommandRunner;
-import me.neoblade298.neotabletop.GameInstance;
+import me.neoblade298.neotabletop.GameLobby;
 import me.neoblade298.neotabletop.GameManager;
+import me.neoblade298.neotabletop.GameSession;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class CmdTabletopSpectate extends Subcommand {
+public class CmdTabletopStart extends Subcommand {
 
-	// /tt spectate [name]
-	public CmdTabletopSpectate(String key, String desc, String perm, SubcommandRunner runner) {
+	// /tt start
+	public CmdTabletopStart(String key, String desc, String perm, SubcommandRunner runner) {
 		super(key, desc, perm, runner);
-		args.add(new Arg("name"));
 		hidden = true;
 	}
 
@@ -24,18 +23,19 @@ public class CmdTabletopSpectate extends Subcommand {
 	public void run(CommandSender s, String[] args) {
 		ProxiedPlayer p = (ProxiedPlayer) s;
 		UUID uuid = p.getUniqueId();
-		if (GameManager.getSession(uuid) != null) {
-			Util.msg(p, "&cYou're already in a session! Use /tt leave!");
-			return;
-		}
-
-		GameInstance inst = GameManager.getInstance(args[0]);
-		if (inst == null) {
-			Util.msg(p, "&cCould not find that game instance! Maybe the game hasn't started yet?");
+		GameSession sess = GameManager.getSession(uuid);
+		if (sess == null || !(sess instanceof GameLobby)) {
+			Util.msg(p, "&cYou're not in a game lobby!");
 			return;
 		}
 		
-		inst.addSpectator(p);
+		if (!sess.getHost().equals(uuid)) {
+			Util.msg(p, "&cOnly the host may start the game!");
+			return;
+		}
+		
+		GameLobby lob = (GameLobby) sess;
+		lob.startGame(p);
 	}
 
 }

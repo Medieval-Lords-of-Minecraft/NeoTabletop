@@ -5,7 +5,9 @@ import java.util.UUID;
 
 import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neocore.shared.util.SharedUtil;
+import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -19,17 +21,12 @@ public abstract class GameLobby extends GameSession {
 		this.isPublic = isPublic;
 	}
 
-	public GameInstance startGame(ProxiedPlayer s) {
-		if (!s.getUniqueId().equals(host)) {
-			Util.msg(s, "&cOnly the host may start the game!");
-			return null;
-		}
-
+	public void startGame(ProxiedPlayer s) {
 		if (game.getMinPlayers() > players.size()) {
 			Util.msg(s, "&cYou need at least &e" + game.getMinPlayers() + " &cplayers to start!");
-			return null;
+			return;
 		}
-		return onStart();
+		GameManager.startGame(this, onStart());
 	}
 
 	public abstract GameInstance onStart();
@@ -73,6 +70,14 @@ public abstract class GameLobby extends GameSession {
 	}
 
 	@Override
+	public void adminKickPlayer(CommandSender s, String name) {
+		ProxiedPlayer p = ProxyServer.getInstance().getPlayer(name);
+		players.remove(p.getUniqueId());
+		GameManager.removeFromSession(p.getUniqueId());
+		broadcast("&e" + p.getName() + " &7was kicked from the lobby by an admin!");
+	}
+
+	@Override
 	public void kickPlayer(ProxiedPlayer s, String name) {
 		if (!s.getUniqueId().equals(host)) {
 			Util.msg(s, "&cOnly the host may kick other players!");
@@ -88,7 +93,7 @@ public abstract class GameLobby extends GameSession {
 		}
 
 		players.remove(p.getUniqueId());
-		GameManager.removeFromSession(s.getUniqueId());
+		GameManager.removeFromSession(p.getUniqueId());
 		broadcast("&e" + p.getName() + " &7was kicked from the lobby!");
 	}
 
@@ -112,22 +117,46 @@ public abstract class GameLobby extends GameSession {
 	}
 
 	@Override
-	public void displayInfo(ProxiedPlayer viewer) {
+	public void displayInfo(ProxiedPlayer viewer, ProxiedPlayer viewed) {
 		Util.msg(viewer, "&7<< &c" + name + " &7(&6" + game.getName() + "&7) >>", false);
 		ProxiedPlayer h = ProxyServer.getInstance().getPlayer(host);
+		boolean isHost = viewer.getUniqueId().equals(host);
+		ComponentBuilder b = new ComponentBuilder();
+		
+		// Public/Private
+		SharedUtil.appendText(b, "&8[" + (isPublic ? "&a" : "&7") + "Public &8| " + (!isPublic ? "&a" : "&7") + "Private&8]",
+				isHost ? "Click to toggle!" : null,
+				isHost ? (isPublic ? "tt private" : "tt public") : null);
+		viewer.sendMessage(b.create());
+		
+		// Params
+		Util.msg(viewer, "&7Parameters (Click one to change):", false);
+		b = new ComponentBuilder();
+		for (GameParameter param : params.values()) {
+			SharedUtil.appendText(b, "&7- &c" + param.getName() + "&7: &6" + param.get(), "Click to change parameter",
+					"tt set " + param.getKey() + " " + param.get(), ClickEvent.Action.SUGGEST_COMMAND);
+		}
+		viewer.sendMessage(b.create());
+		
+		// Player list
+		Util.msg(viewer, "&7Players:");
 		Util.msg(viewer, "&7- &c" + h.getName() + " &7(&eHost&7)", false);
-
+		b = new ComponentBuilder();
 		for (UUID uuid : players) {
 			if (uuid.equals(host)) continue;
 			ProxiedPlayer p = ProxyServer.getInstance().getPlayer(uuid);
-			ComponentBuilder b = new ComponentBuilder("§7- §c" + p.getName());
-			if (uuid.equals(host)) {
+			SharedUtil.appendText(b, "\n&7- &c" + p.getName());
+			if (viewer.getUniqueId().equals(host)) {
 				SharedUtil.appendText(b, " &8[&cClick to kick&8]", "Click to kick " + p.getName(), "tt kick " + p.getName());
+				SharedUtil.appendText(b, " &8[&cClick to give host&8]", "Click to give host to " + p.getName(), "tt sethost " + p.getName());
 			}
 			viewer.sendMessage(b.create());
 		}
 
-		viewer.sendMessage(SharedUtil.createText("&8[&7Click here to read about the game!&8]", "Click me!", "tt viewgame the_crew").create());
+		b = new ComponentBuilder();
+		SharedUtil.appendText(b, "&8[&aClick here to start!&8]", "Click me to start!", "tt start");
+		SharedUtil.appendText(b, "&8[&7Click here to read about the game!&8]", "Click me!", "tt viewgame " + game.getKey());
+		viewer.sendMessage(b.create());
 	}
 	
 	public boolean isFull() {
@@ -148,5 +177,20 @@ public abstract class GameLobby extends GameSession {
 
 	public void setPublic(boolean isPublic) {
 		this.isPublic = isPublic;
+	}
+	
+	public void setParameter(ProxiedPlayer p, String param, String str) {
+		if (!params.containsKey(param)) {
+			Util.msg(p, "&cThat parameter doesn't exist!");
+			return;
+		}
+		
+		boolean success = params.get(param).set(str);
+		if (success) {
+			Util.msg(p, "Successfully set parameter &e" + param + " &7to &e" + str);
+		}
+		else {
+			Util.msg(p, "&cFailed to set parameter. Invalid value for parameter.");
+		}
 	}
 }

@@ -8,7 +8,6 @@ import me.neoblade298.neocore.shared.util.SharedUtil;
 import me.neoblade298.neotabletop.Game;
 import me.neoblade298.neotabletop.GameManager;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class CmdTabletopManual extends Subcommand {
@@ -18,6 +17,7 @@ public class CmdTabletopManual extends Subcommand {
 		super(key, desc, perm, runner);
 		args.add(new Arg("game"));
 		args.add(new Arg("page", false));
+		hidden = true;
 	}
 
 	@Override

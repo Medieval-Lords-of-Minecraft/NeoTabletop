@@ -13,10 +13,11 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class CmdTabletopSetHost extends Subcommand {
 
-	// /tt kick [player]
+	// /tt sethost [player]
 	public CmdTabletopSetHost(String key, String desc, String perm, SubcommandRunner runner) {
 		super(key, desc, perm, runner);
 		args.add(new Arg("player"));
+		hidden = true;
 	}
 
 	@Override

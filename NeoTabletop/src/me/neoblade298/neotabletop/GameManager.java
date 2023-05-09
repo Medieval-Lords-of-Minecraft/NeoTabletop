@@ -42,6 +42,11 @@ public class GameManager implements Listener {
     	}
     }
     
+    public static GameSession getSession(String name) {
+    	if (lobbies.containsKey(name)) return lobbies.get(name);
+    	return instances.get(name);
+    }
+    
     public static GameSession getSession(UUID uuid) {
     	return inSession.get(uuid);
     }
@@ -61,6 +66,16 @@ public class GameManager implements Listener {
 		lobbies.put(name.toLowerCase(), lobby);
 		inSession.put(sender.getUniqueId(), lobby);
 		Util.msg(sender, "Successfully created lobby &e" + lobby.getName() + "&7!");
+		lobby.displayInfo(sender, sender);
+	}
+	
+	public static void disbandSession(GameSession sess) {
+		if (sess instanceof GameLobby) {
+			disbandLobby((GameLobby) sess);
+		}
+		else if (sess instanceof GameInstance) {
+			disbandInstance((GameInstance) sess, "admin override");
+		}
 	}
     
 	public static void disbandLobby(GameLobby lob) {
@@ -106,5 +121,15 @@ public class GameManager implements Listener {
 	
 	public static void registerGame(Game g) {
 		games.put(g.getKey(), g);
+	}
+	
+	public static void startGame(GameLobby lob, GameInstance inst) {
+		lobbies.remove(lob.getName());
+		instances.put(inst.getName(), inst);
+	}
+	
+	public static void endGame(GameLobby lob, GameInstance inst) {
+		instances.remove(inst.getName());
+		lobbies.put(lob.getName(), lob);
 	}
 }

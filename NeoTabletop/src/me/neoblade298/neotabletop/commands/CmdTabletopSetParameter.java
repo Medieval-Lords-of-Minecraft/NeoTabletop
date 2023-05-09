@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import me.neoblade298.neocore.bungee.commands.Subcommand;
 import me.neoblade298.neocore.bungee.util.Util;
+import me.neoblade298.neocore.shared.commands.Arg;
 import me.neoblade298.neocore.shared.commands.SubcommandRunner;
 import me.neoblade298.neotabletop.GameLobby;
 import me.neoblade298.neotabletop.GameManager;
@@ -11,11 +12,13 @@ import me.neoblade298.neotabletop.GameSession;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class CmdTabletopPrivate extends Subcommand {
+public class CmdTabletopSetParameter extends Subcommand {
 
-	// /tt public
-	public CmdTabletopPrivate(String key, String desc, String perm, SubcommandRunner runner) {
+	// /tt set [param] [value]
+	public CmdTabletopSetParameter(String key, String desc, String perm, SubcommandRunner runner) {
 		super(key, desc, perm, runner);
+		args.add(new Arg("parameter"));
+		args.add(new Arg("value"));
 		hidden = true;
 	}
 
@@ -25,17 +28,17 @@ public class CmdTabletopPrivate extends Subcommand {
 		UUID uuid = p.getUniqueId();
 		GameSession sess = GameManager.getSession(uuid);
 		if (sess == null || !(sess instanceof GameLobby)) {
-			Util.msg(p, "&cYou're not in a lobby!");
+			Util.msg(p, "&cYou're not in a game lobby!");
 			return;
 		}
+		GameLobby lob = (GameLobby) sess;
 		
 		if (!sess.getHost().equals(uuid)) {
-			Util.msg(p, "&cOnly the host may change whether a lobby is public or private!");
+			Util.msg(p, "&cOnly the host may change game parameters!");
 			return;
 		}
 
-		((GameLobby) sess).setPublic(false);
-		Util.msg(p, "Successfully set lobby to private!");
+		lob.setParameter(p, args[0], args[1]);
 	}
 
 }

@@ -1,5 +1,6 @@
 package me.neoblade298.neotabletop.commands;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import me.neoblade298.neocore.bungee.commands.Subcommand;
@@ -10,7 +11,6 @@ import me.neoblade298.neotabletop.Game;
 import me.neoblade298.neotabletop.GameLobby;
 import me.neoblade298.neotabletop.GameManager;
 import me.neoblade298.neotabletop.GameSession;
-import me.neoblade298.neotabletop.thecrew.TheCrew;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -19,7 +19,9 @@ public class CmdTabletopCreate extends Subcommand {
 	// /tt create [game] [name] {public/private}
 	public CmdTabletopCreate(String key, String desc, String perm, SubcommandRunner runner) {
 		super(key, desc, perm, runner);
-		args.add(new Arg("game"));
+		Arg ga = new Arg("game");
+		ga.setTabOptions(new ArrayList<String>(GameManager.getGames().keySet()));
+		args.add(ga);
 		args.add(new Arg("name"));
 		args.add(new Arg("public/private", false));
 	}

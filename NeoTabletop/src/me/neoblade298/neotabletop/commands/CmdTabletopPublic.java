@@ -16,6 +16,7 @@ public class CmdTabletopPublic extends Subcommand {
 	// /tt public
 	public CmdTabletopPublic(String key, String desc, String perm, SubcommandRunner runner) {
 		super(key, desc, perm, runner);
+		hidden = true;
 	}
 
 	@Override
@@ -34,6 +35,7 @@ public class CmdTabletopPublic extends Subcommand {
 		}
 
 		((GameLobby) sess).setPublic(true);
+		Util.msg(p, "Successfully set lobby to public!");
 	}
 
 }

@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.UUID;
 
 import me.neoblade298.neocore.bungee.util.Util;
+import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -20,6 +21,15 @@ public abstract class GameInstance extends GameSession {
 	}
 	
 	public abstract void handleLeave(GamePlayer gp);
+
+	@Override
+	public void adminKickPlayer(CommandSender s, String name) {
+		ProxiedPlayer p = ProxyServer.getInstance().getPlayer(name);
+		GamePlayer gp = players.remove(name.toLowerCase());
+		handleLeave(gp);
+		GameManager.removeFromSession(gp.getUniqueId());
+		broadcast("&e" + p.getName() + " &7was kicked from the game by an admin!");
+	}
 	
 	@Override
 	public void kickPlayer(ProxiedPlayer p, String name) {
@@ -84,5 +94,10 @@ public abstract class GameInstance extends GameSession {
 		onSpectate(p);
 	}
 	
+	public void endGame() {
+		GameManager.endGame(onEnd(), this);
+	}
+	
 	public abstract void onSpectate(ProxiedPlayer p);
+	public abstract GameLobby onEnd();
 }

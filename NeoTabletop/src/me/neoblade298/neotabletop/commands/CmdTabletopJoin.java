@@ -15,6 +15,7 @@ public class CmdTabletopJoin extends Subcommand {
 	public CmdTabletopJoin(String key, String desc, String perm, SubcommandRunner runner) {
 		super(key, desc, perm, runner);
 		args.add(new Arg("name"));
+		hidden = true;
 	}
 
 	@Override

@@ -4,8 +4,6 @@ import java.util.Map.Entry;
 import java.util.UUID;
 
 import me.neoblade298.neocore.bungee.commands.Subcommand;
-import me.neoblade298.neocore.bungee.util.Util;
-import me.neoblade298.neocore.shared.commands.Arg;
 import me.neoblade298.neocore.shared.commands.SubcommandRunner;
 import me.neoblade298.neocore.shared.util.SharedUtil;
 import me.neoblade298.neotabletop.GameLobby;
@@ -24,7 +22,6 @@ public class CmdTabletopLobbies extends Subcommand {
 
 	@Override
 	public void run(CommandSender s, String[] args) {
-		ProxiedPlayer p = (ProxiedPlayer) s;
 		ComponentBuilder b = SharedUtil.createText("&7List of Lobbies:", null, null);
 		for (Entry<String, GameLobby> ent : GameManager.getLobbies().entrySet()) {
 			GameLobby lob = ent.getValue();

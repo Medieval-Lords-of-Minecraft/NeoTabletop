@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import me.neoblade298.neocore.bungee.util.Util;
+import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -31,7 +32,7 @@ public abstract class GameSession {
 	public UUID getHost() {
 		return host;
 	}
-	public void setHost(ProxiedPlayer cmdUser, String username) {
+	public void setHost(CommandSender cmdUser, String username) {
 		ProxiedPlayer p = ProxyServer.getInstance().getPlayer(username);
 		if (p == null) {
 			Util.msg(cmdUser, "&cThat player isn't online!");
@@ -46,5 +47,6 @@ public abstract class GameSession {
 	}
 	public abstract void leavePlayer(ProxiedPlayer p);
 	public abstract void kickPlayer(ProxiedPlayer s, String username);
-	public abstract void displayInfo(ProxiedPlayer p);
+	public abstract void adminKickPlayer(CommandSender s, String username);
+	public abstract void displayInfo(ProxiedPlayer viewer, ProxiedPlayer viewed);
 }
