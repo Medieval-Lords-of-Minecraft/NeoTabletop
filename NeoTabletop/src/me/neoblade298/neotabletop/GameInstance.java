@@ -14,10 +14,6 @@ public abstract class GameInstance extends GameSession {
 	protected HashSet<ProxiedPlayer> spectators = new HashSet<ProxiedPlayer>();
 	public GameInstance(String name, Game game, UUID host, GameLobby lobby) {
 		super(name, game, host, lobby.getParameters());
-		for (UUID uuid : lobby.getPlayers()) {
-			ProxiedPlayer p = ProxyServer.getInstance().getPlayer(uuid);
-			this.players.put(p.getName().toLowerCase(), new GamePlayer(uuid, name, p));
-		}
 	}
 	
 	public abstract void handleLeave(GamePlayer gp);
