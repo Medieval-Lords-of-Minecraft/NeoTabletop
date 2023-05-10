@@ -10,6 +10,7 @@ import me.neoblade298.neocore.shared.commands.SubcommandRunner;
 import me.neoblade298.neotabletop.Game;
 import me.neoblade298.neotabletop.GameLobby;
 import me.neoblade298.neotabletop.GameManager;
+import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.GameSession;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -40,7 +41,7 @@ public class CmdTabletopCreate extends Subcommand {
 		}
 		
 		// Check if the name exists already, or player is already in a game
-		GameSession sess = GameManager.getSession(uuid);
+		GameSession<? extends GamePlayer> sess = GameManager.getSession(uuid);
 		if (sess != null) {
 			String sessionType = sess instanceof GameLobby ? "lobby" : "instance";
 			Util.msg(s, "&cYou're already in " + sessionType + " &e" + sess.getName() + " &7for game &e" + sess.getGame().getName() + "&7!");

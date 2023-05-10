@@ -6,6 +6,7 @@ import me.neoblade298.neocore.shared.commands.Arg;
 import me.neoblade298.neocore.shared.commands.SubcommandRunner;
 import me.neoblade298.neotabletop.GameLobby;
 import me.neoblade298.neotabletop.GameManager;
+import me.neoblade298.neotabletop.GamePlayer;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -26,7 +27,7 @@ public class CmdTabletopJoin extends Subcommand {
 			return;
 		}
 		
-		GameLobby lob = GameManager.getLobby(args[0]);
+		GameLobby<? extends GamePlayer> lob = GameManager.getLobby(args[0]);
 		if (lob == null) {
 			if (GameManager.getInstance(args[0]) != null) {
 				Util.msg(s, "&cThat lobby already started its game!");

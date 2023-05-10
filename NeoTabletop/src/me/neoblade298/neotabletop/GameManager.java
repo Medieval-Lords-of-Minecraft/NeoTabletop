@@ -12,9 +12,9 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
 public class GameManager implements Listener {
-	private static HashMap<String, GameLobby> lobbies = new HashMap<String, GameLobby>();
-	private static HashMap<String, GameInstance> instances = new HashMap<String, GameInstance>();
-	private static HashMap<UUID, GameSession> inSession = new HashMap<UUID, GameSession>(); // Can be lobby or instance
+	private static HashMap<String, GameLobby<? extends GamePlayer>> lobbies = new HashMap<String, GameLobby<? extends GamePlayer>>();
+	private static HashMap<String, GameInstance<? extends GamePlayer>> instances = new HashMap<String, GameInstance<? extends GamePlayer>>();
+	private static HashMap<UUID, GameSession<? extends GamePlayer>> inSession = new HashMap<UUID, GameSession<? extends GamePlayer>>(); // Can be lobby or instance
 	private static HashMap<String, Game> games = new HashMap<String, Game>();
 	
 	public GameManager() {
@@ -28,9 +28,9 @@ public class GameManager implements Listener {
     	ProxiedPlayer p = e.getPlayer();
     	UUID uuid = p.getUniqueId();
     	if (inSession.containsKey(uuid)) {
-    		GameSession sess = inSession.get(uuid);
+    		GameSession<? extends GamePlayer> sess = inSession.get(uuid);
     		if (sess instanceof GameLobby) {
-    			GameLobby lob = (GameLobby) sess;
+    			GameLobby<? extends GamePlayer> lob = (GameLobby<? extends GamePlayer>) sess;
     			inSession.remove(uuid);
     			if (lob.getHost().equals(uuid)) {
     				disbandLobby(lob);
@@ -42,43 +42,43 @@ public class GameManager implements Listener {
     	}
     }
     
-    public static GameSession getSession(String name) {
+    public static GameSession<? extends GamePlayer> getSession(String name) {
     	if (lobbies.containsKey(name)) return lobbies.get(name);
     	return instances.get(name);
     }
     
-    public static GameSession getSession(UUID uuid) {
+    public static GameSession<? extends GamePlayer> getSession(UUID uuid) {
     	return inSession.get(uuid);
     }
     
-    public static GameLobby getLobby(String name) {
+    public static GameLobby<? extends GamePlayer> getLobby(String name) {
     	return lobbies.get(name.toLowerCase());
     }
     
-    public static GameInstance getInstance(String name) {
+    public static GameInstance<? extends GamePlayer> getInstance(String name) {
     	return instances.get(name.toLowerCase());
     }
     
     // Creates a lobby
 	public static void createLobby(String name, ProxiedPlayer sender, Game game, boolean isPublic) {
 		UUID uuid = sender.getUniqueId();
-		GameLobby lobby = game.createLobby(name, uuid, isPublic);
+		GameLobby<? extends GamePlayer> lobby = game.createLobby(name, uuid, isPublic);
 		lobbies.put(name.toLowerCase(), lobby);
 		inSession.put(sender.getUniqueId(), lobby);
 		Util.msg(sender, "Successfully created lobby &e" + lobby.getName() + "&7!");
 		lobby.displayInfo(sender, sender);
 	}
 	
-	public static void disbandSession(GameSession sess) {
+	public static void disbandSession(GameSession<? extends GamePlayer> sess) {
 		if (sess instanceof GameLobby) {
-			disbandLobby((GameLobby) sess);
+			disbandLobby((GameLobby<? extends GamePlayer>) sess);
 		}
 		else if (sess instanceof GameInstance) {
-			disbandInstance((GameInstance) sess, "admin override");
+			disbandInstance((GameInstance<? extends GamePlayer>) sess, "admin override");
 		}
 	}
     
-	public static void disbandLobby(GameLobby lob) {
+	public static void disbandLobby(GameLobby<? extends GamePlayer> lob) {
 		for (UUID uuid : lob.getPlayers()) {
 			ProxiedPlayer p = ProxyServer.getInstance().getPlayer(uuid);
 			inSession.remove(p.getUniqueId());
@@ -87,7 +87,7 @@ public class GameManager implements Listener {
 		lobbies.remove(lob.getName().toLowerCase());
 	}
 	
-	public static void disbandInstance(GameInstance inst, String reason) {
+	public static void disbandInstance(GameInstance<? extends GamePlayer> inst, String reason) {
 		for (GamePlayer gp : inst.getPlayers().values()) {
 			inSession.remove(gp.getUniqueId());
 		}
@@ -103,11 +103,11 @@ public class GameManager implements Listener {
 		return lobbies.containsKey(name.toLowerCase()) || instances.containsKey(name.toLowerCase());
 	}
 	
-	public static HashMap<String, GameLobby> getLobbies() {
+	public static HashMap<String, GameLobby<? extends GamePlayer>> getLobbies() {
 		return lobbies;
 	}
 	
-	public static HashMap<String, GameInstance> getInstances() {
+	public static HashMap<String, GameInstance<? extends GamePlayer>> getInstances() {
 		return instances;
 	}
 	
@@ -123,12 +123,12 @@ public class GameManager implements Listener {
 		games.put(g.getKey(), g);
 	}
 	
-	public static void startGame(GameLobby lob, GameInstance inst) {
+	public static void startGame(GameLobby<? extends GamePlayer> lob, GameInstance<? extends GamePlayer> inst) {
 		lobbies.remove(lob.getName());
 		instances.put(inst.getName(), inst);
 	}
 	
-	public static void endGame(GameLobby lob, GameInstance inst) {
+	public static void endGame(GameLobby<? extends GamePlayer> lob, GameInstance<? extends GamePlayer> inst) {
 		instances.remove(inst.getName());
 		lobbies.put(lob.getName(), lob);
 	}

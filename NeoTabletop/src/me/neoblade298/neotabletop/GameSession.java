@@ -8,7 +8,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public abstract class GameSession {
+public abstract class GameSession<T extends GamePlayer> {
 	protected String name;
 	protected Game game;
 	protected UUID host;

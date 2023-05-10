@@ -8,6 +8,7 @@ import me.neoblade298.neocore.shared.commands.SubcommandRunner;
 import me.neoblade298.neocore.shared.util.SharedUtil;
 import me.neoblade298.neotabletop.GameLobby;
 import me.neoblade298.neotabletop.GameManager;
+import me.neoblade298.neotabletop.GamePlayer;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -23,8 +24,8 @@ public class CmdTabletopLobbies extends Subcommand {
 	@Override
 	public void run(CommandSender s, String[] args) {
 		ComponentBuilder b = SharedUtil.createText("&7List of Lobbies:", null, null);
-		for (Entry<String, GameLobby> ent : GameManager.getLobbies().entrySet()) {
-			GameLobby lob = ent.getValue();
+		for (Entry<String, GameLobby<? extends GamePlayer>> ent : GameManager.getLobbies().entrySet()) {
+			GameLobby<? extends GamePlayer> lob = ent.getValue();
 			SharedUtil.appendText(b, "\n&7- &c" + lob.getName() + " &7(&6"
 					+ lob.getGame().getName() + "&7)",
 					createHoverText(lob),
@@ -32,7 +33,7 @@ public class CmdTabletopLobbies extends Subcommand {
 		}
 	}
 
-	private String createHoverText(GameLobby lob) {
+	private String createHoverText(GameLobby<? extends GamePlayer> lob) {
 		String text = lob.isPublic() ? "&aPublic Lobby" + (lob.isFull() ? ", click to join!" : "") : "&cPrivate Lobby";
 		
 		String col = lob.isFull() ? "&a" : "&c";

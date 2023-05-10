@@ -11,7 +11,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public abstract class GameLobby extends GameSession {
+public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 	protected HashSet<UUID> players = new HashSet<UUID>(), invited = new HashSet<UUID>();
 	protected boolean isPublic;
 
@@ -29,7 +29,7 @@ public abstract class GameLobby extends GameSession {
 		GameManager.startGame(this, onStart());
 	}
 
-	public abstract GameInstance onStart();
+	public abstract GameInstance<? extends GamePlayer> onStart();
 
 	public void invitePlayer(ProxiedPlayer inviter, String username) {
 		if (!inviter.getUniqueId().equals(host)) {

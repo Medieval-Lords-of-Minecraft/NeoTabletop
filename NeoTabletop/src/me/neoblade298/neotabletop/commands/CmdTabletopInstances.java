@@ -6,6 +6,7 @@ import me.neoblade298.neocore.shared.commands.SubcommandRunner;
 import me.neoblade298.neocore.shared.util.SharedUtil;
 import me.neoblade298.neotabletop.GameInstance;
 import me.neoblade298.neotabletop.GameManager;
+import me.neoblade298.neotabletop.GamePlayer;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 
@@ -19,8 +20,8 @@ public class CmdTabletopInstances extends Subcommand {
 	@Override
 	public void run(CommandSender s, String[] args) {
 		ComponentBuilder b = SharedUtil.createText("&7List of instances:", null, null);
-		for (Entry<String, GameInstance> ent : GameManager.getInstances().entrySet()) {
-			GameInstance inst = ent.getValue();
+		for (Entry<String, GameInstance<? extends GamePlayer>> ent : GameManager.getInstances().entrySet()) {
+			GameInstance<? extends GamePlayer> inst = ent.getValue();
 			SharedUtil.appendText(b, "\n&7- &c" + inst.getName() + " &7(&6"
 					+ inst.getGame().getName() + "&7)",
 					"Click to spectate this game!",

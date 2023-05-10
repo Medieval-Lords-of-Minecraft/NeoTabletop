@@ -6,9 +6,10 @@ import me.neoblade298.neotabletop.BooleanParameterSetter;
 import me.neoblade298.neotabletop.GameInstance;
 import me.neoblade298.neotabletop.GameLobby;
 import me.neoblade298.neotabletop.GameParameter;
+import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.IntegerParameterSetter;
 
-public class TheCrewLobby extends GameLobby {
+public class TheCrewLobby extends GameLobby<TheCrewPlayer> {
 
 	public TheCrewLobby(String name, UUID host, boolean isPublic) {
 		super(name, TheCrew.inst(), host, isPublic);
@@ -27,9 +28,8 @@ public class TheCrewLobby extends GameLobby {
 	}
 
 	@Override
-	public GameInstance onStart() {
-		// TODO Auto-generated method stub
-		return null;
+	public GameInstance<? extends GamePlayer> onStart() {
+		return new TheCrewInstance(host, null);
 	}
 	
 }

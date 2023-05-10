@@ -7,13 +7,14 @@ import java.util.UUID;
 import me.neoblade298.neocore.bungee.util.Util;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public abstract class GameInstance extends GameSession {
-	protected HashMap<String, GamePlayer> players = new HashMap<String, GamePlayer>();
+public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> {
+	protected HashMap<String, T> players = new HashMap<String, T>();
 	protected HashSet<ProxiedPlayer> spectators = new HashSet<ProxiedPlayer>();
-	public GameInstance(String name, Game game, UUID host, GameLobby lobby) {
-		super(name, game, host, lobby.getParameters());
+	public GameInstance(UUID host, GameLobby<T> lobby) {
+		super(lobby.getName(), lobby.getGame(), host, lobby.getParameters());
 	}
 	
 	public abstract void handleLeave(GamePlayer gp);
@@ -48,10 +49,19 @@ public abstract class GameInstance extends GameSession {
 	@Override
 	public void broadcast(String msg) {
 		for (GamePlayer gp : players.values()) {
-			Util.msg(gp.getPlayer(), msg);
+			Util.msg(gp.getPlayer(), msg, false);
 		}
 		for (ProxiedPlayer p : spectators) {
-			Util.msg(p, msg);
+			Util.msg(p, msg, false);
+		}
+	}
+	
+	public void broadcast(BaseComponent[] bc) {
+		for (GamePlayer gp : players.values()) {
+			gp.getPlayer().sendMessage(bc);
+		}
+		for (ProxiedPlayer p : spectators) {
+			p.sendMessage(bc);
 		}
 	}
 
@@ -80,7 +90,7 @@ public abstract class GameInstance extends GameSession {
 		}
 	}
 	
-	public HashMap<String, GamePlayer> getPlayers() {
+	public HashMap<String, T> getPlayers() {
 		return players;
 	}
 	
@@ -95,5 +105,5 @@ public abstract class GameInstance extends GameSession {
 	}
 	
 	public abstract void onSpectate(ProxiedPlayer p);
-	public abstract GameLobby onEnd();
+	public abstract GameLobby<T> onEnd();
 }

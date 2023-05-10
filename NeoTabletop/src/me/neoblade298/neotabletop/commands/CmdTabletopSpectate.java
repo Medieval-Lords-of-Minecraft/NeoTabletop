@@ -8,6 +8,7 @@ import me.neoblade298.neocore.shared.commands.Arg;
 import me.neoblade298.neocore.shared.commands.SubcommandRunner;
 import me.neoblade298.neotabletop.GameInstance;
 import me.neoblade298.neotabletop.GameManager;
+import me.neoblade298.neotabletop.GamePlayer;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -29,7 +30,7 @@ public class CmdTabletopSpectate extends Subcommand {
 			return;
 		}
 
-		GameInstance inst = GameManager.getInstance(args[0]);
+		GameInstance<? extends GamePlayer> inst = GameManager.getInstance(args[0]);
 		if (inst == null) {
 			Util.msg(p, "&cCould not find that game instance! Maybe the game hasn't started yet?");
 			return;
