@@ -12,14 +12,16 @@ public abstract class GameSession<T extends GamePlayer> {
 	protected String name;
 	protected Game game;
 	protected UUID host;
+	protected boolean isPublic;
 	protected HashMap<String, GameParameter> params = new HashMap<String, GameParameter>();
-	public GameSession(String name, Game game, UUID host) {
+	public GameSession(String name, Game game, UUID host, boolean isPublic) {
 		this.name = name;
 		this.game = game;
 		this.host = host;
+		this.isPublic = isPublic;
 	}
-	public GameSession(String name, Game game, UUID host, HashMap<String, GameParameter> params) {
-		this(name, game, host);
+	public GameSession(String name, Game game, UUID host, boolean isPublic, HashMap<String, GameParameter> params) {
+		this(name, game, host, isPublic);
 		this.params = params;
 	}
 	public abstract void broadcast(String msg);
@@ -31,6 +33,12 @@ public abstract class GameSession<T extends GamePlayer> {
 	}
 	public UUID getHost() {
 		return host;
+	}
+	public void setPublic(boolean isPublic) {
+		this.isPublic = isPublic;
+	}
+	public boolean isPublic() {
+		return isPublic;
 	}
 	public void setHost(CommandSender cmdUser, String username) {
 		ProxiedPlayer p = ProxyServer.getInstance().getPlayer(username);

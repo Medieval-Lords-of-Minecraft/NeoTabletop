@@ -26,10 +26,14 @@ public class TheCrewLobby extends GameLobby<TheCrewPlayer> {
 				"Number of sonar tokens you're allowed to use to communicate. Can be 0-3",
 				Integer.valueOf(1), new IntegerParameterSetter(0, 3)));
 	}
+	
+	public TheCrewLobby(GameInstance<TheCrewPlayer> inst) {
+		super(inst);
+	}
 
 	@Override
 	public GameInstance<? extends GamePlayer> onStart() {
-		return new TheCrewInstance(host, null);
+		return new TheCrewInstance(this);
 	}
 	
 }

@@ -13,12 +13,14 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 	protected HashSet<UUID> players = new HashSet<UUID>(), invited = new HashSet<UUID>();
-	protected boolean isPublic;
 
 	public GameLobby(String name, Game game, UUID host, boolean isPublic) {
-		super(name, game, host);
+		super(name, game, host, isPublic);
 		players.add(host);
-		this.isPublic = isPublic;
+	}
+	
+	public GameLobby(GameInstance<T> inst) {
+		super(inst.getName(), inst.getGame(), inst.getHost(), inst.isPublic(), inst.getParameters());
 	}
 
 	public void startGame(ProxiedPlayer s) {
@@ -169,14 +171,6 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 
 	public HashSet<UUID> getInvited() {
 		return invited;
-	}
-
-	public boolean isPublic() {
-		return isPublic;
-	}
-
-	public void setPublic(boolean isPublic) {
-		this.isPublic = isPublic;
 	}
 	
 	public void setParameter(ProxiedPlayer p, String param, String str) {

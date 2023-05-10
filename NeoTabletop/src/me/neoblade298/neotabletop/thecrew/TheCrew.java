@@ -49,6 +49,8 @@ public class TheCrew extends Game {
 	}
 	
 	public static TheCrewTask getTask() {
-		
+		TheCrewTask task = tasks.removeFirst();
+		tasks.addLast(task);
+		return task;
 	}
 }

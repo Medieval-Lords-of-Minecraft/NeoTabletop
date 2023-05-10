@@ -22,6 +22,10 @@ public class TheCrewCard {
 		return type.color + "" + value;
 	}
 	
+	public boolean isSimilar(TheCrewCard comp) {
+		return comp.getType() == type;
+	}
+	
 	public enum CardType {
 		RED(1, ChatColor.RED),
 		BLUE(2, ChatColor.BLUE),

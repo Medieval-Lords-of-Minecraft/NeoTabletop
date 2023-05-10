@@ -5,16 +5,18 @@ import java.util.HashSet;
 import java.util.UUID;
 
 import me.neoblade298.neocore.bungee.util.Util;
+import me.neoblade298.neocore.shared.util.SharedUtil;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> {
 	protected HashMap<String, T> players = new HashMap<String, T>();
 	protected HashSet<ProxiedPlayer> spectators = new HashSet<ProxiedPlayer>();
-	public GameInstance(UUID host, GameLobby<T> lobby) {
-		super(lobby.getName(), lobby.getGame(), host, lobby.getParameters());
+	public GameInstance(GameLobby<T> lobby) {
+		super(lobby.getName(), lobby.getGame(), lobby.getHost(), lobby.isPublic(), lobby.getParameters());
 	}
 	
 	public abstract void handleLeave(GamePlayer gp);
@@ -102,6 +104,21 @@ public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> 
 	
 	public void endGame() {
 		GameManager.endGame(onEnd(), this);
+	}
+	
+	public void displayKickList(CommandSender cmdUser) {
+		Util.msg(cmdUser, "&7Players:");
+		Util.msg(cmdUser, "&7- &c" + cmdUser.getName() + " &7(&eHost&7)", false);
+		ComponentBuilder b = new ComponentBuilder();
+		for (GamePlayer gp : players.values()) {
+			UUID uuid = gp.getUniqueId();
+			if (uuid.equals(host)) continue;
+			
+			SharedUtil.appendText(b, "\n&7- &c" + gp.getName());
+			SharedUtil.appendText(b, " &8[&cClick to kick&8]", "Click to kick " + gp.getName(), "tt kick " + gp.getName());
+			SharedUtil.appendText(b, " &8[&cClick to give host&8]", "Click to give host to " + gp.getName(), "tt sethost " + gp.getName());
+			cmdUser.sendMessage(b.create());
+		}
 	}
 	
 	public abstract void onSpectate(ProxiedPlayer p);
