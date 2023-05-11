@@ -14,24 +14,24 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class TheCrewPlayer extends GamePlayer {
-	private LinkedList<TheCrewCard> hand = new LinkedList<TheCrewCard>();
+	private LinkedList<TheCrewCardInstance> hand = new LinkedList<TheCrewCardInstance>();
 	private LinkedList<TheCrewTask> tasks = new LinkedList<TheCrewTask>();
-	private ArrayList<TheCrewCard> cardsWon = new ArrayList<TheCrewCard>();
+	private ArrayList<TheCrewCardInstance> cardsWon = new ArrayList<TheCrewCardInstance>();
 	private int tricksWon = 0;
 
 	public TheCrewPlayer(UUID uuid, String name, ProxiedPlayer p) {
 		super(uuid, name, p);
 	}
 	
-	public TheCrewCard getCard(int num) {
+	public TheCrewCardInstance getCard(int num) {
 		return hand.get(num);
 	}
 	
-	public TheCrewCard removeCard(int num) {
+	public TheCrewCardInstance removeCard(int num) {
 		return hand.remove(num);
 	}
 	
-	public void addCard(TheCrewCard card) {
+	public void addCard(TheCrewCardInstance card) {
 		hand.add(card);
 	}
 	
@@ -63,7 +63,7 @@ public class TheCrewPlayer extends GamePlayer {
 		}
 		
 		int pos = 0;
-		Iterator<TheCrewCard> iter = hand.iterator();
+		Iterator<TheCrewCardInstance> iter = hand.iterator();
 		SharedUtil.appendText(b, iter.next().getDisplay(), isOwner ? "Click to play!" : null, "thecrew play " + pos);
 		while (iter.hasNext()) {
 			SharedUtil.appendText(b, " ");
@@ -84,7 +84,7 @@ public class TheCrewPlayer extends GamePlayer {
 		return text;
 	}
 	
-	public void winTrick(ArrayList<TheCrewCard> pile) {
+	public void winTrick(ArrayList<TheCrewCardInstance> pile) {
 		tricksWon++;
 		cardsWon.addAll(pile);
 		pile.clear();
@@ -105,5 +105,9 @@ public class TheCrewPlayer extends GamePlayer {
 	
 	public int getWins() {
 		return tricksWon;
+	}
+	
+	public ArrayList<TheCrewCardInstance> getCardsWon() {
+		return cardsWon;
 	}
 }

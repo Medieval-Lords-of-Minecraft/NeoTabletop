@@ -43,7 +43,7 @@ public abstract class GameSession<T extends GamePlayer> {
 	public void setHost(CommandSender cmdUser, String username) {
 		ProxiedPlayer p = ProxyServer.getInstance().getPlayer(username);
 		if (p == null) {
-			Util.msg(cmdUser, "&cThat player isn't online!");
+			Util.msgRaw(cmdUser, "&cThat player isn't online!");
 			return;
 		}
 		

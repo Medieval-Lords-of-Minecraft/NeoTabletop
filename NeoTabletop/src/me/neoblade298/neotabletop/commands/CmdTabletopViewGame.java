@@ -22,7 +22,7 @@ public class CmdTabletopViewGame extends Subcommand {
 	public void run(CommandSender s, String[] args) {
 		Game g = GameManager.getGame(args[0]);
 		if (g == null) {
-			Util.msg(s, "&cThat game doesn't exist! Try using /tt games to see a full list!");
+			Util.msgRaw(s, "&cThat game doesn't exist! Try using /tt games to see a full list!");
 			return;
 		}
 

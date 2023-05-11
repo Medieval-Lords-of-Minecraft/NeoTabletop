@@ -28,7 +28,7 @@ public class CmdTheCrewViewHand extends Subcommand {
 		UUID uuid = p.getUniqueId();
 		GameSession<? extends GamePlayer> sess = GameManager.getSession(uuid);
 		if (sess == null && !(sess instanceof TheCrewInstance)) {
-			Util.msg(p, "&cYou're not in a game instance of The Crew!");
+			Util.msgRaw(p, "&cYou're not in a game instance of The Crew!");
 			return;
 		}
 

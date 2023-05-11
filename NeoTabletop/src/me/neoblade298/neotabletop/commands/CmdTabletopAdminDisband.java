@@ -21,7 +21,7 @@ public class CmdTabletopAdminDisband extends Subcommand {
 	public void run(CommandSender s, String[] args) {
 		GameSession<? extends GamePlayer> sess = GameManager.getSession(args[0]);
 		if (sess == null) {
-			Util.msg(s, "&cThat instance doesn't exist!");
+			Util.msgRaw(s, "&cThat instance doesn't exist!");
 			return;
 		}
 

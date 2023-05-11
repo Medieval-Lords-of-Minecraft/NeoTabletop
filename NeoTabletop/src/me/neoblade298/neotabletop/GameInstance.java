@@ -33,12 +33,12 @@ public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> 
 	@Override
 	public void kickPlayer(ProxiedPlayer p, String name) {
 		if (!p.getUniqueId().equals(host)) {
-			Util.msg(p, "&cOnly the host may kick other players!");
+			Util.msgRaw(p, "&cOnly the host may kick other players!");
 			return;
 		}
 		
 		if (!players.containsKey(name.toLowerCase())) {
-			Util.msg(p, "&cThat player isn't in your game!");
+			Util.msgRaw(p, "&cThat player isn't in your game!");
 			return;
 		}
 		
@@ -51,10 +51,10 @@ public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> 
 	@Override
 	public void broadcast(String msg) {
 		for (GamePlayer gp : players.values()) {
-			Util.msg(gp.getPlayer(), msg, false);
+			Util.msgRaw(gp.getPlayer(), msg);
 		}
 		for (ProxiedPlayer p : spectators) {
-			Util.msg(p, msg, false);
+			Util.msgRaw(p, msg);
 		}
 	}
 	
@@ -81,7 +81,7 @@ public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> 
 			broadcast("&e" + p.getName() + " &7stopped spectating!");
 		}
 		else {
-			Util.msg(p, "&cSomething went wrong! You were unable to leave game &e" + name + "&c.");
+			Util.msgRaw(p, "&cSomething went wrong! You were unable to leave game &e" + name + "&c.");
 			return;
 		}
 		
@@ -107,8 +107,8 @@ public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> 
 	}
 	
 	public void displayKickList(CommandSender cmdUser) {
-		Util.msg(cmdUser, "&7Players:");
-		Util.msg(cmdUser, "&7- &c" + cmdUser.getName() + " &7(&eHost&7)", false);
+		Util.msgRaw(cmdUser, "&7Players:");
+		Util.msgRaw(cmdUser, "&7- &c" + cmdUser.getName() + " &7(&eHost&7)");
 		ComponentBuilder b = new ComponentBuilder();
 		for (GamePlayer gp : players.values()) {
 			UUID uuid = gp.getUniqueId();

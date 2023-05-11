@@ -27,7 +27,7 @@ public class CmdTabletopInvite extends Subcommand {
 		UUID uuid = p.getUniqueId();
 		GameSession<? extends GamePlayer> sess = GameManager.getSession(uuid);
 		if (sess == null) {
-			Util.msg(p, "&cYou're not in a game session!");
+			Util.msgRaw(p, "&cYou're not in a game session!");
 			return;
 		}
 		
@@ -37,7 +37,7 @@ public class CmdTabletopInvite extends Subcommand {
 		}
 		
 		if (!sess.getHost().equals(uuid)) {
-			Util.msg(p, "&cOnly the host may invite players!");
+			Util.msgRaw(p, "&cOnly the host may invite players!");
 			return;
 		}
 

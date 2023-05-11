@@ -65,7 +65,7 @@ public class GameManager implements Listener {
 		GameLobby<? extends GamePlayer> lobby = game.createLobby(name, uuid, isPublic);
 		lobbies.put(name.toLowerCase(), lobby);
 		inSession.put(sender.getUniqueId(), lobby);
-		Util.msg(sender, "Successfully created lobby &e" + lobby.getName() + "&7!");
+		Util.msgRaw(sender, "Successfully created lobby &e" + lobby.getName() + "&7!");
 		lobby.displayInfo(sender, sender);
 	}
 	

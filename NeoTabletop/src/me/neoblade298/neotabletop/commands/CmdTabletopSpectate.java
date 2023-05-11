@@ -26,13 +26,13 @@ public class CmdTabletopSpectate extends Subcommand {
 		ProxiedPlayer p = (ProxiedPlayer) s;
 		UUID uuid = p.getUniqueId();
 		if (GameManager.getSession(uuid) != null) {
-			Util.msg(p, "&cYou're already in a session! Use /tt leave!");
+			Util.msgRaw(p, "&cYou're already in a session! Use /tt leave!");
 			return;
 		}
 
 		GameInstance<? extends GamePlayer> inst = GameManager.getInstance(args[0]);
 		if (inst == null) {
-			Util.msg(p, "&cCould not find that game instance! Maybe the game hasn't started yet?");
+			Util.msgRaw(p, "&cCould not find that game instance! Maybe the game hasn't started yet?");
 			return;
 		}
 		

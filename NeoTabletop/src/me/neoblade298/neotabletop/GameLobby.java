@@ -25,7 +25,7 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 
 	public void startGame(ProxiedPlayer s) {
 		if (game.getMinPlayers() > players.size()) {
-			Util.msg(s, "&cYou need at least &e" + game.getMinPlayers() + " &cplayers to start!");
+			Util.msgRaw(s, "&cYou need at least &e" + game.getMinPlayers() + " &cplayers to start!");
 			return;
 		}
 		GameManager.startGame(this, onStart());
@@ -35,32 +35,32 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 
 	public void invitePlayer(ProxiedPlayer inviter, String username) {
 		if (!inviter.getUniqueId().equals(host)) {
-			Util.msg(inviter, "&cOnly the host may invite other players!");
+			Util.msgRaw(inviter, "&cOnly the host may invite other players!");
 			return;
 		}
 
 		ProxiedPlayer recipient = ProxyServer.getInstance().getPlayer(username);
 		if (recipient == null) {
-			Util.msg(inviter, "&cThat player isn't online!");
+			Util.msgRaw(inviter, "&cThat player isn't online!");
 			return;
 		}
 
 		invited.add(recipient.getUniqueId());
 		broadcast("&e" + recipient.getName() + " &7was invited to the lobby!");
 
-		Util.msg(recipient, "You've been invited to lobby &e" + name + " &7for &e" + game.getName() + "&7!");
+		Util.msgRaw(recipient, "You've been invited to lobby &e" + name + " &7for &e" + game.getName() + "&7!");
 		
 		inviter.sendMessage(SharedUtil.createText("&8[&aClick here to accept the invite!&8]", "Click to accept invite", "tt join " + name).create());
 	}
 
 	public void addPlayer(ProxiedPlayer p) {
 		if (!isPublic && invited.contains(p.getUniqueId())) {
-			Util.msg(p, "&cYou aren't invited to this private lobby!");
+			Util.msgRaw(p, "&cYou aren't invited to this private lobby!");
 			return;
 		}
 
 		if (game.getMaxPlayers() <= players.size()) {
-			Util.msg(p, "&cThis lobby is full as it has a max of &e" + game.getMaxPlayers() + " &cplayers!");
+			Util.msgRaw(p, "&cThis lobby is full as it has a max of &e" + game.getMaxPlayers() + " &cplayers!");
 		}
 
 		if (!isPublic) {
@@ -82,7 +82,7 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 	@Override
 	public void kickPlayer(ProxiedPlayer s, String name) {
 		if (!s.getUniqueId().equals(host)) {
-			Util.msg(s, "&cOnly the host may kick other players!");
+			Util.msgRaw(s, "&cOnly the host may kick other players!");
 			return;
 		}
 		// Lobby kicks are guaranteed to be online, since people who disconnect are
@@ -90,7 +90,7 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 		ProxiedPlayer p = ProxyServer.getInstance().getPlayer(name);
 
 		if (!players.contains(p.getUniqueId())) {
-			Util.msg(s, "&cThat player isn't in your lobby!");
+			Util.msgRaw(s, "&cThat player isn't in your lobby!");
 			return;
 		}
 
@@ -114,13 +114,13 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 	public void broadcast(String msg) {
 		for (UUID uuid : players) {
 			ProxiedPlayer p = ProxyServer.getInstance().getPlayer(uuid);
-			Util.msg(p, msg);
+			Util.msgRaw(p, msg);
 		}
 	}
 
 	@Override
 	public void displayInfo(ProxiedPlayer viewer, ProxiedPlayer viewed) {
-		Util.msg(viewer, "&7<< &c" + name + " &7(&6" + game.getName() + "&7) >>", false);
+		Util.msgRaw(viewer, "&7<< &c" + name + " &7(&6" + game.getName() + "&7) >>");
 		ProxiedPlayer h = ProxyServer.getInstance().getPlayer(host);
 		boolean isHost = viewer.getUniqueId().equals(host);
 		ComponentBuilder b = new ComponentBuilder();
@@ -132,7 +132,7 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 		viewer.sendMessage(b.create());
 		
 		// Params
-		Util.msg(viewer, "&7Parameters (Click one to change):", false);
+		Util.msgRaw(viewer, "&7Parameters (Click one to change):");
 		b = new ComponentBuilder();
 		for (GameParameter param : params.values()) {
 			SharedUtil.appendText(b, "&7- &c" + param.getName() + "&7: &6" + param.get(), "Click to change parameter",
@@ -141,8 +141,8 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 		viewer.sendMessage(b.create());
 		
 		// Player list
-		Util.msg(viewer, "&7Players:");
-		Util.msg(viewer, "&7- &c" + h.getName() + " &7(&eHost&7)", false);
+		Util.msgRaw(viewer, "&7Players:");
+		Util.msgRaw(viewer, "&7- &c" + h.getName() + " &7(&eHost&7)");
 		b = new ComponentBuilder();
 		for (UUID uuid : players) {
 			if (uuid.equals(host)) continue;
@@ -175,16 +175,16 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 	
 	public void setParameter(ProxiedPlayer p, String param, String str) {
 		if (!params.containsKey(param)) {
-			Util.msg(p, "&cThat parameter doesn't exist!");
+			Util.msgRaw(p, "&cThat parameter doesn't exist!");
 			return;
 		}
 		
 		boolean success = params.get(param).set(str);
 		if (success) {
-			Util.msg(p, "Successfully set parameter &e" + param + " &7to &e" + str);
+			Util.msgRaw(p, "Successfully set parameter &e" + param + " &7to &e" + str);
 		}
 		else {
-			Util.msg(p, "&cFailed to set parameter. Invalid value for parameter.");
+			Util.msgRaw(p, "&cFailed to set parameter. Invalid value for parameter.");
 		}
 	}
 }

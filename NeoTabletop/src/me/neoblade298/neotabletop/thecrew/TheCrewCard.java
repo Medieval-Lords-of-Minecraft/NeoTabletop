@@ -46,4 +46,8 @@ public class TheCrewCard {
 			return color;
 		}
 	}
+	
+	public TheCrewCardInstance createInstance() {
+		return new TheCrewCardInstance(this);
+	}
 }

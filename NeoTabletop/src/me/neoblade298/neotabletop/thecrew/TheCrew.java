@@ -42,8 +42,11 @@ public class TheCrew extends Game {
 		return new TheCrewLobby(name, uuid, false);
 	}
 	
-	public static ArrayList<TheCrewCard> createDeck() {
-		ArrayList<TheCrewCard> deck = new ArrayList<TheCrewCard>(TheCrew.deck);
+	public static ArrayList<TheCrewCardInstance> createDeck() {
+		ArrayList<TheCrewCardInstance> deck = new ArrayList<TheCrewCardInstance>();
+		for (TheCrewCard card : TheCrew.deck) {
+			deck.add(card.createInstance());
+		}
 		Collections.shuffle(deck);
 		return deck;
 	}

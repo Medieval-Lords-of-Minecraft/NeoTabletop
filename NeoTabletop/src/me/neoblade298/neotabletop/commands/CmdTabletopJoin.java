@@ -23,17 +23,17 @@ public class CmdTabletopJoin extends Subcommand {
 	public void run(CommandSender s, String[] args) {
 		ProxiedPlayer p = (ProxiedPlayer) s;
 		if (GameManager.getSession(p.getUniqueId()) != null) {
-			Util.msg(p, "&cYou're already in a session! Use /tt leave!");
+			Util.msgRaw(p, "&cYou're already in a session! Use /tt leave!");
 			return;
 		}
 		
 		GameLobby<? extends GamePlayer> lob = GameManager.getLobby(args[0]);
 		if (lob == null) {
 			if (GameManager.getInstance(args[0]) != null) {
-				Util.msg(s, "&cThat lobby already started its game!");
+				Util.msgRaw(s, "&cThat lobby already started its game!");
 			}
 			else {
-				Util.msg(s, "&cThat lobby doesn't exist!");
+				Util.msgRaw(s, "&cThat lobby doesn't exist!");
 			}
 			return;
 		}

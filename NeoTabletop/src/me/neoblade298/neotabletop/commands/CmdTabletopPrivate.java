@@ -26,17 +26,17 @@ public class CmdTabletopPrivate extends Subcommand {
 		UUID uuid = p.getUniqueId();
 		GameSession<? extends GamePlayer> sess = GameManager.getSession(uuid);
 		if (sess == null || !(sess instanceof GameLobby)) {
-			Util.msg(p, "&cYou're not in a lobby!");
+			Util.msgRaw(p, "&cYou're not in a lobby!");
 			return;
 		}
 		
 		if (!sess.getHost().equals(uuid)) {
-			Util.msg(p, "&cOnly the host may change whether a lobby is public or private!");
+			Util.msgRaw(p, "&cOnly the host may change whether a lobby is public or private!");
 			return;
 		}
 
 		((GameLobby<? extends GamePlayer>) sess).setPublic(false);
-		Util.msg(p, "Successfully set lobby to private!");
+		Util.msgRaw(p, "Successfully set lobby to private!");
 	}
 
 }

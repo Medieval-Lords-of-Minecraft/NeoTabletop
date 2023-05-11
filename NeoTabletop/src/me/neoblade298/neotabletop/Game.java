@@ -47,9 +47,9 @@ public abstract class Game {
 		return maxPlayers;
 	}
 	public void displayInfo(ProxiedPlayer p) {
-		Util.msg(p, "&7<< &6" + name + "&7>>", false);
-		Util.msg(p, desc, false);
-		Util.msg(p, "&7=====", false);
+		Util.msgRaw(p, "&7<< &6" + name + "&7>>");
+		Util.msgRaw(p, desc);
+		Util.msgRaw(p, "&7=====");
 		p.sendMessage(SharedUtil.createText("&8[&7Click to read the manual for the game!&8]", "Click here to read the manual!", "tt manual " + key).create());
 	}
 	public void displayManual(ProxiedPlayer p) {
@@ -58,7 +58,7 @@ public abstract class Game {
 	public void displayManual(ProxiedPlayer p, int page) {
 		page--;
 		if (page < 0 || page + 1 >= manual.length) {
-			Util.msg(p, "&cThat page in the manual doesn't exist! Choose between page 1-" + manual.length + ".");
+			Util.msgRaw(p, "&cThat page in the manual doesn't exist! Choose between page 1-" + manual.length + ".");
 			return;
 		}
 		p.sendMessage(manual[page]);
