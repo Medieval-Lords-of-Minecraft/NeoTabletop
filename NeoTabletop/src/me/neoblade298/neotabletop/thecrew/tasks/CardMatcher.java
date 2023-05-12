@@ -6,6 +6,7 @@ import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
 public class CardMatcher {
 	private int value;
 	private CardType type;
+	private String display;
 	public CardMatcher(String matcher) {
 		char num = matcher.charAt(0);
 		if (num == '*') {
@@ -33,6 +34,17 @@ public class CardMatcher {
 			break;
 			}
 		}
+		
+		// Calculate display
+		if (value == -1) {
+			display = type.getColor() + "Any " + type.getDisplay() + " Card";
+		}
+		else if (type == null) {
+			display = "Any " + value + " Card";
+		}
+		else {
+			display = type.getColor() + type.getDisplay() + " " + value;
+		}
 	}
 	
 	public boolean match(TheCrewCard card) {
@@ -43,5 +55,9 @@ public class CardMatcher {
 			return false;
 		}
 		return true;
+	}
+	
+	public String getDisplay() {
+		return display;
 	}
 }

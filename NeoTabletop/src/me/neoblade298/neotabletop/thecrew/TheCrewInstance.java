@@ -38,7 +38,6 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 	
 	// Play phase
 	private ArrayList<TheCrewCardInstance> pile = new ArrayList<TheCrewCardInstance>();
-	private ArrayList<TheCrewTask> tasksCompletedThisRound = new ArrayList<TheCrewTask>();
 	
 	// Lose phase
 	private TheCrewTask lossReason;
@@ -241,8 +240,6 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		}
 		pile.clear();
 		
-		tasksCompletedThisRound.clear();
-		
 		startRound(this.round);
 	}
 	
@@ -271,7 +268,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 			tcp.sortHand();
 			
 			for (TheCrewTask task : tcp.getTasks()) {
-				task.setComplete(false);
+				task.reset();
 			}
 		}
 		
@@ -378,13 +375,12 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		}
 		
 		TheCrewPlayer tcp = turnOrder.get(winningPlayer);
+		boolean lastTrick = (totalRounds == round);
 		
 		// Figure out what tasks have completed
 		for (TheCrewPlayer p : turnOrder) {
 			for (TheCrewTask task : p.getTasks()) {
-				TaskResult result = task.onTrickEnd(this, tcp, pile);
-				if (result == TaskResult.SUCCESS) tasksCompletedThisRound.add(task);
-				else if (result == TaskResult.FAIL) {
+				if (task.hasFailed(this, tcp, pile, lastTrick)) {
 					phase = GamePhase.LOSE;
 					broadcastInfo();
 					return;
@@ -392,11 +388,14 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 			}
 		}
 		
-		// Now that we know we haven't lost due to a task, complete the tasks
-		for (TheCrewTask task : tasksCompletedThisRound) {
-			task.setComplete(true);
+		for (TheCrewPlayer p : turnOrder) {
+			for (TheCrewTask task : p.getTasks()) {
+				if (task.update(this, tcp, pile, lastTrick)) {
+					broadcast("&e" + p.getName() + " &7completed task: " + task.getDisplay());
+				}
+			}
 		}
-		tasksCompletedThisRound.clear();
+		
 		tcp.winTrick(pile);
 		broadcast("&e" + tcp.getName() + " &7won the round with " + winningCard.getDisplay() + "&7!");
 		setFirst(tcp.getUniqueId());
