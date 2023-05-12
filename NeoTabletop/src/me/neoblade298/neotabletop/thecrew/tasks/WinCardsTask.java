@@ -2,7 +2,6 @@ package me.neoblade298.neotabletop.thecrew.tasks;
 
 import java.util.ArrayList;
 
-import me.neoblade298.neotabletop.thecrew.TheCrewCard;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
@@ -28,8 +27,9 @@ public class WinCardsTask extends TheCrewTask {
 		}
 	}
 	
-	public WinCardsTask(TheCrewPlayer owner, ArrayList<CardMatcher> cards, boolean negate) {
+	public WinCardsTask(TheCrewPlayer owner, String display, ArrayList<CardMatcher> cards, boolean negate) {
 		super(owner);
+		this.display = display;
 		for (CardMatcher card : cards) {
 			this.cards.add(card);
 		}
@@ -38,11 +38,11 @@ public class WinCardsTask extends TheCrewTask {
 
 	@Override
 	public WinCardsTask clone(TheCrewPlayer owner) {
-		return new WinCardsTask(owner, this.cards, this.negate);
+		return new WinCardsTask(owner, this.display, this.cards, this.negate);
 	}
 	
 	@Override
-	public boolean hasFailed(TheCrewInstance inst, TheCrewPlayer winner, ArrayList<TheCrewCardInstance> pile, boolean lastTrick) {
+	public boolean hasFailed(TheCrewInstance inst, TheCrewPlayer winner, ArrayList<TheCrewCardInstance> pile) {
 		for (TheCrewCardInstance card : pile) {
 			for (int i = 0; i < cards.size(); i++) {
 				CardMatcher matcher = cards.get(i);
@@ -59,7 +59,7 @@ public class WinCardsTask extends TheCrewTask {
 	}
 
 	@Override
-	public boolean update(TheCrewInstance inst, TheCrewPlayer winner, ArrayList<TheCrewCardInstance> pile, boolean lastTrick) {
+	public boolean update(TheCrewInstance inst, TheCrewPlayer winner, ArrayList<TheCrewCardInstance> pile) {
 		ArrayList<Integer> toRemove = new ArrayList<Integer>(cards.size());
 		for (TheCrewCardInstance card : pile) {
 			for (int i = 0; i < cards.size(); i++) {

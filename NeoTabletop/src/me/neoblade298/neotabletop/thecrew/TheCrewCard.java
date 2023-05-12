@@ -3,9 +3,9 @@ package me.neoblade298.neotabletop.thecrew;
 import net.md_5.bungee.api.ChatColor;
 
 public class TheCrewCard {
-	private CardType type;
-	private int value;
-	private String display;
+	protected CardType type;
+	protected int value;
+	protected String display;
 	
 	public TheCrewCard(CardType type, int value) {
 		this.type = type;

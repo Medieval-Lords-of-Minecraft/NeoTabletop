@@ -7,6 +7,7 @@ public class CardMatcher {
 	private int value;
 	private CardType type;
 	private String display;
+	private int totalCardsMatching;
 	public CardMatcher(String matcher) {
 		char num = matcher.charAt(0);
 		if (num == '*') {
@@ -35,15 +36,20 @@ public class CardMatcher {
 			}
 		}
 		
+		// Calculate total cards matching
+		
 		// Calculate display
 		if (value == -1) {
 			display = type.getColor() + "Any " + type.getDisplay() + " Card";
+			totalCardsMatching = (type == CardType.SUB ? 4 : 9);
 		}
 		else if (type == null) {
 			display = "Any " + value + " Card";
+			totalCardsMatching = 4;
 		}
 		else {
 			display = type.getColor() + type.getDisplay() + " " + value;
+			totalCardsMatching = 1;
 		}
 	}
 	
@@ -57,7 +63,24 @@ public class CardMatcher {
 		return true;
 	}
 	
+	public CardType getType() {
+		return type;
+	}
+	
 	public String getDisplay() {
 		return display;
+	}
+	
+	public int getTotalCardsMatching() {
+		return totalCardsMatching;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof CardMatcher) {
+			CardMatcher cm = (CardMatcher) o;
+			return cm.getType() == type && cm.value == value;
+		}
+		return false;
 	}
 }

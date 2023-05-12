@@ -3,7 +3,6 @@ package me.neoblade298.neotabletop.thecrew.tasks;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import me.neoblade298.neotabletop.thecrew.TheCrewCard;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
@@ -16,6 +15,9 @@ public abstract class TheCrewTask {
 	
 	public TheCrewTask(TheCrewPlayer owner) {
 		this.owner = owner;
+		if (owner != null) {
+			reset();
+		}
 	}
 	
 	public int getDifficulty(int players) {
@@ -33,8 +35,8 @@ public abstract class TheCrewTask {
 
 	public abstract void reset();
 	public abstract TheCrewTask clone(TheCrewPlayer owner);
-	public abstract boolean hasFailed(TheCrewInstance inst, TheCrewPlayer winner, ArrayList<TheCrewCardInstance> pile, boolean lastTrick);
-	public abstract boolean update(TheCrewInstance inst, TheCrewPlayer winner, ArrayList<TheCrewCardInstance> pile, boolean lastTrick);
+	public abstract boolean hasFailed(TheCrewInstance inst, TheCrewPlayer winner, ArrayList<TheCrewCardInstance> pile);
+	public abstract boolean update(TheCrewInstance inst, TheCrewPlayer winner, ArrayList<TheCrewCardInstance> pile);
 	
 	public enum TaskResult {
 		FAIL,

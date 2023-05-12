@@ -13,4 +13,13 @@ public class TheCrewCardInstance extends TheCrewCard {
 	public TheCrewPlayer getPlayer() {
 		return player;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof TheCrewCardInstance) {
+			TheCrewCardInstance card = (TheCrewCardInstance) o;
+			return card.type == type && card.value == value;
+		}
+		return false;
+	}
 }

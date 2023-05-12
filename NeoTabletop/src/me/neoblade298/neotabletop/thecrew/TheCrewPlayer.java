@@ -17,6 +17,7 @@ public class TheCrewPlayer extends GamePlayer {
 	private LinkedList<TheCrewCardInstance> hand = new LinkedList<TheCrewCardInstance>();
 	private LinkedList<TheCrewTask> tasks = new LinkedList<TheCrewTask>();
 	private ArrayList<TheCrewCardInstance> cardsWon = new ArrayList<TheCrewCardInstance>();
+	private TheCrewCardInstance lastPlayed;
 	private int tricksWon = 0;
 
 	public TheCrewPlayer(UUID uuid, String name, ProxiedPlayer p) {
@@ -27,8 +28,9 @@ public class TheCrewPlayer extends GamePlayer {
 		return hand.get(num);
 	}
 	
-	public TheCrewCardInstance removeCard(int num) {
-		return hand.remove(num);
+	public TheCrewCardInstance playCard(int num) {
+		lastPlayed = hand.remove(num);
+		return lastPlayed;
 	}
 	
 	public void addCard(TheCrewCardInstance card) {
@@ -109,5 +111,22 @@ public class TheCrewPlayer extends GamePlayer {
 	
 	public ArrayList<TheCrewCardInstance> getCardsWon() {
 		return cardsWon;
+	}
+	
+	public LinkedList<TheCrewCardInstance> getHand() {
+		return hand;
+	}
+	
+	public TheCrewCardInstance getLastPlayed() {
+		return lastPlayed;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof TheCrewPlayer) {
+			TheCrewPlayer tcp = (TheCrewPlayer) o;
+			return tcp.getUniqueId().equals(uuid);
+		}
+		return false;
 	}
 }

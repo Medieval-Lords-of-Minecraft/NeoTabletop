@@ -124,11 +124,13 @@ public class GameManager implements Listener {
 	}
 	
 	public static void startGame(GameLobby<? extends GamePlayer> lob, GameInstance<? extends GamePlayer> inst) {
+		lob.broadcast("The game has started!");
 		lobbies.remove(lob.getName());
 		instances.put(inst.getName(), inst);
 	}
 	
 	public static void endGame(GameLobby<? extends GamePlayer> lob, GameInstance<? extends GamePlayer> inst) {
+		lob.broadcast("The game has ended and you've all been returned to the lobby.");
 		instances.remove(inst.getName());
 		lobbies.put(lob.getName(), lob);
 	}

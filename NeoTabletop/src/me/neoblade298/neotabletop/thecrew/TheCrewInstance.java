@@ -16,7 +16,6 @@ import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.NeoTabletop;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
 import me.neoblade298.neotabletop.thecrew.tasks.TheCrewTask;
-import me.neoblade298.neotabletop.thecrew.tasks.TheCrewTask.TaskResult;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -81,7 +80,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		boolean viewerTurn = turnOrder.get(turn).getUniqueId().equals(viewer.getUniqueId());
 		
 		if (isHost) {
-			p.getPlayer().sendMessage(SharedUtil.createText("&8[&7Click for game moderation tools&7]&8", "Click here!", "tt kicklist").create());
+			p.getPlayer().sendMessage(SharedUtil.createText("&8[&7Click for game moderation tools&7]&8", "Click here!", "thecrew mod").create());
 		}
 		switch (phase) {
 		case SETUP: Util.msgRaw(viewer, "&7Game is being setup...");
@@ -134,6 +133,9 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 			if (viewer.getUniqueId().equals(host)) {
 				Util.msgRaw(viewer, "&cYou lost!");
 				Util.msgRaw(viewer, "&7Failed to perform task: " + lossReason.getDisplay());
+				p.displayHand(viewer);
+				viewer.sendMessage(SharedUtil.createText("&8[&7Click or hover to view accepted tasks&8]",
+						createTaskHover(), "thecrew viewtasks").create());
 				ComponentBuilder b = SharedUtil.createText("&8[&7Click to redo round&8]", "Click here!", "thecrew restartround");
 				SharedUtil.appendText(b, " [&7Click to restart from round 1&8]", "Click here!", "thecrew restartgame");
 				SharedUtil.appendText(b, " [&7Click to return to lobby&8]", "Click here!", "tt return");
@@ -142,6 +144,9 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 			else {
 				Util.msgRaw(viewer, "&cYou lost! Waiting for host to decide what to do next...");
 				Util.msgRaw(viewer, "&7Failed to perform task: " + lossReason.getDisplay());
+				p.displayHand(viewer);
+				viewer.sendMessage(SharedUtil.createText("&8[&7Click or hover to view accepted tasks&8]",
+						createTaskHover(), "thecrew viewtasks").create());
 			}
 			break;
 		}
@@ -152,22 +157,35 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		if (phase == GamePhase.PLAY) {
 			Util.msgRaw(viewer, "Rounds remaining: &e" + (totalRounds - round));
 			Util.msgRaw(viewer, "&7Turn Order (Hover or click to view hand):");
-			int num = 0;
-			for (TheCrewPlayer tcp : turnOrder) {
-				String text = "&7- &c" + tcp.getName() + " &6" + tcp.getWins() + "W&7";
-				if (tcp.getUniqueId().equals(captain.getUniqueId())) {
-					text += " (&4Captain&7)";
-				}
-				text += ": ";
-				text += pile.size() > num ? pile.get(num).getDisplay() : "???";
-				viewer.sendMessage(SharedUtil.createText(text, tcp.createHandHoverText(), "thecrew viewhand " + tcp.getName()).create());
-			}
+			showAllHands(viewer);
+			viewer.sendMessage(SharedUtil.createText("&8[&7Click or hover to view accepted tasks&8]",
+					createTaskHover(), "thecrew viewtasks").create());
+		}
+		else if (phase == GamePhase.LOSE) {
+			Util.msgRaw(viewer, "&cYou lost! Waiting for host to decide what to do next...");
+			Util.msgRaw(viewer, "&7Failed to perform task: " + lossReason.getDisplay());
+			showAllHands(viewer);
 			viewer.sendMessage(SharedUtil.createText("&8[&7Click or hover to view accepted tasks&8]",
 					createTaskHover(), "thecrew viewtasks").create());
 		}
 		else {
 			displayInfo(viewer, viewer);
 		}
+	}
+	
+	public void showAllHands(ProxiedPlayer viewer) {
+		int num = 0;
+		for (TheCrewPlayer tcp : turnOrder) {
+			String text = "&7- &c" + tcp.getName() + " &6" + tcp.getWins() + "W&7";
+			if (tcp.getUniqueId().equals(captain.getUniqueId())) {
+				text += " (&4Captain&7)";
+			}
+			text += ": ";
+			text += pile.size() > num ? pile.get(num).getDisplay() : "???";
+			viewer.sendMessage(SharedUtil.createText(text, tcp.createHandHoverText(), "thecrew viewhand " + tcp.getName()).create());
+		}
+		viewer.sendMessage(SharedUtil.createText("&8[&7Click or hover to view accepted tasks&8]",
+				createTaskHover(), "thecrew viewtasks").create());
 	}
 	
 	public void broadcastInfo() {
@@ -223,7 +241,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 	}
 	
 	public void restartRound(ProxiedPlayer p) {
-		if (phase != GamePhase.LOSE) {
+		if (phase != GamePhase.LOSE && phase != GamePhase.PLAY) {
 			Util.msgRaw(p, "&cYou can't do that right now!");
 			return;
 		}
@@ -244,7 +262,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 	}
 	
 	public void restartGame(ProxiedPlayer p) {
-		if (phase != GamePhase.LOSE) {
+		if (phase != GamePhase.LOSE && phase != GamePhase.PLAY) {
 			Util.msgRaw(p, "&cYou can't do that right now!");
 			return;
 		}
@@ -341,7 +359,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 			}
 		}
 		
-		pile.add(pile.size(), tcp.removeCard(num));
+		pile.add(pile.size(), tcp.playCard(num));
 		broadcast("&e" + p.getName() + " &7plays " + toPlay.getDisplay());
 
 		int time = 1;
@@ -391,6 +409,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		for (TheCrewPlayer p : turnOrder) {
 			for (TheCrewTask task : p.getTasks()) {
 				if (task.update(this, tcp, pile, lastTrick)) {
+					task.setComplete(true);
 					broadcast("&e" + p.getName() + " &7completed task: " + task.getDisplay());
 				}
 			}
