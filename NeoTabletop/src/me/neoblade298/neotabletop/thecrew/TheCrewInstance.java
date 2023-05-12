@@ -16,6 +16,7 @@ import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.NeoTabletop;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
 import me.neoblade298.neotabletop.thecrew.tasks.TheCrewTask;
+import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -393,12 +394,11 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		}
 		
 		TheCrewPlayer tcp = turnOrder.get(winningPlayer);
-		boolean lastTrick = (totalRounds == round);
 		
 		// Figure out what tasks have completed
 		for (TheCrewPlayer p : turnOrder) {
 			for (TheCrewTask task : p.getTasks()) {
-				if (task.hasFailed(this, tcp, pile, lastTrick)) {
+				if (task.hasFailed(this, tcp, pile)) {
 					phase = GamePhase.LOSE;
 					broadcastInfo();
 					return;
@@ -408,7 +408,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		
 		for (TheCrewPlayer p : turnOrder) {
 			for (TheCrewTask task : p.getTasks()) {
-				if (task.update(this, tcp, pile, lastTrick)) {
+				if (task.update(this, tcp, pile)) {
 					task.setComplete(true);
 					broadcast("&e" + p.getName() + " &7completed task: " + task.getDisplay());
 				}
@@ -625,5 +625,18 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		SELECT_TASKS,
 		PLAY,
 		LOSE;
+	}
+
+	@Override
+	public void showDebug(CommandSender s) {
+		Util.msgRaw(s, "Round: " + round + ", Total Rounds: " + totalRounds + ", Phase: " + phase + ", Turn: " + turn);
+		Util.msgRaw(s, "Turn Order: " + turnOrder);
+		for (TheCrewPlayer p : turnOrder) {
+			for (TheCrewTask task : p.getTasks()) {
+				Util.msgRaw(s, "Tasks for " + p.getName() + ":");
+				Util.msgRaw(s, "- " + (task.isComplete() ? "(done) " : "") + task.getDisplay());
+				task.showDebug(s);
+			}
+		}
 	}
 }

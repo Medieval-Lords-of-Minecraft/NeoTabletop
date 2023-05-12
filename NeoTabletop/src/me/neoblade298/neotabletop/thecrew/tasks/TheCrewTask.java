@@ -6,6 +6,7 @@ import java.util.HashMap;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
+import net.md_5.bungee.api.CommandSender;
 
 public abstract class TheCrewTask {
 	protected TheCrewPlayer owner;
@@ -34,6 +35,7 @@ public abstract class TheCrewTask {
 	}
 
 	public abstract void reset();
+	public abstract void showDebug(CommandSender s);
 	public abstract TheCrewTask clone(TheCrewPlayer owner);
 	public abstract boolean hasFailed(TheCrewInstance inst, TheCrewPlayer winner, ArrayList<TheCrewCardInstance> pile);
 	public abstract boolean update(TheCrewInstance inst, TheCrewPlayer winner, ArrayList<TheCrewCardInstance> pile);

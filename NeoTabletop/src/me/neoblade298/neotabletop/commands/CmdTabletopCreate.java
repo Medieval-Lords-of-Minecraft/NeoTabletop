@@ -44,16 +44,16 @@ public class CmdTabletopCreate extends Subcommand {
 		GameSession<? extends GamePlayer> sess = GameManager.getSession(uuid);
 		if (sess != null) {
 			String sessionType = sess instanceof GameLobby ? "lobby" : "instance";
-			Util.msgRaw(s, "&cYou're already in " + sessionType + " &e" + sess.getName() + " &7for game &e" + sess.getGame().getName() + "&7!");
+			Util.msg(s, "&cYou're already in " + sessionType + " &e" + sess.getName() + " &7for game &e" + sess.getGame().getName() + "&7!");
 			return;
 		}
 		else if (GameManager.sessionExists(args[1])) {
-			Util.msgRaw(s, "&cThe name &e" + args[1] + "&c is already taken!");
+			Util.msg(s, "&cThe name &e" + args[1] + "&c is already taken!");
 			return;
 		}
 		Game g = GameManager.getGame(game);
 		if (g == null) {
-			Util.msgRaw(s, "&cThat game doesn't exist! Try using /tt games to see a full list!");
+			Util.msg(s, "&cThat game doesn't exist! Try using /tt games to see a full list!");
 			return;
 		}
 

@@ -2,14 +2,26 @@ package me.neoblade298.neotabletop.thecrew.tasks;
 
 import java.util.ArrayList;
 
+import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
+import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.config.Configuration;
 
 public class WinCardsTask extends TheCrewTask {
 	private boolean negate = false;
 	private ArrayList<CardMatcher> cards = new ArrayList<CardMatcher>(), completed = new ArrayList<CardMatcher>();
+	
+	@Override
+	public void showDebug(CommandSender s) {
+		String text = "cards:";
+		for (CardMatcher cm : cards) text += " " + cm;
+		Util.msgRaw(s, text);
+		text = "completed:";
+		for (CardMatcher cm : completed) text += " " + cm;
+		Util.msgRaw(s, text);
+	}
 	
 	public WinCardsTask(Configuration cfg) {
 		super(null);
@@ -83,6 +95,5 @@ public class WinCardsTask extends TheCrewTask {
 	public void reset() {
 		cards.addAll(completed);
 		completed.clear();
-		
 	}
 }

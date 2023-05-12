@@ -26,12 +26,12 @@ public class CmdTabletopKicklist extends Subcommand {
 		UUID uuid = p.getUniqueId();
 		GameSession<? extends GamePlayer> sess = GameManager.getSession(uuid);
 		if (sess == null && !(sess instanceof GameInstance)) {
-			Util.msgRaw(p, "&cYou're not in a game instance!");
+			Util.msg(p, "&cYou're not in a game instance!");
 			return;
 		}
 		
 		if (!sess.getHost().equals(uuid)) {
-			Util.msgRaw(p, "&cOnly the host may access the kick list!");
+			Util.msg(p, "&cOnly the host may access the kick list!");
 			return;
 		}
 

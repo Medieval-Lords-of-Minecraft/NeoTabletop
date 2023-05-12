@@ -2,16 +2,22 @@ package me.neoblade298.neotabletop.thecrew.tasks;
 
 import java.util.ArrayList;
 
+import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
+import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.config.Configuration;
 
 public class WinCardsTypeExclusiveTask extends TheCrewTask {
 	private boolean hasWon = false;
 	private int numExcluded = 0;
-	private CardMatcher win;
-	private CardMatcher exclude;
+	private CardMatcher win, exclude;
+	
+	@Override
+	public void showDebug(CommandSender s) {
+		Util.msgRaw(s, "hasWon: " + hasWon + ", numExcluded: " + numExcluded + ", win: " + win + ", exclude: " + exclude);
+	}
 	
 	public WinCardsTypeExclusiveTask(Configuration cfg) {
 		super(null);

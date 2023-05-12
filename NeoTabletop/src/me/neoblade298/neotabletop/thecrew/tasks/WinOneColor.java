@@ -4,16 +4,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
+import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.config.Configuration;
 
 public class WinOneColor extends TheCrewTask {
 	private HashMap<CardType, Integer> numWon = new HashMap<CardType, Integer>();
 	private HashSet<CardType> colorsRemaining = new HashSet<CardType>();
+	
+	@Override
+	public void showDebug(CommandSender s) {
+		Util.msgRaw(s, "numWon: " + numWon);
+		Util.msgRaw(s, "colorsRemaining: " + colorsRemaining);
+	}
 	
 	public WinOneColor(Configuration cfg) {
 		super(null);

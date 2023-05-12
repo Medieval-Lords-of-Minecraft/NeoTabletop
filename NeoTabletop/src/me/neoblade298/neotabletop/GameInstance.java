@@ -122,5 +122,6 @@ public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> 
 	}
 	
 	public abstract void onSpectate(ProxiedPlayer p);
+	public abstract void showDebug(CommandSender s);
 	public abstract GameLobby<T> onEnd();
 }

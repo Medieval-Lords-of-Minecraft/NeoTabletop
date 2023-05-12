@@ -24,13 +24,13 @@ public class CmdTabletopManual extends Subcommand {
 	public void run(CommandSender s, String[] args) {
 		Game g = GameManager.getGame(args[0]);
 		if (g == null) {
-			Util.msgRaw(s, "&cThat game doesn't exist! Try using /tt games to see a full list!");
+			Util.msg(s, "&cThat game doesn't exist! Try using /tt games to see a full list!");
 			return;
 		}
 
 		if (args.length > 1) {
 			if (!SharedUtil.isNumeric(args[1])) {
-				Util.msgRaw(s, "&cPage number must be an integer!");
+				Util.msg(s, "&cPage number must be an integer!");
 				return;
 			}
 			g.displayManual((ProxiedPlayer) s, Integer.parseInt(args[1]));

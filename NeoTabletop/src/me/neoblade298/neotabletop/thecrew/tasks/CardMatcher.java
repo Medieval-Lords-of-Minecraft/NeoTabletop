@@ -6,9 +6,10 @@ import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
 public class CardMatcher {
 	private int value;
 	private CardType type;
-	private String display;
+	private String display, base;
 	private int totalCardsMatching;
 	public CardMatcher(String matcher) {
+		this.base = matcher;
 		char num = matcher.charAt(0);
 		if (num == '*') {
 			value = -1;
@@ -82,5 +83,9 @@ public class CardMatcher {
 			return cm.getType() == type && cm.value == value;
 		}
 		return false;
+	}
+	
+	public String toString() {
+		return base;
 	}
 }

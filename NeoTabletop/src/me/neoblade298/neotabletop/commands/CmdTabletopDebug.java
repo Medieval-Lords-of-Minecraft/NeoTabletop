@@ -4,28 +4,29 @@ import me.neoblade298.neocore.bungee.commands.Subcommand;
 import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neocore.shared.commands.Arg;
 import me.neoblade298.neocore.shared.commands.SubcommandRunner;
-import me.neoblade298.neotabletop.Game;
+import me.neoblade298.neotabletop.GameInstance;
 import me.neoblade298.neotabletop.GameManager;
+import me.neoblade298.neotabletop.GamePlayer;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class CmdTabletopViewGame extends Subcommand {
+public class CmdTabletopDebug extends Subcommand {
 
-	// /tt viewgame [game]
-	public CmdTabletopViewGame(String key, String desc, String perm, SubcommandRunner runner) {
+	// /tt debug [instance name]
+	public CmdTabletopDebug(String key, String desc, String perm, SubcommandRunner runner) {
 		super(key, desc, perm, runner);
-		args.add(new Arg("game"));
+		args.add(new Arg("session name"));
 		hidden = true;
 	}
 
 	@Override
 	public void run(CommandSender s, String[] args) {
-		Game g = GameManager.getGame(args[0]);
-		if (g == null) {
-			Util.msg(s, "&cThat game doesn't exist! Try using /tt games to see a full list!");
+		GameInstance<? extends GamePlayer> inst = GameManager.getInstance(args[0]);
+		if (inst == null) {
+			Util.msg(s, "&cThat instance doesn't exist!");
 			return;
 		}
 
-		g.displayInfo((ProxiedPlayer) s);
+		inst.showDebug(s);
 	}
+
 }

@@ -24,7 +24,7 @@ public class CmdTabletopLeave extends Subcommand {
 		UUID uuid = p.getUniqueId();
 		GameSession<? extends GamePlayer> sess = GameManager.getSession(uuid);
 		if (sess == null) {
-			Util.msgRaw(p, "&cYou're not in a game session!");
+			Util.msg(p, "&cYou're not in a game session!");
 			return;
 		}
 

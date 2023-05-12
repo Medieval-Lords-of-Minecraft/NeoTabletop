@@ -25,7 +25,7 @@ public class CmdTabletopInfo extends Subcommand {
 		ProxiedPlayer p = args.length > 0 ? ProxyServer.getInstance().getPlayer(args[0]) : (ProxiedPlayer) s;
 		GameSession<? extends GamePlayer> sess = GameManager.getSession(p.getUniqueId());
 		if (sess == null) {
-			Util.msgRaw(p, "&cPlayer is not currently in a session!");
+			Util.msg(p, "&cPlayer is not currently in a session!");
 			return;
 		}
 

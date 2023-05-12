@@ -29,13 +29,13 @@ public class CmdTabletopSetParameter extends Subcommand {
 		UUID uuid = p.getUniqueId();
 		GameSession<? extends GamePlayer> sess = GameManager.getSession(uuid);
 		if (sess == null || !(sess instanceof GameLobby)) {
-			Util.msgRaw(p, "&cYou're not in a game lobby!");
+			Util.msg(p, "&cYou're not in a game lobby!");
 			return;
 		}
 		GameLobby<? extends GamePlayer> lob = (GameLobby<? extends GamePlayer>) sess;
 		
 		if (!sess.getHost().equals(uuid)) {
-			Util.msgRaw(p, "&cOnly the host may change game parameters!");
+			Util.msg(p, "&cOnly the host may change game parameters!");
 			return;
 		}
 

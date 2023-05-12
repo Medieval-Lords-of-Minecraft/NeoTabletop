@@ -1,14 +1,13 @@
 package me.neoblade298.neotabletop.thecrew.tasks;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 
+import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
-import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
+import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.config.Configuration;
 
 public class WinTrickUsingTask extends TheCrewTask {
@@ -86,5 +85,11 @@ public class WinTrickUsingTask extends TheCrewTask {
 				}
 			}
 		}
+	}
+	
+	@Override
+	public void showDebug(CommandSender s) {
+		Util.msgRaw(s, "win: " + win + ", winRemaining: " + winRemaining);
+		Util.msgRaw(s, "using: " + using + ", usingRemaining: " + usingRemaining);
 	}
 }

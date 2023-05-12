@@ -2,15 +2,23 @@ package me.neoblade298.neotabletop.thecrew.tasks;
 
 import java.util.ArrayList;
 
+import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
+import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.config.Configuration;
 
 public class CompareColorsTask extends TheCrewTask {
 	private CardMatcher card, comp;
 	private boolean more, allowZero; // If true, win more card than comp. False, win equal card and comp
 	private int cardsLeft = 9, compsLeft = 9;
+
+	@Override
+	public void showDebug(CommandSender s) {
+		Util.msgRaw(s, "card: " + card + ", comp: " + comp + ", more: " + more + ", allowZero: " + allowZero + ", cardsLeft: " +
+				cardsLeft + ", compsLeft: " + compsLeft);
+	}
 	
 	public CompareColorsTask(Configuration cfg) {
 		super(null);

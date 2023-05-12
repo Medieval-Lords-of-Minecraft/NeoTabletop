@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import me.neoblade298.neocore.bungee.commands.Subcommand;
 import me.neoblade298.neocore.bungee.util.Util;
-import me.neoblade298.neocore.shared.commands.Arg;
 import me.neoblade298.neocore.shared.commands.SubcommandRunner;
 import me.neoblade298.neotabletop.GameInstance;
 import me.neoblade298.neotabletop.GameManager;
@@ -27,12 +26,12 @@ public class CmdTabletopReturn extends Subcommand {
 		UUID uuid = p.getUniqueId();
 		GameSession<? extends GamePlayer> sess = GameManager.getSession(uuid);
 		if (sess == null && sess instanceof GameInstance) {
-			Util.msgRaw(p, "&cYou're not in a game!");
+			Util.msg(p, "&cYou're not in a game!");
 			return;
 		}
 		
 		if (!sess.getHost().equals(uuid)) {
-			Util.msgRaw(p, "&cOnly the host may return everyone to a lobby!");
+			Util.msg(p, "&cOnly the host may return everyone to a lobby!");
 			return;
 		}
 

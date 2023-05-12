@@ -41,6 +41,7 @@ public class NeoTabletop extends Plugin {
 		mngr.register(new CmdTabletopSetHost("sethost", "Sets the game host", null, SubcommandRunner.PLAYER_ONLY));
 		mngr.register(new CmdTabletopViewGame("viewgame", "Gets additional info for a game", null, SubcommandRunner.PLAYER_ONLY));
 		mngr.register(new CmdTabletopManual("manual", "View a game's manual", null, SubcommandRunner.PLAYER_ONLY));
+		mngr.register(new CmdTabletopDebug("debug", "Show debug for an instance", null, SubcommandRunner.PLAYER_ONLY));
 		
 		mngr = new SubcommandManager("tta", "tabletop.admin", ChatColor.DARK_RED, this);
 		mngr.registerCommandList("");

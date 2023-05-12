@@ -2,13 +2,14 @@ package me.neoblade298.neotabletop.thecrew.tasks;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
+import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
+import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.config.Configuration;
 
 public class WinCardsCompareMultipleTask extends TheCrewTask {
@@ -16,6 +17,16 @@ public class WinCardsCompareMultipleTask extends TheCrewTask {
 	
 	private ArrayList<CardMatcher> cards = new ArrayList<CardMatcher>();
 	private int amount;
+	
+	@Override
+	public void showDebug(CommandSender s) {
+		String text = "cards:";
+		for (CardMatcher cm : cards) text += " " + cm;
+		Util.msgRaw(s, text);
+		Util.msgRaw(s, "amount: " + amount);
+		Util.msgRaw(s, "numWon: " + numWon);
+		Util.msgRaw(s, "numRemaining: " + numRemaining);
+	}
 	
 	public WinCardsCompareMultipleTask(Configuration cfg) {
 		super(null);
@@ -35,7 +46,7 @@ public class WinCardsCompareMultipleTask extends TheCrewTask {
 
 	@Override
 	public WinCardsCompareMultipleTask clone(TheCrewPlayer owner) {
-		return new WinCardsCompareMultipleTask(owner, display, card, atLeast, amount);
+		return new WinCardsCompareMultipleTask(owner, display, cards, amount);
 	}
 	
 	@Override
