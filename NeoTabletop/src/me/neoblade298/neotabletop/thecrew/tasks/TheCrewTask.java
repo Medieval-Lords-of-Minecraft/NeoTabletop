@@ -26,6 +26,7 @@ public abstract class TheCrewTask {
 	public void setComplete(boolean isComplete) {
 		this.isComplete = isComplete;
 	}
+	public abstract void reset();
 
 	public abstract TheCrewTask clone(TheCrewPlayer owner);
 	public abstract TaskResult onTrickEnd(TheCrewInstance inst, TheCrewPlayer winner, ArrayList<TheCrewCardInstance> pile); // Return false to end game
