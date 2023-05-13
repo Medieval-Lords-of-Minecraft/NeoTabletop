@@ -11,11 +11,11 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.config.Configuration;
 
 public class WinCardsCompareTask extends TheCrewTask {
-	private int numWon = 0, numRemaining;
+	protected int numWon = 0, numRemaining;
 	
-	private CardMatcher card;
-	private boolean atLeast; // Either at least or equal
-	private int amount;
+	protected CardMatcher card;
+	protected boolean atLeast; // Either at least or equal
+	protected int amount;
 	
 	@Override
 	public void showDebug(CommandSender s) {
@@ -23,26 +23,25 @@ public class WinCardsCompareTask extends TheCrewTask {
 	}
 	
 	public WinCardsCompareTask(Configuration cfg) {
-		super(null);
+		super(cfg);
 		card = new CardMatcher(cfg.getString("card"));
 		amount = cfg.getInt("amount");
 		atLeast = cfg.getString("comparator").equals(">=");
 		display = "Win " + (atLeast ? "at least" : "exactly") + amount + " of " + card.getDisplay();
 	}
 	
-	public WinCardsCompareTask(TheCrewPlayer owner, String display, CardMatcher card, boolean atLeast, int amount) {
-		super(owner);
+	public WinCardsCompareTask(TheCrewPlayer owner, WinCardsCompareTask src, TheCrewInstance inst) {
+		super(owner, src, inst);
 		
-		this.display = display;
-		this.card = card;
-		this.atLeast = atLeast;
-		this.amount = amount;
+		this.card = src.card;
+		this.atLeast = src.atLeast;
+		this.amount = src.amount;
 		reset();
 	}
 
 	@Override
-	public WinCardsCompareTask clone(TheCrewPlayer owner) {
-		return new WinCardsCompareTask(owner, display, card, atLeast, amount);
+	public WinCardsCompareTask clone(TheCrewPlayer owner, TheCrewInstance inst) {
+		return new WinCardsCompareTask(owner, this, inst);
 	}
 	
 	@Override

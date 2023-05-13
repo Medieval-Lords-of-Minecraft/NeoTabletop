@@ -13,9 +13,9 @@ import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.config.Configuration;
 
-public class WinOneColor extends TheCrewTask {
-	private HashMap<CardType, Integer> numWon = new HashMap<CardType, Integer>();
-	private HashSet<CardType> colorsRemaining = new HashSet<CardType>();
+public class WinOneColorTask extends TheCrewTask {
+	protected HashMap<CardType, Integer> numWon = new HashMap<CardType, Integer>();
+	protected HashSet<CardType> colorsRemaining = new HashSet<CardType>();
 	
 	@Override
 	public void showDebug(CommandSender s) {
@@ -23,19 +23,19 @@ public class WinOneColor extends TheCrewTask {
 		Util.msgRaw(s, "colorsRemaining: " + colorsRemaining);
 	}
 	
-	public WinOneColor(Configuration cfg) {
-		super(null);
+	public WinOneColorTask(Configuration cfg) {
+		super(cfg);
 		display = "Win all cards of at least one color";
 	}
 	
-	public WinOneColor(TheCrewPlayer owner, String display) {
-		super(owner);
+	public WinOneColorTask(TheCrewPlayer owner, WinOneColorTask src, TheCrewInstance inst) {
+		super(owner, src, inst);
 		reset();
 	}
 
 	@Override
-	public WinOneColor clone(TheCrewPlayer owner) {
-		return new WinOneColor(owner, display);
+	public WinOneColorTask clone(TheCrewPlayer owner, TheCrewInstance inst) {
+		return new WinOneColorTask(owner, this, inst);
 	}
 	
 	@Override

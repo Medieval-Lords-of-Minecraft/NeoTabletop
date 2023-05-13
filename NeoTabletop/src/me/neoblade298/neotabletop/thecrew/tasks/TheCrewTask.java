@@ -7,6 +7,7 @@ import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.config.Configuration;
 
 public abstract class TheCrewTask {
 	protected TheCrewPlayer owner;
@@ -14,11 +15,21 @@ public abstract class TheCrewTask {
 	protected String display;
 	protected boolean isComplete = false;
 	
-	public TheCrewTask(TheCrewPlayer owner) {
+	public TheCrewTask(TheCrewPlayer owner, TheCrewTask src, TheCrewInstance inst) {
 		this.owner = owner;
-		if (owner != null) {
-			reset();
+		this.display = src.display;
+		this.difficulty = src.difficulty;
+	}
+	
+	public TheCrewTask(Configuration diffSec) {
+		for (String key : diffSec.getKeys()) {
+			int ikey = Integer.parseInt(key);
+			difficulty.put(ikey, diffSec.getInt(key));
 		}
+	}
+	
+	public HashMap<Integer, Integer> getDifficulty() {
+		return difficulty;
 	}
 	
 	public int getDifficulty(int players) {
@@ -36,7 +47,7 @@ public abstract class TheCrewTask {
 
 	public abstract void reset();
 	public abstract void showDebug(CommandSender s);
-	public abstract TheCrewTask clone(TheCrewPlayer owner);
+	public abstract TheCrewTask clone(TheCrewPlayer owner, TheCrewInstance inst);
 	public abstract boolean hasFailed(TheCrewInstance inst, TheCrewPlayer winner, ArrayList<TheCrewCardInstance> pile);
 	public abstract boolean update(TheCrewInstance inst, TheCrewPlayer winner, ArrayList<TheCrewCardInstance> pile);
 	

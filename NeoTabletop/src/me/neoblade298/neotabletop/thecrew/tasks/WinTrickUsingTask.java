@@ -11,28 +11,28 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.config.Configuration;
 
 public class WinTrickUsingTask extends TheCrewTask {
-	private int winRemaining, usingRemaining;
+	protected int winRemaining, usingRemaining;
 	
-	private CardMatcher win, using;
+	protected CardMatcher win, using;
 	
 	public WinTrickUsingTask(Configuration cfg) {
-		super(null);
+		super(cfg);
 		win = new CardMatcher(cfg.getString("win"));
 		using = new CardMatcher(cfg.getString("using"));
 	}
 	
-	public WinTrickUsingTask(TheCrewPlayer owner, String display, CardMatcher win, CardMatcher using) {
-		super(owner);
+	public WinTrickUsingTask(TheCrewPlayer owner, WinTrickUsingTask src, TheCrewInstance inst) {
+		super(owner, src, inst);
 		
-		this.display = display;
-		this.win = win;
-		this.using = using;
+		this.display = src.display;
+		this.win = src.win;
+		this.using = src.using;
 		reset();
 	}
 
 	@Override
-	public WinTrickUsingTask clone(TheCrewPlayer owner) {
-		return new WinTrickUsingTask(owner, display, win, using);
+	public WinTrickUsingTask clone(TheCrewPlayer owner, TheCrewInstance inst) {
+		return new WinTrickUsingTask(owner, this, inst);
 	}
 	
 	@Override

@@ -632,8 +632,8 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		Util.msgRaw(s, "Round: " + round + ", Total Rounds: " + totalRounds + ", Phase: " + phase + ", Turn: " + turn);
 		Util.msgRaw(s, "Turn Order: " + turnOrder);
 		for (TheCrewPlayer p : turnOrder) {
+			Util.msgRaw(s, p.getName() + " tasks, cardValues: " + p.getCardValues());
 			for (TheCrewTask task : p.getTasks()) {
-				Util.msgRaw(s, "Tasks for " + p.getName() + ":");
 				Util.msgRaw(s, "- " + (task.isComplete() ? "(done) " : "") + task.getDisplay());
 				task.showDebug(s);
 			}

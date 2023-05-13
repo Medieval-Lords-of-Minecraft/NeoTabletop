@@ -10,9 +10,9 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.config.Configuration;
 
 public class WinCardsTypeExclusiveTask extends TheCrewTask {
-	private boolean hasWon = false;
-	private int numExcluded = 0;
-	private CardMatcher win, exclude;
+	protected boolean hasWon = false;
+	protected int numExcluded = 0;
+	protected CardMatcher win, exclude;
 	
 	@Override
 	public void showDebug(CommandSender s) {
@@ -20,23 +20,23 @@ public class WinCardsTypeExclusiveTask extends TheCrewTask {
 	}
 	
 	public WinCardsTypeExclusiveTask(Configuration cfg) {
-		super(null);
+		super(cfg);
 		win = new CardMatcher(cfg.getString("win"));
 		exclude = new CardMatcher(cfg.getString("exclude"));
 
 		display = "Win " + win.getDisplay() + " &fand no other card of that type";
 	}
 	
-	public WinCardsTypeExclusiveTask(TheCrewPlayer owner, String display, CardMatcher win, CardMatcher exclude) {
-		super(owner);
-		this.win = win;
-		this.exclude = exclude;
-		this.display = display;
+	public WinCardsTypeExclusiveTask(TheCrewPlayer owner, WinCardsTypeExclusiveTask src, TheCrewInstance inst) {
+		super(owner, src, inst);
+		this.win = src.win;
+		this.exclude = src.exclude;
+		this.display = src.display;
 	}
 
 	@Override
-	public WinCardsTypeExclusiveTask clone(TheCrewPlayer owner) {
-		return new WinCardsTypeExclusiveTask(owner, this.display, this.win, this.exclude);
+	public WinCardsTypeExclusiveTask clone(TheCrewPlayer owner, TheCrewInstance inst) {
+		return new WinCardsTypeExclusiveTask(owner, this, inst);
 	}
 	
 	@Override

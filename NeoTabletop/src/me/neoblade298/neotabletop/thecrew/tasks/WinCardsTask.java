@@ -10,8 +10,8 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.config.Configuration;
 
 public class WinCardsTask extends TheCrewTask {
-	private boolean negate = false;
-	private ArrayList<CardMatcher> cards = new ArrayList<CardMatcher>(), completed = new ArrayList<CardMatcher>();
+	protected boolean negate = false;
+	protected ArrayList<CardMatcher> cards = new ArrayList<CardMatcher>(), completed = new ArrayList<CardMatcher>();
 	
 	@Override
 	public void showDebug(CommandSender s) {
@@ -24,7 +24,7 @@ public class WinCardsTask extends TheCrewTask {
 	}
 	
 	public WinCardsTask(Configuration cfg) {
-		super(null);
+		super(cfg);
 		for (String str : cfg.getStringList("cards")) {
 			cards.add(new CardMatcher(str));
 		}
@@ -39,18 +39,18 @@ public class WinCardsTask extends TheCrewTask {
 		}
 	}
 	
-	public WinCardsTask(TheCrewPlayer owner, String display, ArrayList<CardMatcher> cards, boolean negate) {
-		super(owner);
-		this.display = display;
+	public WinCardsTask(TheCrewPlayer owner, WinCardsTask src, TheCrewInstance inst) {
+		super(owner, src, inst);
+		
 		for (CardMatcher card : cards) {
 			this.cards.add(card);
 		}
-		this.negate = negate;
+		this.negate = src.negate;
 	}
 
 	@Override
-	public WinCardsTask clone(TheCrewPlayer owner) {
-		return new WinCardsTask(owner, this.display, this.cards, this.negate);
+	public WinCardsTask clone(TheCrewPlayer owner, TheCrewInstance inst) {
+		return new WinCardsTask(owner, this, inst);
 	}
 	
 	@Override

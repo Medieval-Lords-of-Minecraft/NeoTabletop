@@ -10,9 +10,9 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.config.Configuration;
 
 public class CompareColorsTask extends TheCrewTask {
-	private CardMatcher card, comp;
-	private boolean more, allowZero; // If true, win more card than comp. False, win equal card and comp
-	private int cardsLeft = 9, compsLeft = 9;
+	protected CardMatcher card, comp;
+	protected boolean more, allowZero; // If true, win more card than comp. False, win equal card and comp
+	protected int cardsLeft = 9, compsLeft = 9;
 
 	@Override
 	public void showDebug(CommandSender s) {
@@ -21,7 +21,7 @@ public class CompareColorsTask extends TheCrewTask {
 	}
 	
 	public CompareColorsTask(Configuration cfg) {
-		super(null);
+		super(cfg);
 		card = new CardMatcher(cfg.getString("card"));
 		comp = new CardMatcher(cfg.getString("comp"));
 		more = cfg.getString("comparator").equals(">");
@@ -42,18 +42,17 @@ public class CompareColorsTask extends TheCrewTask {
 		}
 	}
 	
-	public CompareColorsTask(TheCrewPlayer owner, String display, CardMatcher card, CardMatcher comp, boolean more, boolean allowZero) {
-		super(owner);
-		this.display = display;
-		this.card = card;
-		this.comp = comp;
-		this.more = more;
-		this.allowZero = allowZero;
+	public CompareColorsTask(TheCrewPlayer owner, CompareColorsTask src, TheCrewInstance inst) {
+		super(owner, src, inst);
+		this.card = src.card;
+		this.comp = src.comp;
+		this.more = src.more;
+		this.allowZero = src.allowZero;
 	}
 
 	@Override
-	public CompareColorsTask clone(TheCrewPlayer owner) {
-		return new CompareColorsTask(this.owner, this.display, this.card, this.comp, this.more, this.allowZero);
+	public CompareColorsTask clone(TheCrewPlayer owner, TheCrewInstance inst) {
+		return new CompareColorsTask(this.owner, this, inst);
 	}
 	
 	@Override

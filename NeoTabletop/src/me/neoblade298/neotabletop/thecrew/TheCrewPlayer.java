@@ -5,10 +5,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.TreeSet;
 import java.util.UUID;
 
 import me.neoblade298.neocore.shared.util.SharedUtil;
 import me.neoblade298.neotabletop.GamePlayer;
+import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
 import me.neoblade298.neotabletop.thecrew.tasks.TheCrewTask;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -17,6 +19,7 @@ public class TheCrewPlayer extends GamePlayer {
 	private LinkedList<TheCrewCardInstance> hand = new LinkedList<TheCrewCardInstance>();
 	private LinkedList<TheCrewTask> tasks = new LinkedList<TheCrewTask>();
 	private ArrayList<TheCrewCardInstance> cardsWon = new ArrayList<TheCrewCardInstance>();
+	private TreeSet<Integer> cardValues = new TreeSet<Integer>();
 	private TheCrewCardInstance lastPlayed;
 	private int tricksWon = 0;
 
@@ -30,11 +33,24 @@ public class TheCrewPlayer extends GamePlayer {
 	
 	public TheCrewCardInstance playCard(int num) {
 		lastPlayed = hand.remove(num);
+		
+		// If we have another card with same value, don't remove from cardValues
+		boolean removeValue = true;
+		for (TheCrewCard card : hand) {
+			if (card.getValue() == lastPlayed.getValue() && card.getType() != CardType.SUB) {
+				removeValue = false;
+				break;
+			}
+		}
+		if (removeValue) cardValues.remove(lastPlayed.getValue());
+		
+		if (lastPlayed.getType() != CardType.SUB) cardValues.add(lastPlayed.getValue());
 		return lastPlayed;
 	}
 	
 	public void addCard(TheCrewCardInstance card) {
 		hand.add(card);
+		if (card.getType() != CardType.SUB) cardValues.add(card.getValue());
 	}
 	
 	public void addTask(TheCrewTask task) {
@@ -128,5 +144,18 @@ public class TheCrewPlayer extends GamePlayer {
 			return tcp.getUniqueId().equals(uuid);
 		}
 		return false;
+	}
+	
+	public int getMinCard(boolean includeSubs) {
+		return cardValues.first();
+	}
+	
+	public int getMaxCard(boolean includeSubs) {
+		return cardValues.last();
+	}
+	
+	// List of available values not including subs
+	public TreeSet<Integer> getCardValues() {
+		return cardValues;
 	}
 }

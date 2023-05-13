@@ -15,8 +15,8 @@ import net.md_5.bungee.config.Configuration;
 public class WinCardsCompareMultipleTask extends TheCrewTask {
 	private HashMap<CardType, Integer> numWon = new HashMap<CardType, Integer>(), numRemaining = new HashMap<CardType, Integer>();
 	
-	private ArrayList<CardMatcher> cards = new ArrayList<CardMatcher>();
-	private int amount;
+	protected ArrayList<CardMatcher> cards = new ArrayList<CardMatcher>();
+	protected int amount;
 	
 	@Override
 	public void showDebug(CommandSender s) {
@@ -29,24 +29,23 @@ public class WinCardsCompareMultipleTask extends TheCrewTask {
 	}
 	
 	public WinCardsCompareMultipleTask(Configuration cfg) {
-		super(null);
+		super(cfg);
 		amount = cfg.getInt("amount");
 		
 		display = "Win exactly 1 " + cards.get(0).getDisplay() + " &fand exactly 1 " + cards.get(1).getDisplay();
 	}
 	
-	public WinCardsCompareMultipleTask(TheCrewPlayer owner, String display, ArrayList<CardMatcher> cards, int amount) {
-		super(owner);
+	public WinCardsCompareMultipleTask(TheCrewPlayer owner, WinCardsCompareMultipleTask src, TheCrewInstance inst) {
+		super(owner, src, inst);
 		
-		this.display = display;
-		this.cards = cards;
-		this.amount = amount;
+		this.cards = src.cards;
+		this.amount = src.amount;
 		reset();
 	}
 
 	@Override
-	public WinCardsCompareMultipleTask clone(TheCrewPlayer owner) {
-		return new WinCardsCompareMultipleTask(owner, display, cards, amount);
+	public WinCardsCompareMultipleTask clone(TheCrewPlayer owner, TheCrewInstance inst) {
+		return new WinCardsCompareMultipleTask(owner, this, inst);
 	}
 	
 	@Override
