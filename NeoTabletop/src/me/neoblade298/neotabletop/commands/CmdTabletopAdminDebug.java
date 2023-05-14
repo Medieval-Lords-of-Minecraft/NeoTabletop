@@ -9,10 +9,10 @@ import me.neoblade298.neotabletop.GameManager;
 import me.neoblade298.neotabletop.GamePlayer;
 import net.md_5.bungee.api.CommandSender;
 
-public class CmdTabletopDebug extends Subcommand {
+public class CmdTabletopAdminDebug extends Subcommand {
 
 	// /tt debug [instance name]
-	public CmdTabletopDebug(String key, String desc, String perm, SubcommandRunner runner) {
+	public CmdTabletopAdminDebug(String key, String desc, String perm, SubcommandRunner runner) {
 		super(key, desc, perm, runner);
 		args.add(new Arg("session name"));
 		hidden = true;

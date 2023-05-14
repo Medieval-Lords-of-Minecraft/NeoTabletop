@@ -47,6 +47,7 @@ public class TheCrew extends Game {
 		for (TheCrewCard card : TheCrew.deck) {
 			deck.add(card.createInstance());
 		}
+		System.out.println("Creating deck size " + deck.size() + " " + TheCrew.deck.size());
 		Collections.shuffle(deck);
 		return deck;
 	}

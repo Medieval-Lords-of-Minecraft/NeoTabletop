@@ -22,4 +22,9 @@ public class TheCrewCardInstance extends TheCrewCard {
 		}
 		return false;
 	}
+	
+	@Override
+	public String toString() {
+		return type + " " + value;
+	}
 }

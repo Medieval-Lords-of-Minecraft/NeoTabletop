@@ -57,7 +57,7 @@
 		    <artifactId>NeoCore</artifactId>
 		    <version>1.0</version>
 		    <scope>system</scope>
-		    <systemPath>C:\Users\Alex\git\NeoPaystub\NeoPaystub\resources\NeoCore-0.0.1-SNAPSHOT.jar</systemPath>
+		    <systemPath>C:\Users\Alex\git\NeoTabletop\NeoTabletop\resources\NeoCore-0.0.1-SNAPSHOT.jar</systemPath>
 		</dependency>
   </dependencies>
 </project>

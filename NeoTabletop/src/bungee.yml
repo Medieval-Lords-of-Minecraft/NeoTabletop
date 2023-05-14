@@ -1,4 +1,4 @@
-name: NeoPaystub
+name: NeoTabletop
 main: me.neoblade298.neotabletop.NeoTabletop
 author: [Neoblade298]
 depends: [NeoCore]
