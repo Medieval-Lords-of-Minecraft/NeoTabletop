@@ -3,7 +3,6 @@ package me.neoblade298.neotabletop;
 import me.neoblade298.neocore.bungee.commands.SubcommandManager;
 import me.neoblade298.neocore.shared.commands.SubcommandRunner;
 import me.neoblade298.neotabletop.commands.*;
-import me.neoblade298.neotabletop.thecrew.TheCrew;
 import me.neoblade298.neotabletop.thecrew.commands.*;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;

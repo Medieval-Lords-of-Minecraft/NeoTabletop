@@ -1,14 +1,12 @@
 package me.neoblade298.neotabletop.thecrew.tasks;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
-import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.config.Configuration;
 

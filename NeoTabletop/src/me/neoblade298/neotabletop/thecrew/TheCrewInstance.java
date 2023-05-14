@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.bukkit.ChatColor;
 
+import me.neoblade298.neocore.bungee.BungeeCore;
 import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neocore.shared.util.SharedUtil;
 import me.neoblade298.neotabletop.GameInstance;
@@ -442,13 +443,31 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		
 		// Special case for predicting a task
 		if (task instanceof WinTricksPredictTask) {
-			
+			BungeeCore.promptChatResponse(p, (e) -> {
+				String resp = e.getMessage();
+				if (SharedUtil.isNumeric(resp)) {
+					int amount = Integer.parseInt(resp);
+					if (amount < 0 || amount > totalRounds) {
+						Util.msg(tcp.getPlayer(), "&cYour prediction must be a number between 0 and " + totalRounds + "!");
+						return false;
+					}
+					completeAcceptTask(task, tcp);
+					return true;
+				}
+				Util.msg(tcp.getPlayer(), "&cYour prediction must be a number between 0 and " + totalRounds + "!");
+				return false;
+			});
+			((WinTricksPredictTask) task).clone(tcp, this, 1);
 		}
 		else {
 			tcp.addTask(task.clone(tcp, this));
+			completeAcceptTask(task, tcp);
 		}
+	}
+	
+	private void completeAcceptTask(TheCrewTask task, TheCrewPlayer tcp) {
 		turnOrder.get(turn).addTask(task.clone(tcp, this));
-		broadcast("&e" + p.getName() + " &7has accepted task: &f" + task.getDisplay());
+		broadcast("&e" + tcp.getName() + " &7has accepted task: &f" + task.getDisplay());
 		
 		if (tasks.isEmpty()) {
 			broadcast("Task assignment completed! Starting game...");

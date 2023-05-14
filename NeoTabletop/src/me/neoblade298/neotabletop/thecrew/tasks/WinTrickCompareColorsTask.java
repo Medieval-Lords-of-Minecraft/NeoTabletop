@@ -1,7 +1,6 @@
 package me.neoblade298.neotabletop.thecrew.tasks;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard;
