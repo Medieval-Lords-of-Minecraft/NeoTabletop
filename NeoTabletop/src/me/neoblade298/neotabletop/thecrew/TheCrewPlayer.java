@@ -158,4 +158,8 @@ public class TheCrewPlayer extends GamePlayer {
 	public TreeSet<Integer> getCardValues() {
 		return cardValues;
 	}
+	
+	public void addWin(int num) {
+		tricksWon += num;
+	}
 }

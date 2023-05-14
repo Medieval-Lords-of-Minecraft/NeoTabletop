@@ -32,7 +32,7 @@ public class WinCardsCompareMultipleTask extends TheCrewTask {
 		super(cfg);
 		amount = cfg.getInt("amount");
 		
-		display = "Win exactly 1 " + cards.get(0).getDisplay() + " &fand exactly 1 " + cards.get(1).getDisplay();
+		display = "Win exactly &e1 &f" + cards.get(0).getDisplay() + " &fand exactly &e1 &f" + cards.get(1).getDisplay();
 	}
 	
 	public WinCardsCompareMultipleTask(TheCrewPlayer owner, WinCardsCompareMultipleTask src, TheCrewInstance inst) {

@@ -16,6 +16,7 @@ import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.NeoTabletop;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
 import me.neoblade298.neotabletop.thecrew.tasks.TheCrewTask;
+import me.neoblade298.neotabletop.thecrew.tasks.WinTricksPredictTask;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -396,18 +397,23 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		TheCrewPlayer tcp = turnOrder.get(winningPlayer);
 		
 		// Figure out what tasks have completed
+		tcp.addWin(1); // Temporarily add win to accurately check task fails
 		for (TheCrewPlayer p : turnOrder) {
 			for (TheCrewTask task : p.getTasks()) {
+				if (task.isComplete()) continue; // Skip completed tasks
 				if (task.hasFailed(this, tcp, pile)) {
+					tcp.addWin(-1); // Reset win so round restart works
 					phase = GamePhase.LOSE;
 					broadcastInfo();
 					return;
 				}
 			}
 		}
+		tcp.addWin(-1); // Reset win because tcp.winTrick adds it later
 		
 		for (TheCrewPlayer p : turnOrder) {
 			for (TheCrewTask task : p.getTasks()) {
+				if (task.isComplete()) continue; // Skip completed tasks
 				if (task.update(this, tcp, pile)) {
 					task.setComplete(true);
 					broadcast("&e" + p.getName() + " &7completed task: " + task.getDisplay());
@@ -431,8 +437,17 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 			return;
 		}
 		
+		TheCrewPlayer tcp = players.get(p.getName());
 		TheCrewTask task = tasks.remove(num);
-		turnOrder.get(turn).addTask(task);
+		
+		// Special case for predicting a task
+		if (task instanceof WinTricksPredictTask) {
+			
+		}
+		else {
+			tcp.addTask(task.clone(tcp, this));
+		}
+		turnOrder.get(turn).addTask(task.clone(tcp, this));
 		broadcast("&e" + p.getName() + " &7has accepted task: &f" + task.getDisplay());
 		
 		if (tasks.isEmpty()) {
@@ -616,6 +631,14 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 	
 	public int getRoundsLeft() {
 		return totalRounds - round;
+	}
+	
+	public ArrayList<TheCrewPlayer> getTurnOrder() {
+		return turnOrder;
+	}
+	
+	public TheCrewPlayer getCaptain() {
+		return captain;
 	}
 
 	private enum GamePhase {

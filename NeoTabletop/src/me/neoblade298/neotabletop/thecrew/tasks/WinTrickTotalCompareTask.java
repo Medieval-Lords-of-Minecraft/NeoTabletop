@@ -30,7 +30,9 @@ public class WinTrickTotalCompareTask extends TheCrewTask {
 			int ikey = Integer.parseInt(key);
 			totals.put(ikey, totalSec.getInt(key));
 		}
-		
+
+		display = "Win a trick with a total value " + (more ? "greater" : "less") + " than " + totals.get(3) +
+				" (3-player), " + totals.get(4) + " (4-player), " + totals.get(5) + " (5-player). *No subs";
 		more = cfg.getString("comparator").equals(">");
 		
 	}
@@ -39,7 +41,7 @@ public class WinTrickTotalCompareTask extends TheCrewTask {
 		super(owner, src, inst);
 
 		this.total = inst.getPlayers().size();
-		display = "Win a trick with a total value " + (more ? "greater" : "less") + " than " + total;
+		display = "Win a trick with a total value " + (more ? "greater" : "less") + " than &e" + total + "&f. *No subs";
 		this.total = src.total;
 		this.more = src.more;
 	}
@@ -52,14 +54,18 @@ public class WinTrickTotalCompareTask extends TheCrewTask {
 	@Override
 	public boolean hasFailed(TheCrewInstance inst, TheCrewPlayer winner, ArrayList<TheCrewCardInstance> pile) {
 		int total = 0;
+		boolean containsSub = false;
 		if (winner.equals(owner)) {
 			for (TheCrewCard card : pile) {
-				if (card.getType() == CardType.SUB) return false;
+				if (card.getType() == CardType.SUB) {
+					containsSub = true;
+					break;
+				}
 				
 				total += card.getValue();
 			}
 		}
-		if (more ? total > this.total : total < this.total) return false; // Succeeded
+		if (more ? total > this.total : total < this.total && !containsSub) return false; // Succeeded
 		
 		int potential = 0;
 		for (TheCrewPlayer p : inst.getPlayers().values()) {

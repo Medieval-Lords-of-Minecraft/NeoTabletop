@@ -19,6 +19,8 @@ public class WinTrickUsingTask extends TheCrewTask {
 		super(cfg);
 		win = new CardMatcher(cfg.getString("win"));
 		using = new CardMatcher(cfg.getString("using"));
+		
+		display = "Win " + win.getDisplay() + "&f using " + using.getDisplay();
 	}
 	
 	public WinTrickUsingTask(TheCrewPlayer owner, WinTrickUsingTask src, TheCrewInstance inst) {

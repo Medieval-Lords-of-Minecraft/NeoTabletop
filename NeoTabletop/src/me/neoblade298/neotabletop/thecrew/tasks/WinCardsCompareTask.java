@@ -27,7 +27,7 @@ public class WinCardsCompareTask extends TheCrewTask {
 		card = new CardMatcher(cfg.getString("card"));
 		amount = cfg.getInt("amount");
 		atLeast = cfg.getString("comparator").equals(">=");
-		display = "Win " + (atLeast ? "at least" : "exactly") + amount + " of " + card.getDisplay();
+		display = "Win " + (atLeast ? "at least&e" : "exactly&e") + amount + " &f" + card.getDisplay();
 	}
 	
 	public WinCardsCompareTask(TheCrewPlayer owner, WinCardsCompareTask src, TheCrewInstance inst) {
