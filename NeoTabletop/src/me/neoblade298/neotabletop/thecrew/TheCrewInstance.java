@@ -103,7 +103,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 			else {
 				Util.msgRaw(viewer, "&7Captain is deciding whether to reroll the following tasks:");
 				for (TheCrewTask task : tasks) {
-					Util.msgRaw(viewer, "&7- &f" + task.getDisplay() + " &7(Difficulty: &e" + task.getDifficulty(players.size()));
+					Util.msgRaw(viewer, "&7- &f" + task.getDisplay() + " &7(Difficulty: &e" + task.getDifficulty(players.size()) + "&7)");
 				}
 			}
 			break;
@@ -131,8 +131,9 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 					text += " (&4Captain&7)";
 				}
 				text += ": ";
-				text += pile.size() > num++ ? pile.get(num).getDisplay() : "???";
+				text += pile.size() > num ? pile.get(num).getDisplay() : "???";
 				Util.msgRaw(viewer, text);
+				num++;
 			}
 			viewer.sendMessage(SharedUtil.createText("&8[&7Click or hover to view accepted tasks&8]",
 					createTaskHover(), "/thecrew viewtasks").create());
@@ -322,7 +323,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 	public void promptPlayer() {
 		if (phase == GamePhase.ROLL_TASKS) {
 			for (TheCrewTask task : tasks) {
-				Util.msgRaw(captain.getPlayer(), "&7- &f" + task.getDisplay() + " &7(Difficulty: &e" + task.getDifficulty(players.size()));
+				Util.msgRaw(captain.getPlayer(), "&7- &f" + task.getDisplay() + " &7(Difficulty: &e" + task.getDifficulty(players.size()) + "&7)");
 			}
 			ComponentBuilder b = SharedUtil.createText("&8[&aAccept Tasks&8] ", "Click to accept!", "/thecrew accepttasks");
 			SharedUtil.appendText(b, "&8[&cReroll Tasks&8]", "Click to reroll!", "/thecrew rerolltasks");
@@ -335,7 +336,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 			Util.msgRaw(p, "&7Choose a task:");
 			int num = 0;
 			for (TheCrewTask task : tasks) {
-				ComponentBuilder b = SharedUtil.createText("&7- &f" + task.getDisplay() + " &7(Difficulty: &e" + task.getDifficulty(players.size()),
+				ComponentBuilder b = SharedUtil.createText("&7- &f" + task.getDisplay() + " &7(Difficulty: &e" + task.getDifficulty(players.size()) + "&7)",
 						"Click to accept!", "/thecrew accepttask " + num++);
 				p.sendMessage(b.create());
 			}
@@ -346,6 +347,10 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 				p.sendMessage(SharedUtil.createText("&8[&7Click to pass&8]", "This means players after you will\nhave to accept these tasks!",
 						"/thecrew passtask").create());
 			}
+		}
+		else {
+			ProxiedPlayer p = turnOrder.get(turn).getPlayer();
+			displayInfo(p, p);
 		}
 	}
 	

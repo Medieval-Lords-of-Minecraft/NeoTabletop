@@ -141,14 +141,14 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 		viewer.sendMessage(b.create());
 		
 		// Params
-		Util.msgRaw(viewer, "&7Parameters (Click one to change):");
+		Util.msgRaw(viewer, "&7Parameters (Click to change):");
 		b = new ComponentBuilder();
 		boolean first = true;
 		for (GameParameter param : params.values()) {
 			if (!first) {
 				SharedUtil.appendText(b, "\n");
-				first = false;
 			}
+			first = false;
 			SharedUtil.appendText(b, "&7- &c" + param.getName() + "&7: &6" + param.get(), "Click to change parameter",
 					"/tt set " + param.getKey() + " " + param.get(), ClickEvent.Action.SUGGEST_COMMAND);
 		}
@@ -164,8 +164,8 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 				if (uuid.equals(host)) continue;
 				if (!first) {
 					SharedUtil.appendText(b, "\n");
-					first = false;
 				}
+				first = false;
 				ProxiedPlayer p = ProxyServer.getInstance().getPlayer(uuid);
 				SharedUtil.appendText(b, "&7- &c" + p.getName());
 				if (viewer.getUniqueId().equals(host)) {
