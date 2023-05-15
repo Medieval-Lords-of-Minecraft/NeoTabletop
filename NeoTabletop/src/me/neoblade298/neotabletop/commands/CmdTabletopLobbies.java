@@ -28,13 +28,13 @@ public class CmdTabletopLobbies extends Subcommand {
 			Util.msg(s, "&cThere are currently no active lobbies!");
 			return;
 		}
-		ComponentBuilder b = SharedUtil.createText("&7List of Lobbies:", null, null);
+		ComponentBuilder b = SharedUtil.createText("&7List of Lobbies (click to join):", null, null);
 		for (Entry<String, GameLobby<? extends GamePlayer>> ent : GameManager.getLobbies().entrySet()) {
 			GameLobby<? extends GamePlayer> lob = ent.getValue();
 			SharedUtil.appendText(b, "\n&7- &c" + lob.getName() + " &7(&6"
 					+ lob.getGame().getName() + "&7)",
 					createHoverText(lob),
-					lob.isPublic() && !lob.isFull() ? "/tt join " + lob.getName() : null);
+					"/tt join " + lob.getName());
 		}
 		s.sendMessage(b.create());
 	}

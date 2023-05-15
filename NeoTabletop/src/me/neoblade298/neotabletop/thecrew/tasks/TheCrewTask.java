@@ -33,8 +33,9 @@ public abstract class TheCrewTask {
 		return difficulty;
 	}
 	
+	// TODO FIX
 	public int getDifficulty(int players) {
-		return difficulty.get(players);
+		return difficulty.get(3);
 	}
 	public String getDisplay() {
 		return display;

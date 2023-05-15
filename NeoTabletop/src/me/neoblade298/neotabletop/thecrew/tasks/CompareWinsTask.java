@@ -27,6 +27,10 @@ public class CompareWinsTask extends TheCrewTask {
 		display = "Win " + comp.getDisplay() + " " + with.getDisplay();
 	}
 	
+	public boolean comparesCaptain() {
+		return with == CompareTo.CAPTAIN;
+	}
+	
 	public CompareWinsTask(TheCrewPlayer owner, CompareWinsTask src, TheCrewInstance inst) {
 		super(owner, src, inst);
 

@@ -147,8 +147,8 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 		for (GameParameter param : params.values()) {
 			if (!first) {
 				SharedUtil.appendText(b, "\n");
+				first = false;
 			}
-			first = false;
 			SharedUtil.appendText(b, "&7- &c" + param.getName() + "&7: &6" + param.get(), "Click to change parameter",
 					"/tt set " + param.getKey() + " " + param.get(), ClickEvent.Action.SUGGEST_COMMAND);
 		}
@@ -159,10 +159,15 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 		Util.msgRaw(viewer, "&7- &c" + h.getName() + " &7(&eHost&7)");
 		if (players.size() > 1) {
 			b = new ComponentBuilder();
+			first = true;
 			for (UUID uuid : players) {
 				if (uuid.equals(host)) continue;
+				if (!first) {
+					SharedUtil.appendText(b, "\n");
+					first = false;
+				}
 				ProxiedPlayer p = ProxyServer.getInstance().getPlayer(uuid);
-				SharedUtil.appendText(b, "\n&7- &c" + p.getName());
+				SharedUtil.appendText(b, "&7- &c" + p.getName());
 				if (viewer.getUniqueId().equals(host)) {
 					SharedUtil.appendText(b, " &8[&cClick to kick&8]", "Click to kick " + p.getName(), "/tt kick " + p.getName());
 					SharedUtil.appendText(b, " &8[&cClick to give host&8]", "Click to give host to " + p.getName(), "/tt sethost " + p.getName());

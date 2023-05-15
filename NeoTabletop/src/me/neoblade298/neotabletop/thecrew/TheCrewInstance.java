@@ -16,6 +16,7 @@ import me.neoblade298.neotabletop.GameLobby;
 import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.NeoTabletop;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
+import me.neoblade298.neotabletop.thecrew.tasks.CompareWinsTask;
 import me.neoblade298.neotabletop.thecrew.tasks.TheCrewTask;
 import me.neoblade298.neotabletop.thecrew.tasks.WinTricksPredictTask;
 import net.md_5.bungee.api.CommandSender;
@@ -444,8 +445,16 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 			Util.msgRaw(p, "&cIt's not your turn right now!");
 			return;
 		}
-		
 		TheCrewPlayer tcp = players.get(p.getName().toLowerCase());
+		
+		// Special case for not allowing captain to choose captain comparison tasks
+		if (tasks.get(num) instanceof CompareWinsTask) {
+			if (((CompareWinsTask) tasks.get(num)).comparesCaptain() && captain.equals(tcp)) {
+				Util.msgRaw(p, "&cThe captain can't choose this task!");
+				return;
+			}
+		}
+		
 		TheCrewTask task = tasks.remove(num);
 		
 		// Special case for predicting a task
@@ -497,7 +506,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		}
 		
 		int remainingPlayers = players.size() - (turn + 1);
-		if (tasks.size() < remainingPlayers) {
+		if (tasks.size() <= remainingPlayers) {
 			Util.msgRaw(p, "&cAll remaining tasks must be accepted this round!");
 			return;
 		}

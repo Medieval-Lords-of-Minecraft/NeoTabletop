@@ -24,7 +24,7 @@ public class CmdTabletopInstances extends Subcommand {
 			Util.msg(s, "&cThere are currently no active instances!");
 			return;
 		}
-		ComponentBuilder b = SharedUtil.createText("&7List of instances:", null, null);
+		ComponentBuilder b = SharedUtil.createText("&7List of instances (click to spectate):", null, null);
 		for (Entry<String, GameInstance<? extends GamePlayer>> ent : GameManager.getInstances().entrySet()) {
 			GameInstance<? extends GamePlayer> inst = ent.getValue();
 			SharedUtil.appendText(b, "\n&7- &c" + inst.getName() + " &7(&6"
