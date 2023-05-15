@@ -65,7 +65,7 @@ public class GameManager implements Listener {
 		GameLobby<? extends GamePlayer> lobby = game.createLobby(name, uuid, isPublic);
 		lobbies.put(name.toLowerCase(), lobby);
 		inSession.put(sender.getUniqueId(), lobby);
-		Util.msgRaw(sender, "Successfully created lobby &e" + lobby.getName() + "&7!");
+		Util.msg(sender, "Successfully created lobby &e" + lobby.getName() + "&7!");
 		lobby.displayInfo(sender, sender);
 	}
 	
@@ -111,6 +111,10 @@ public class GameManager implements Listener {
 		return instances;
 	}
 	
+	public static void addToLobby(ProxiedPlayer p, GameLobby lob) {
+		inSession.put(p.getUniqueId(), lob);
+	}
+	
 	public static Game getGame(String name) {
 		return games.get(name);
 	}
@@ -124,14 +128,25 @@ public class GameManager implements Listener {
 	}
 	
 	public static void startGame(GameLobby<? extends GamePlayer> lob, GameInstance<? extends GamePlayer> inst) {
+		System.out.println("Game start 1");
 		lob.broadcast("The game has started!");
+
 		lobbies.remove(lob.getName());
 		instances.put(inst.getName(), inst);
+		System.out.println("Game start 2");
+		for (UUID uuid : lob.getPlayers()) {
+			System.out.println("Game start 2: " + uuid);
+			inSession.put(uuid, inst);
+		}
+		System.out.println("Game start 3");
 	}
 	
 	public static void endGame(GameLobby<? extends GamePlayer> lob, GameInstance<? extends GamePlayer> inst) {
 		lob.broadcast("The game has ended and you've all been returned to the lobby.");
 		instances.remove(inst.getName());
 		lobbies.put(lob.getName(), lob);
+		for (GamePlayer gp : inst.getPlayers().values()) {
+			inSession.put(gp.getUniqueId(), lob);
+		}
 	}
 }

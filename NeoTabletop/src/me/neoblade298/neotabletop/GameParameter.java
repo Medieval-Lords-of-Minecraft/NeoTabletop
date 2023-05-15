@@ -8,6 +8,7 @@ public class GameParameter {
 	
 	public GameParameter(String key, String name, String desc, Object defaultVal, GameParameterSetter setter) {
 		this.key = key;
+		this.name = name;
 		this.desc = desc;
 		this.defaultVal = defaultVal;
 		this.setter = setter;

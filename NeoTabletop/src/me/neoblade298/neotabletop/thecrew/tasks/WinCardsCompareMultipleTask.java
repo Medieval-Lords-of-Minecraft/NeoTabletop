@@ -31,6 +31,9 @@ public class WinCardsCompareMultipleTask extends TheCrewTask {
 	public WinCardsCompareMultipleTask(Configuration cfg) {
 		super(cfg);
 		amount = cfg.getInt("amount");
+		for (String str : cfg.getStringList("cards")) {
+			cards.add(new CardMatcher(str));
+		}
 		
 		display = "Win exactly &e1 &f" + cards.get(0).getDisplay() + " &fand exactly &e1 &f" + cards.get(1).getDisplay();
 	}

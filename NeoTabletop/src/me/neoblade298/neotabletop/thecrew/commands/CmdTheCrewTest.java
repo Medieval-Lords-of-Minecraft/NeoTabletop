@@ -32,7 +32,7 @@ public class CmdTheCrewTest extends Subcommand {
 		ArrayList<TheCrewCardInstance> cards = TheCrew.createDeck();
 		ArrayList<TheCrewPlayer> players = new ArrayList<TheCrewPlayer>();
 		for (int i = 0; i < numPlayers; i++) {
-			TheCrewPlayer p = new TheCrewPlayer(null, null, null);
+			TheCrewPlayer p = new TheCrewPlayer(null, null);
 			players.add(p);
 			for (int j = 0; j < 40 / numPlayers; j++) {
 				p.addCard(cards.remove(0));
@@ -56,9 +56,6 @@ public class CmdTheCrewTest extends Subcommand {
 	}
 
 	private boolean checkTaskBruteForce(CommandSender s, ArrayList<TheCrewPlayer> players) {
-		for (int i = 1; i < 5; i++) {
-			System.out.println("Player " + i + " hand: " + players.get(i).getHand());
-		}
 		for (TheCrewCard topCard : players.get(0).getHand()) {
 			iterations++;
 			if (topCard.getType() == CardType.SUB) continue;
@@ -76,10 +73,8 @@ public class CmdTheCrewTest extends Subcommand {
 		for (TheCrewCard card : players.get(turn).getHand()) {
 			iterations++;
 			if (card.getType() == CardType.SUB) continue;
-			// System.out.println("Try " + turn + " " + card.getType() + " " + card.getValue());
 			if (!isPlayable(topCard, card, players.get(turn))) continue;
 
-			// System.out.println("Can play " + turn + " " + card.getType() + " " + card.getValue());
 			// Recurse case
 			if (turn + 1 < players.size()) {
 				if (checkTaskBruteForceRecurse(s, topCard, players, turn + 1, sum + card.getValue())) {

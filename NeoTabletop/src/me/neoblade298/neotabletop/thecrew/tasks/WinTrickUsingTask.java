@@ -17,10 +17,17 @@ public class WinTrickUsingTask extends TheCrewTask {
 	
 	public WinTrickUsingTask(Configuration cfg) {
 		super(cfg);
-		win = new CardMatcher(cfg.getString("win"));
+		if (cfg.contains("win")) {
+			win = new CardMatcher(cfg.getString("win"));
+		}
 		using = new CardMatcher(cfg.getString("using"));
 		
-		display = "Win " + win.getDisplay() + "&f using " + using.getDisplay();
+		if (win == null) {
+			display = "Win a trick using " + using.getDisplay();
+		}
+		else {
+			display = "Win " + win.getDisplay() + "&f using " + using.getDisplay();
+		}
 	}
 	
 	public WinTrickUsingTask(TheCrewPlayer owner, WinTrickUsingTask src, TheCrewInstance inst) {

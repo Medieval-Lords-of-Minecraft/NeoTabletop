@@ -22,7 +22,7 @@ public class CmdTabletopGames extends Subcommand {
 		ComponentBuilder b = SharedUtil.createText("&7List of games:", null, null);
 		for (Entry<String, Game> ent : GameManager.getGames().entrySet()) {
 			SharedUtil.appendText(b, "\n&7- &c" + ent.getKey(), "&6" + ent.getValue().getName() +
-					"\n&fClick for more information!", "tt viewgame " + ent.getValue().getName());
+					"\n&fClick for more information!", "/tt viewgame " + ent.getValue().getName());
 		}
 	}
 }

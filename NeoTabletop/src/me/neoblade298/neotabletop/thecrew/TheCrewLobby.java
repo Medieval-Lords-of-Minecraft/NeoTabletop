@@ -14,10 +14,6 @@ public class TheCrewLobby extends GameLobby<TheCrewPlayer> {
 	public TheCrewLobby(String name, UUID host, boolean isPublic) {
 		super(name, TheCrew.inst(), host, isPublic);
 		
-		params.put("hard_mode", new GameParameter("hard_mode", "Hard Mode", 
-				"If set to false, the server will block you from playing cards that will cause your"
-				+ "game to become unwinnable.", false, new BooleanParameterSetter()));
-		
 		params.put("difficulty", new GameParameter("difficulty", "Difficulty",
 				"Affects how many conditions you must pass to win. Can be 1-25.",
 				Integer.valueOf(6), new IntegerParameterSetter(1, 25)));
@@ -33,6 +29,7 @@ public class TheCrewLobby extends GameLobby<TheCrewPlayer> {
 
 	@Override
 	public GameInstance<? extends GamePlayer> onStart() {
+		System.out.println("Start game A");
 		return new TheCrewInstance(this);
 	}
 	

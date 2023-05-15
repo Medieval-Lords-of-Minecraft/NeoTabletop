@@ -24,11 +24,18 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 	}
 
 	public void startGame(ProxiedPlayer s) {
-		if (game.getMinPlayers() > players.size()) {
+		/*if (game.getMinPlayers() > players.size()) {
 			Util.msgRaw(s, "&cYou need at least &e" + game.getMinPlayers() + " &cplayers to start!");
 			return;
+		}*/
+		try {
+			System.out.println("Starting game");
+			GameManager.startGame(this, onStart());
+			System.out.println("Game started");
 		}
-		GameManager.startGame(this, onStart());
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public abstract GameInstance<? extends GamePlayer> onStart();
@@ -50,11 +57,11 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 
 		Util.msgRaw(recipient, "You've been invited to lobby &e" + name + " &7for &e" + game.getName() + "&7!");
 		
-		inviter.sendMessage(SharedUtil.createText("&8[&aClick here to accept the invite!&8]", "Click to accept invite", "tt join " + name).create());
+		recipient.sendMessage(SharedUtil.createText("&8[&aClick here to accept the invite!&8]", "Click to accept invite", "/tt join " + name).create());
 	}
 
 	public void addPlayer(ProxiedPlayer p) {
-		if (!isPublic && invited.contains(p.getUniqueId())) {
+		if (!isPublic && !invited.contains(p.getUniqueId())) {
 			Util.msgRaw(p, "&cYou aren't invited to this private lobby!");
 			return;
 		}
@@ -67,7 +74,9 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 			invited.remove(p.getUniqueId());
 		}
 
+		GameManager.addToLobby(p, this);
 		players.add(p.getUniqueId());
+		displayInfo(p, p);
 		broadcast("&e" + p.getName() + " &7joined the lobby!");
 	}
 
@@ -128,36 +137,45 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 		// Public/Private
 		SharedUtil.appendText(b, "&8[" + (isPublic ? "&a" : "&7") + "Public &8| " + (!isPublic ? "&a" : "&7") + "Private&8]",
 				isHost ? "Click to toggle!" : null,
-				isHost ? (isPublic ? "tt private" : "tt public") : null);
+				isHost ? (isPublic ? "/tt private" : "/tt public") : null);
 		viewer.sendMessage(b.create());
 		
 		// Params
 		Util.msgRaw(viewer, "&7Parameters (Click one to change):");
 		b = new ComponentBuilder();
+		boolean first = true;
 		for (GameParameter param : params.values()) {
+			if (!first) {
+				SharedUtil.appendText(b, "\n");
+			}
+			first = false;
 			SharedUtil.appendText(b, "&7- &c" + param.getName() + "&7: &6" + param.get(), "Click to change parameter",
-					"tt set " + param.getKey() + " " + param.get(), ClickEvent.Action.SUGGEST_COMMAND);
+					"/tt set " + param.getKey() + " " + param.get(), ClickEvent.Action.SUGGEST_COMMAND);
 		}
 		viewer.sendMessage(b.create());
 		
 		// Player list
 		Util.msgRaw(viewer, "&7Players:");
 		Util.msgRaw(viewer, "&7- &c" + h.getName() + " &7(&eHost&7)");
-		b = new ComponentBuilder();
-		for (UUID uuid : players) {
-			if (uuid.equals(host)) continue;
-			ProxiedPlayer p = ProxyServer.getInstance().getPlayer(uuid);
-			SharedUtil.appendText(b, "\n&7- &c" + p.getName());
-			if (viewer.getUniqueId().equals(host)) {
-				SharedUtil.appendText(b, " &8[&cClick to kick&8]", "Click to kick " + p.getName(), "tt kick " + p.getName());
-				SharedUtil.appendText(b, " &8[&cClick to give host&8]", "Click to give host to " + p.getName(), "tt sethost " + p.getName());
+		if (players.size() > 1) {
+			b = new ComponentBuilder();
+			for (UUID uuid : players) {
+				if (uuid.equals(host)) continue;
+				ProxiedPlayer p = ProxyServer.getInstance().getPlayer(uuid);
+				SharedUtil.appendText(b, "\n&7- &c" + p.getName());
+				if (viewer.getUniqueId().equals(host)) {
+					SharedUtil.appendText(b, " &8[&cClick to kick&8]", "Click to kick " + p.getName(), "/tt kick " + p.getName());
+					SharedUtil.appendText(b, " &8[&cClick to give host&8]", "Click to give host to " + p.getName(), "/tt sethost " + p.getName());
+				}
 			}
 			viewer.sendMessage(b.create());
 		}
 
 		b = new ComponentBuilder();
-		SharedUtil.appendText(b, "&8[&aClick here to start!&8]", "Click me to start!", "tt start");
-		SharedUtil.appendText(b, "&8[&7Click here to read about the game!&8]", "Click me!", "tt viewgame " + game.getKey());
+		if (viewer.getUniqueId().equals(host)) {
+			SharedUtil.appendText(b, "&8[&aClick here to start!&8] ", "Click me to start!", "/tt start");
+		}
+		SharedUtil.appendText(b, "&8[&7Click here to read about the game!&8]", "Click me!", "/tt viewgame " + game.getKey());
 		viewer.sendMessage(b.create());
 	}
 	

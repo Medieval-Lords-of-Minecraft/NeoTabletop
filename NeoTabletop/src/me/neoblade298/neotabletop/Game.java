@@ -50,7 +50,7 @@ public abstract class Game {
 		Util.msgRaw(p, "&7<< &6" + name + "&7>>");
 		Util.msgRaw(p, desc);
 		Util.msgRaw(p, "&7=====");
-		p.sendMessage(SharedUtil.createText("&8[&7Click to read the manual for the game!&8]", "Click here to read the manual!", "tt manual " + key).create());
+		p.sendMessage(SharedUtil.createText("&8[&7Click to read the manual for the game!&8]", "Click here to read the manual!", "/tt manual " + key).create());
 	}
 	public void displayManual(ProxiedPlayer p) {
 		displayManual(p, 1);

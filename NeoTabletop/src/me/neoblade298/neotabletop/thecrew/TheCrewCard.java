@@ -31,7 +31,7 @@ public class TheCrewCard {
 	public enum CardType {
 		RED(1, ChatColor.RED, "Red"),
 		BLUE(2, ChatColor.BLUE, "Blue"),
-		GREEN(3, ChatColor.GREEN, "Green"),
+		GREEN(3, ChatColor.DARK_GREEN, "Green"),
 		YELLOW(4, ChatColor.YELLOW, "Yellow"),
 		SUB(5, ChatColor.DARK_GRAY, "Sub");
 		

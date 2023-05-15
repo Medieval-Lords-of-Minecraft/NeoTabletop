@@ -22,8 +22,8 @@ public class WinTrickTotalEqualTask extends TheCrewTask {
 	public WinTrickTotalEqualTask(Configuration cfg) {
 		super(cfg);
 		
-		for (String key : cfg.getStringList("totals")) {
-			totals.add(Integer.parseInt(key));
+		for (int i : cfg.getIntList("totals")) {
+			totals.add(i);
 		}
 
 		display = "Win a trick with a total value equal to &e" + totals.get(0) + " &for &e" + totals.get(1) + "&f. *No subs";;

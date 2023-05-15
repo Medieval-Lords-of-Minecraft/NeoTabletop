@@ -115,8 +115,8 @@ public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> 
 			if (uuid.equals(host)) continue;
 			
 			SharedUtil.appendText(b, "\n&7- &c" + gp.getName());
-			SharedUtil.appendText(b, " &8[&cClick to kick&8]", "Click to kick " + gp.getName(), "tt kick " + gp.getName());
-			SharedUtil.appendText(b, " &8[&cClick to give host&8]", "Click to give host to " + gp.getName(), "tt sethost " + gp.getName());
+			SharedUtil.appendText(b, " &8[&cClick to kick&8]", "Click to kick " + gp.getName(), "/tt kick " + gp.getName());
+			SharedUtil.appendText(b, " &8[&cClick to give host&8]", "Click to give host to " + gp.getName(), "/tt sethost " + gp.getName());
 			cmdUser.sendMessage(b.create());
 		}
 	}

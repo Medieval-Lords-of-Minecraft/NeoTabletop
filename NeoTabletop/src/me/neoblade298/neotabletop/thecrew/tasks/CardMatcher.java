@@ -9,6 +9,12 @@ public class CardMatcher {
 	private String display, base;
 	private int totalCardsMatching;
 	public CardMatcher(String matcher) {
+		if (matcher == null) {
+			value = -1;
+			type = null;
+			return;
+		}
+		
 		this.base = matcher;
 		char num = matcher.charAt(0);
 		if (num == '*') {
@@ -40,7 +46,11 @@ public class CardMatcher {
 		// Calculate total cards matching
 		
 		// Calculate display
-		if (value == -1) {
+		if (value == -1 && type == null) {
+			display = "Any Card";
+			totalCardsMatching = 40;
+		}
+		else if (value == -1) {
 			display = type.getColor() + "Any " + type.getDisplay() + " Card";
 			totalCardsMatching = (type == CardType.SUB ? 4 : 9);
 		}

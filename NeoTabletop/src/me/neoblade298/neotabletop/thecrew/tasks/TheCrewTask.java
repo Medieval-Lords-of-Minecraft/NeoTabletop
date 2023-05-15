@@ -21,10 +21,11 @@ public abstract class TheCrewTask {
 		this.difficulty = src.difficulty;
 	}
 	
-	public TheCrewTask(Configuration diffSec) {
-		for (String key : diffSec.getKeys()) {
+	public TheCrewTask(Configuration sec) {
+		Configuration diff = sec.getSection("difficulty");
+		for (String key : diff.getKeys()) {
 			int ikey = Integer.parseInt(key);
-			difficulty.put(ikey, diffSec.getInt(key));
+			difficulty.put(ikey, diff.getInt(key));
 		}
 	}
 	

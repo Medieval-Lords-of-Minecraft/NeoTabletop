@@ -26,15 +26,12 @@ public class CmdTabletopInvite extends Subcommand {
 		ProxiedPlayer p = (ProxiedPlayer) s;
 		UUID uuid = p.getUniqueId();
 		GameSession<? extends GamePlayer> sess = GameManager.getSession(uuid);
-		if (sess == null) {
-			Util.msg(p, "&cYou're not in a game session!");
+		if (sess == null || !(sess instanceof GameLobby)) {
+			Util.msg(p, "&cYou're not in a game lobby!");
 			return;
 		}
 		
-		GameLobby<? extends GamePlayer> lob = null;
-		if (!(sess instanceof GameLobby)) {
-			lob = (GameLobby<? extends GamePlayer>) sess;
-		}
+		GameLobby<? extends GamePlayer> lob = (GameLobby<? extends GamePlayer>) sess;
 		
 		if (!sess.getHost().equals(uuid)) {
 			Util.msg(p, "&cOnly the host may invite players!");

@@ -11,3 +11,6 @@ commands:
    tta:
       description: Admin command
       usage: /tta
+   thecrew:
+      description: Command for the crew
+      usage: /thecrew

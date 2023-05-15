@@ -9,7 +9,7 @@ import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.config.Configuration;
 
-public class WinEdgeTricksTask extends TheCrewTask {
+public class WinEdgeTrickTask extends TheCrewTask {
 	protected boolean first, last, exclusive;
 	
 	@Override
@@ -17,7 +17,7 @@ public class WinEdgeTricksTask extends TheCrewTask {
 		Util.msgRaw(s, "first: " + first + ", last: " + last + ", exclusive: " + exclusive);
 	}
 	
-	public WinEdgeTricksTask(Configuration cfg) {
+	public WinEdgeTrickTask(Configuration cfg) {
 		super(cfg);
 
 		first = cfg.getBoolean("first");
@@ -38,7 +38,7 @@ public class WinEdgeTricksTask extends TheCrewTask {
 		display = "Win " + (exclusive ? "only" : "") + " the " + str + " trick";
 	}
 	
-	public WinEdgeTricksTask(TheCrewPlayer owner, WinEdgeTricksTask src, TheCrewInstance inst) {
+	public WinEdgeTrickTask(TheCrewPlayer owner, WinEdgeTrickTask src, TheCrewInstance inst) {
 		super(owner, src, inst);
 
 		this.display = src.display;
@@ -48,8 +48,8 @@ public class WinEdgeTricksTask extends TheCrewTask {
 	}
 
 	@Override
-	public WinEdgeTricksTask clone(TheCrewPlayer owner, TheCrewInstance inst) {
-		return new WinEdgeTricksTask(owner, this, inst);
+	public WinEdgeTrickTask clone(TheCrewPlayer owner, TheCrewInstance inst) {
+		return new WinEdgeTrickTask(owner, this, inst);
 	}
 	
 	@Override

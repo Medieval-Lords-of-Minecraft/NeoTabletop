@@ -8,10 +8,10 @@ public class GamePlayer {
 	protected UUID uuid;
 	protected String name;
 	protected ProxiedPlayer p;
-	public GamePlayer(UUID uuid, String name, ProxiedPlayer p) {
+	public GamePlayer(UUID uuid, ProxiedPlayer p) {
 		super();
 		this.uuid = uuid;
-		this.name = name;
+		this.name = p.getName();
 		this.p = p;
 	}
 	public UUID getUniqueId() {
@@ -23,5 +23,8 @@ public class GamePlayer {
 	public ProxiedPlayer getPlayer() {
 		return p;
 	}
-	
+	@Override
+	public String toString() {
+		return name;
+	}
 }

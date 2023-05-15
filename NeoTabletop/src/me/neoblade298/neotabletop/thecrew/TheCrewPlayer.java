@@ -23,8 +23,8 @@ public class TheCrewPlayer extends GamePlayer {
 	private TheCrewCardInstance lastPlayed;
 	private int tricksWon = 0;
 
-	public TheCrewPlayer(UUID uuid, String name, ProxiedPlayer p) {
-		super(uuid, name, p);
+	public TheCrewPlayer(UUID uuid, ProxiedPlayer p) {
+		super(uuid, p);
 	}
 	
 	public TheCrewCardInstance getCard(int num) {
@@ -74,7 +74,7 @@ public class TheCrewPlayer extends GamePlayer {
 	public void displayHand(ProxiedPlayer viewer) {
 		boolean isOwner = viewer.getUniqueId().equals(uuid);
 		
-		ComponentBuilder b = SharedUtil.createText((isOwner ? "" : p.getName() + "'s ") + "hand: ");
+		ComponentBuilder b = SharedUtil.createText((isOwner ? "Hand" : p.getName() + "'s hand") + ": ");
 		if (hand.isEmpty()) {
 			viewer.sendMessage(SharedUtil.appendText(b, "empty!").create());
 			return;
@@ -82,10 +82,10 @@ public class TheCrewPlayer extends GamePlayer {
 		
 		int pos = 0;
 		Iterator<TheCrewCardInstance> iter = hand.iterator();
-		SharedUtil.appendText(b, iter.next().getDisplay(), isOwner ? "Click to play!" : null, "thecrew play " + pos);
+		SharedUtil.appendText(b, iter.next().getDisplay(), isOwner ? "Click to play!" : null, "/thecrew play " + pos);
 		while (iter.hasNext()) {
 			SharedUtil.appendText(b, " ");
-			SharedUtil.appendText(b, iter.next().getDisplay(), isOwner ? "Click to play!" : null, "thecrew play " + ++pos);
+			SharedUtil.appendText(b, iter.next().getDisplay(), isOwner ? "Click to play!" : null, "/thecrew play " + ++pos);
 		}
 		viewer.sendMessage(b.create());
 	}
