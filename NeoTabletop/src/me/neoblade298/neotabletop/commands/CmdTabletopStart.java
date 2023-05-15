@@ -36,7 +36,6 @@ public class CmdTabletopStart extends Subcommand {
 		}
 		
 		GameLobby<? extends GamePlayer> lob = (GameLobby<? extends GamePlayer>) sess;
-		System.out.println("Starting...");
 		lob.startGame(p);
 	}
 

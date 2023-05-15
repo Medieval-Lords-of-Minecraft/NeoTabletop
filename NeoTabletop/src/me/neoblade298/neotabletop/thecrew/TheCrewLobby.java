@@ -29,7 +29,6 @@ public class TheCrewLobby extends GameLobby<TheCrewPlayer> {
 
 	@Override
 	public GameInstance<? extends GamePlayer> onStart() {
-		System.out.println("Start game A");
 		return new TheCrewInstance(this);
 	}
 	

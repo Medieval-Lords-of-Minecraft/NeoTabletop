@@ -41,7 +41,7 @@ public class CmdTheCrewMod extends Subcommand {
 		inst.displayKickList(s);
 		ComponentBuilder b = SharedUtil.createText("&8[&7Click to redo round&8]", "Click here!", "/thecrew restartround");
 		SharedUtil.appendText(b, " &8[&7Click to restart from round 1&8]", "Click here!", "/thecrew restartgame");
-		SharedUtil.appendText(b, " &8[&7Click to return to lobby&8]", "Click here!", "/tt return");
+		SharedUtil.appendText(b, "\n&8[&7Click to return to lobby&8]", "Click here!", "/tt return");
 		s.sendMessage(b.create());
 	}
 

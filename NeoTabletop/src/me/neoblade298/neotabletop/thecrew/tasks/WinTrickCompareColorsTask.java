@@ -37,8 +37,8 @@ public class WinTrickCompareColorsTask extends TheCrewTask {
 
 		CardType t = card.getType();
 		CardType tc = comp.getType();
-		display = "Win " + (more ? "more" : "exactly as many") + t.getColor() + t.getDisplay() + " cards&f " + (more ? "than" : "as") +
-				tc.getColor() + tc.getDisplay() + " cards &fin one trick";
+		display = "Win " + (more ? "more " : "exactly as many ") + t.getDisplay() + " cards&f " + (more ? "than " : "as ") +
+				tc.getDisplay() + " cards &fin one trick";
 		
 	}
 	

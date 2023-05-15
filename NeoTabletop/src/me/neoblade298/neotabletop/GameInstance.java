@@ -25,9 +25,9 @@ public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> 
 	public void adminKickPlayer(CommandSender s, String name) {
 		ProxiedPlayer p = ProxyServer.getInstance().getPlayer(name);
 		GamePlayer gp = players.remove(name.toLowerCase());
-		handleLeave(gp);
 		GameManager.removeFromSession(gp.getUniqueId());
 		broadcast("&e" + p.getName() + " &7was kicked from the game by an admin!");
+		handleLeave(gp);
 	}
 	
 	@Override
@@ -43,9 +43,9 @@ public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> 
 		}
 		
 		GamePlayer gp = players.remove(name.toLowerCase());
-		handleLeave(gp);
 		GameManager.removeFromSession(gp.getUniqueId());
 		broadcast("&e" + p.getName() + " &7was kicked from the game!");
+		handleLeave(gp);
 	}
 
 	@Override
@@ -71,9 +71,15 @@ public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> 
 	public void leavePlayer(ProxiedPlayer p) {
 		if (players.containsKey(p.getName().toLowerCase())) {
 			GamePlayer gp = players.remove(p.getName().toLowerCase());
-			handleLeave(gp);
 			GameManager.removeFromSession(p.getUniqueId());
 			broadcast("&e" + p.getName() + " &7left the lobby!");
+			
+			if (p.getUniqueId().equals(host)) {
+				GamePlayer next = players.values().iterator().next();
+				host = next.getUniqueId();
+				broadcast("&7Because the host left, the new host is now &e" + gp.getName() + "&7!");
+			}
+			handleLeave(gp);
 		}
 		else if (spectators.contains(p)) {
 			spectators.remove(p);
@@ -83,12 +89,6 @@ public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> 
 		else {
 			Util.msgRaw(p, "&cSomething went wrong! You were unable to leave game &e" + name + "&c.");
 			return;
-		}
-		
-		if (p.getUniqueId().equals(host)) {
-			GamePlayer gp = players.values().iterator().next();
-			host = gp.getUniqueId();
-			broadcast("&7Because the host left, the new host is now &e" + gp.getName() + "&7!");
 		}
 	}
 	
@@ -110,11 +110,17 @@ public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> 
 		Util.msgRaw(cmdUser, "&7Players:");
 		Util.msgRaw(cmdUser, "&7- &c" + cmdUser.getName() + " &7(&eHost&7)");
 		ComponentBuilder b = new ComponentBuilder();
+		
+		boolean first = true;
 		for (GamePlayer gp : players.values()) {
 			UUID uuid = gp.getUniqueId();
 			if (uuid.equals(host)) continue;
+			if (!first) {
+				SharedUtil.appendText(b, "\n");
+			}
+			first = false;
 			
-			SharedUtil.appendText(b, "\n&7- &c" + gp.getName());
+			SharedUtil.appendText(b, "&7- &c" + gp.getName());
 			SharedUtil.appendText(b, " &8[&cClick to kick&8]", "Click to kick " + gp.getName(), "/tt kick " + gp.getName());
 			SharedUtil.appendText(b, " &8[&cClick to give host&8]", "Click to give host to " + gp.getName(), "/tt sethost " + gp.getName());
 			cmdUser.sendMessage(b.create());

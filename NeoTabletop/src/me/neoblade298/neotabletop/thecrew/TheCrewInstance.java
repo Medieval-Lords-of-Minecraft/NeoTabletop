@@ -47,24 +47,19 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 
 	public TheCrewInstance(GameLobby<TheCrewPlayer> lobby) {
 		super(lobby);
-		try {
-			for (UUID uuid : lobby.getPlayers()) {
-				ProxiedPlayer p = ProxyServer.getInstance().getPlayer(uuid);
-				this.players.put(p.getName().toLowerCase(), new TheCrewPlayer(uuid, p));
-			}
-			
-			difficulty = (int) params.get("difficulty").get();
-			
-			setupGame();
+		for (UUID uuid : lobby.getPlayers()) {
+			ProxiedPlayer p = ProxyServer.getInstance().getPlayer(uuid);
+			this.players.put(p.getName().toLowerCase(), new TheCrewPlayer(uuid, p));
 		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+		
+		difficulty = (int) params.get("difficulty").get();
+		
+		setupGame();
 	}
 
 	@Override
 	public void handleLeave(GamePlayer gp) {
-		broadcast("&7Due to &e" + gp.getName() + " &7leaving, the game has ended.");
+		broadcast("&7Due to &e" + gp.getName() + " &7leaving, the game will end.");
 		endGame();
 	}
 
@@ -122,7 +117,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 			}
 			break;
 		case PLAY:
-			Util.msgRaw(viewer, "Rounds remaining: &e" + (totalRounds - round));
+			Util.msgRaw(viewer, "&7Rounds remaining: &e" + (totalRounds - round));
 			Util.msgRaw(viewer, "&7Turn Order:");
 			int num = 0;
 			for (TheCrewPlayer tcp : turnOrder) {
@@ -142,7 +137,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		case LOSE:
 			if (viewer.getUniqueId().equals(host)) {
 				Util.msgRaw(viewer, "&cYou lost!");
-				Util.msgRaw(viewer, "&7Failed to perform task: " + lossReason.getDisplay());
+				Util.msgRaw(viewer, "&7Failed to perform task: &f" + lossReason.getDisplay());
 				p.displayHand(viewer);
 				viewer.sendMessage(SharedUtil.createText("&8[&7Click or hover to view accepted tasks&8]",
 						createTaskHover(), "/thecrew viewtasks").create());
@@ -153,7 +148,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 			}
 			else {
 				Util.msgRaw(viewer, "&cYou lost! Waiting for host to decide what to do next...");
-				Util.msgRaw(viewer, "&7Failed to perform task: " + lossReason.getDisplay());
+				Util.msgRaw(viewer, "&7Failed to perform task: &f" + lossReason.getDisplay());
 				p.displayHand(viewer);
 				viewer.sendMessage(SharedUtil.createText("&8[&7Click or hover to view accepted tasks&8]",
 						createTaskHover(), "/thecrew viewtasks").create());
@@ -165,7 +160,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 	
 	public void displaySpectatorInfo(ProxiedPlayer viewer) {
 		if (phase == GamePhase.PLAY) {
-			Util.msgRaw(viewer, "Rounds remaining: &e" + (totalRounds - round));
+			Util.msgRaw(viewer, "&7Rounds remaining: &e" + (totalRounds - round));
 			Util.msgRaw(viewer, "&7Turn Order (Hover or click to view hand):");
 			showAllHands(viewer);
 			viewer.sendMessage(SharedUtil.createText("&8[&7Click or hover to view accepted tasks&8]",
@@ -173,7 +168,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		}
 		else if (phase == GamePhase.LOSE) {
 			Util.msgRaw(viewer, "&cYou lost! Waiting for host to decide what to do next...");
-			Util.msgRaw(viewer, "&7Failed to perform task: " + lossReason.getDisplay());
+			Util.msgRaw(viewer, "&7Failed to perform task: &f" + lossReason.getDisplay());
 			showAllHands(viewer);
 			viewer.sendMessage(SharedUtil.createText("&8[&7Click or hover to view accepted tasks&8]",
 					createTaskHover(), "/thecrew viewtasks").create());
@@ -211,7 +206,6 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		// Pass out deck
 		ArrayList<TheCrewCardInstance> deck = TheCrew.createDeck();
 		while (deck.size() >= players.size()) {
-			System.out.println("Setup 1.1");
 			totalRounds++;
 			for (TheCrewPlayer p : players.values()) {
 				TheCrewCardInstance card = deck.remove(0);
@@ -225,7 +219,6 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 
 		// Announce captain and turn order
 		turnOrder.addAll(players.values());
-		System.out.println("Setup 2.1");
 		Collections.sort(turnOrder, new Comparator<TheCrewPlayer>() {
 			@Override
 			public int compare(TheCrewPlayer c1, TheCrewPlayer c2) {
@@ -234,14 +227,10 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		});
 		setFirst(captain.getUniqueId());
 		broadcast("The captain is &e" + captain.getName() + "&7!");
-		broadcast("Turn order:");
-		for (TheCrewPlayer p : turnOrder) {
-			p.sortHand();
-			broadcast("- &c" + p.getName());
-		}
 
 		// Sort and display hands
 		for (TheCrewPlayer p : turnOrder) {
+			p.sortHand();
 			p.displayHand(p.getPlayer());
 			for (ProxiedPlayer spec : spectators) {
 				p.displayHand(spec);
@@ -379,10 +368,6 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		broadcast("&e" + p.getName() + " &7plays " + toPlay.getDisplay());
 
 		int time = 1;
-		sch.schedule(NeoTabletop.inst(), () -> {
-			broadcastInfo();
-		}, time++, TimeUnit.SECONDS);
-
 		if (pile.size() == players.size()) {
 			sch.schedule(NeoTabletop.inst(), () -> {
 				calculateTrickWinner();
@@ -418,6 +403,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 				if (task.hasFailed(this, tcp, pile)) {
 					tcp.addWin(-1); // Reset win so round restart works
 					phase = GamePhase.LOSE;
+					lossReason = task;
 					broadcastInfo();
 					return;
 				}
@@ -510,7 +496,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 			return;
 		}
 		
-		int remainingPlayers = players.size() - (turn + 1);
+		int remainingPlayers = players.size() - turn;
 		if (tasks.size() <= remainingPlayers) {
 			Util.msgRaw(p, "&cAll remaining tasks must be accepted this round!");
 			return;
@@ -545,6 +531,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 	}
 	
 	public void advanceTurn() {
+		if (phase == GamePhase.LOSE) return; // Lost during calculate trick winner
 		GamePhase temp = phase;
 		phase = GamePhase.WAITING;
 		turn++;
@@ -561,13 +548,9 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		}
 		sch.schedule(NeoTabletop.inst(), () -> {
 			phase = temp;
+			promptPlayer();
 			broadcast("&e" + turnOrder.get(turn).getName() + "&7's turn");
 		}, time++, TimeUnit.SECONDS);
-
-		sch.schedule(NeoTabletop.inst(), () -> {
-			phase = temp;
-			promptPlayer();
-		}, time, TimeUnit.SECONDS);
 	}
 	
 	public void rerollTasks(ProxiedPlayer p) {

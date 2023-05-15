@@ -28,14 +28,7 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 			Util.msgRaw(s, "&cYou need at least &e" + game.getMinPlayers() + " &cplayers to start!");
 			return;
 		}*/
-		try {
-			System.out.println("Starting game");
-			GameManager.startGame(this, onStart());
-			System.out.println("Game started");
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+		GameManager.startGame(this, onStart());
 	}
 
 	public abstract GameInstance<? extends GamePlayer> onStart();
@@ -55,7 +48,7 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 		invited.add(recipient.getUniqueId());
 		broadcast("&e" + recipient.getName() + " &7was invited to the lobby!");
 
-		Util.msgRaw(recipient, "You've been invited to lobby &e" + name + " &7for &e" + game.getName() + "&7!");
+		Util.msg(recipient, "You've been invited to lobby &e" + name + " &7for &e" + game.getName() + "&7!");
 		
 		recipient.sendMessage(SharedUtil.createText("&8[&aClick here to accept the invite!&8]", "Click to accept invite", "/tt join " + name).create());
 	}

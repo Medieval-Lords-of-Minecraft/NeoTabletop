@@ -128,7 +128,7 @@ public class TheCrew extends Game {
 
 	@Override
 	public GameLobby<? extends GamePlayer> createLobby(String name, UUID uuid, boolean isPublic) {
-		return new TheCrewLobby(name, uuid, false);
+		return new TheCrewLobby(name, uuid, isPublic);
 	}
 	
 	public static ArrayList<TheCrewCardInstance> createDeck() {

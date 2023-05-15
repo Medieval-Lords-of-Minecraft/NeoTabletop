@@ -47,19 +47,19 @@ public class CardMatcher {
 		
 		// Calculate display
 		if (value == -1 && type == null) {
-			display = "Any Card";
+			display = "&8[&7Any Card&8]";
 			totalCardsMatching = 40;
 		}
 		else if (value == -1) {
-			display = type.getColor() + "Any " + type.getDisplay() + " Card";
+			display = "&8[" + type.getColor() + "Any " + type.getDisplay() + " Card&8]";
 			totalCardsMatching = (type == CardType.SUB ? 4 : 9);
 		}
 		else if (type == null) {
-			display = "Any " + value + " Card";
+			display = "&8[&7Any " + value + " Card&8]";
 			totalCardsMatching = 4;
 		}
 		else {
-			display = type.getColor() + type.getDisplay() + " " + value;
+			display = "&8[" + type.getColor() + type.getDisplay() + " " + value + "&8]";
 			totalCardsMatching = 1;
 		}
 	}
