@@ -43,7 +43,7 @@ public class WinFirstTricksTask extends TheCrewTask {
 	@Override
 	public boolean hasFailed(TheCrewInstance inst, TheCrewPlayer winner, ArrayList<TheCrewCardInstance> pile) {
 		// Since this isn't checked when the task is completed, we just need to check if the player wins (or loses if negated)
-		return winner.equals(owner) ^ negate;
+		return !winner.equals(owner) ^ negate;
  	}
 
 	@Override

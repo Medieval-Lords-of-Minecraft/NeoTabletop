@@ -72,10 +72,10 @@ public class WinTrickCompareColorsTask extends TheCrewTask {
 		}
 		
 		if (!allowZero) {
-			return (more ? tempCards > 1 : tempCards > 0) && tempComps > 0;
+			return (more ? tempCards <= 1 : tempCards == 0) || tempComps == 0;
 		}
 		else {
-			return tempCards > 0;
+			return tempCards == 0;
 		}
 	}
 

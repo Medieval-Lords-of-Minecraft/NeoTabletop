@@ -20,7 +20,7 @@ public class CmdTabletopInstances extends Subcommand {
 
 	@Override
 	public void run(CommandSender s, String[] args) {
-		if (GameManager.getLobbies().size() == 0) {
+		if (GameManager.getInstances().size() == 0) {
 			Util.msg(s, "&cThere are currently no active instances!");
 			return;
 		}

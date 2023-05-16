@@ -46,6 +46,9 @@ public abstract class TheCrewTask {
 	public void setComplete(boolean isComplete) {
 		this.isComplete = isComplete;
 	}
+	public TheCrewPlayer getOwner() {
+		return owner;
+	}
 
 	public abstract void reset();
 	public abstract void showDebug(CommandSender s);

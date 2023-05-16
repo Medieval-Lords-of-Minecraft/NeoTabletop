@@ -136,7 +136,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		case LOSE:
 			if (viewer.getUniqueId().equals(host)) {
 				Util.msgRaw(viewer, "&cYou lost!");
-				Util.msgRaw(viewer, "&7Failed to perform task: &f" + lossReason.getDisplay());
+				Util.msgRaw(viewer, "&c" + lossReason.getOwner().getName() + " failed to perform task: &f" + lossReason.getDisplay());
 				p.displayHand(viewer);
 				viewer.sendMessage(SharedUtil.createText("&8[&7Click or hover to view accepted tasks&8]",
 						createTaskHover(), "/thecrew viewtasks").create());
@@ -147,7 +147,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 			}
 			else {
 				Util.msgRaw(viewer, "&cYou lost! Waiting for host to decide what to do next...");
-				Util.msgRaw(viewer, "&7Failed to perform task: &f" + lossReason.getDisplay());
+				Util.msgRaw(viewer, "&c" + lossReason.getOwner().getName() + " failed to perform task: &f" + lossReason.getDisplay());
 				p.displayHand(viewer);
 				viewer.sendMessage(SharedUtil.createText("&8[&7Click or hover to view accepted tasks&8]",
 						createTaskHover(), "/thecrew viewtasks").create());
@@ -167,7 +167,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		}
 		else if (phase == GamePhase.LOSE) {
 			Util.msgRaw(viewer, "&cYou lost! Waiting for host to decide what to do next...");
-			Util.msgRaw(viewer, "&7Failed to perform task: &f" + lossReason.getDisplay());
+			Util.msgRaw(viewer, "&c" + lossReason.getOwner().getName() + " failed to perform task: &f" + lossReason.getDisplay());
 			showAllHands(viewer);
 			viewer.sendMessage(SharedUtil.createText("&8[&7Click or hover to view accepted tasks&8]",
 					createTaskHover(), "/thecrew viewtasks").create());
@@ -258,6 +258,8 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		}
 		pile.clear();
 		
+		broadcast("The host chose to restart the round!");
+		phase = GamePhase.PLAY;
 		startRound(this.round);
 	}
 	
@@ -289,8 +291,10 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 				task.reset();
 			}
 		}
-		
+
+		broadcast("The host chose to restart the game from round 1!");
 		setFirst(captain.getUniqueId());
+		phase = GamePhase.PLAY;
 		startRound(1);
 	}
 	
@@ -339,6 +343,14 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		else {
 			ProxiedPlayer p = turnOrder.get(turn).getPlayer();
 			displayInfo(p, p);
+			
+			if (phase == GamePhase.PLAY) {
+				for (TheCrewPlayer tcp : players.values()) {
+					if (tcp.getUniqueId().equals(p.getUniqueId())) continue;
+					
+					tcp.displayHand(tcp.getPlayer());
+				}
+			}
 		}
 	}
 	
@@ -570,7 +582,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 			phase = temp;
 			promptPlayer();
 			broadcast("&e" + turnOrder.get(turn).getName() + "&7's turn");
-		}, time++, TimeUnit.SECONDS);
+		}, time, TimeUnit.SECONDS);
 	}
 	
 	public void rerollTasks(ProxiedPlayer p) {
@@ -613,7 +625,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 			SharedUtil.appendText(b, "&8[&cReroll Tasks&8]", "Click to reroll!", "/thecrew rerolltasks");
 			captain.getPlayer().sendMessage(b.create());
 			phase = GamePhase.ROLL_TASKS;
-		}, time++, TimeUnit.SECONDS);
+		}, time, TimeUnit.SECONDS);
 	}
 	
 	private String createTaskHover() {

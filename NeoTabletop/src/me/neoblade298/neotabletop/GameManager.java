@@ -111,7 +111,7 @@ public class GameManager implements Listener {
 		return instances;
 	}
 	
-	public static void addToLobby(ProxiedPlayer p, GameLobby lob) {
+	public static void addToLobby(ProxiedPlayer p, GameLobby<? extends GamePlayer> lob) {
 		inSession.put(p.getUniqueId(), lob);
 	}
 	

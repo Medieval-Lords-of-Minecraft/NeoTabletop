@@ -35,7 +35,9 @@ public class CmdTabletopReturn extends Subcommand {
 			return;
 		}
 
-		((GameInstance<? extends GamePlayer>) sess).endGame();
+		GameInstance<? extends GamePlayer> inst = (GameInstance<? extends GamePlayer>) sess;
+		inst.broadcast("The host chose to return everyone to the lobby!");
+		inst.endGame();
 	}
 
 }

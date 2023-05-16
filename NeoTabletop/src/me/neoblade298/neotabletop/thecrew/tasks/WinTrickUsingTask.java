@@ -89,9 +89,10 @@ public class WinTrickUsingTask extends TheCrewTask {
 		for (TheCrewCard card : owner.getHand()) {
 			if (using.match(card)) {
 				usingRemaining++;
-				if (win != null && win.match(card)) {
-					winRemaining--; // Can't win a card using the same card
-				}
+			}
+			
+			if (win != null && win.match(card)) {
+				winRemaining--; // Can't win a card that's in your hand (have to be using something else)
 			}
 		}
 	}

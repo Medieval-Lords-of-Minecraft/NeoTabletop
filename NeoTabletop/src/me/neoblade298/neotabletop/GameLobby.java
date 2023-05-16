@@ -142,7 +142,7 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 				SharedUtil.appendText(b, "\n");
 			}
 			first = false;
-			SharedUtil.appendText(b, "&7- &c" + param.getName() + "&7: &6" + param.get(), "Click to change parameter",
+			SharedUtil.appendText(b, "&7- &c" + param.getName() + "&7: &6" + param.get(), "&7&o" + param.getDescription() + "\n&fClick to change parameter",
 					"/tt set " + param.getKey() + " " + param.get(), ClickEvent.Action.SUGGEST_COMMAND);
 		}
 		viewer.sendMessage(b.create());
