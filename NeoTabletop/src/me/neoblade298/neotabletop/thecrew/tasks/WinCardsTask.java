@@ -16,12 +16,9 @@ public class WinCardsTask extends TheCrewTask {
 	
 	@Override
 	public void showDebug(CommandSender s) {
-		String text = "cards:";
-		for (CardMatcher cm : cards) text += " " + cm;
-		Util.msgRaw(s, text);
-		text = "completed:";
-		for (CardMatcher cm : completed) text += " " + cm;
-		Util.msgRaw(s, text);
+		Util.msgRaw(s, "cards: " + cards);
+		Util.msgRaw(s, "completed: " + completed);
+		Util.msgRaw(s, "negate: " + negate);
 	}
 	
 	public WinCardsTask(Configuration cfg) {
@@ -31,7 +28,7 @@ public class WinCardsTask extends TheCrewTask {
 		}
 		negate = cfg.getBoolean("negate", false);
 		
-		display = "Win ";
+		display = negate ? "Don't win " : "Win ";
 		for (int i = 0; i < cards.size(); i++) {
 			if (i != 0) {
 				display += "&f, ";

@@ -143,6 +143,7 @@ public class GameManager implements Listener {
 		lobbies.put(lob.getName(), lob);
 		for (GamePlayer gp : inst.getPlayers().values()) {
 			inSession.put(gp.getUniqueId(), lob);
+			lob.addPlayer(gp.getPlayer());
 			lob.displayInfo(gp.getPlayer(), gp.getPlayer());
 		}
 	}

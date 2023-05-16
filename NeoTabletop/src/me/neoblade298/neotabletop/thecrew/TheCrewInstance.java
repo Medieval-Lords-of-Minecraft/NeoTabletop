@@ -382,11 +382,11 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		if (pile.size() == players.size()) {
 			sch.schedule(NeoTabletop.inst(), () -> {
 				calculateTrickWinner();
-			}, time++, TimeUnit.SECONDS);
+			}, time, TimeUnit.SECONDS);
 		}
 		
 		sch.schedule(NeoTabletop.inst(), () -> {
-			advanceTurn();
+			advanceTurn(); // Scheduled at same time because advanceTurn has a 1s delay
 		}, time, TimeUnit.SECONDS);
 	}
 	

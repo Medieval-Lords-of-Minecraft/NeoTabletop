@@ -27,7 +27,7 @@ public class CmdTheCrewMod extends Subcommand {
 		ProxiedPlayer p = (ProxiedPlayer) s;
 		UUID uuid = p.getUniqueId();
 		GameSession<? extends GamePlayer> sess = GameManager.getSession(uuid);
-		if (sess == null && !(sess instanceof GameInstance)) {
+		if (sess == null || !(sess instanceof GameInstance)) {
 			Util.msgRaw(p, "&cYou're not in a game instance!");
 			return;
 		}
