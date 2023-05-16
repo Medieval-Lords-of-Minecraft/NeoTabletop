@@ -53,7 +53,7 @@ public class WinTrickUsingTask extends TheCrewTask {
 			used = true;
 		}
 		for (TheCrewCard card : pile) {
-			if (win.match(card) && !card.equals(owner.getLastPlayed())) {
+			if (win == null || (win.match(card) && !card.equals(owner.getLastPlayed()))) {
 				numLost++;
 				if (winner.equals(owner)) won = true;
 			}
@@ -74,7 +74,7 @@ public class WinTrickUsingTask extends TheCrewTask {
 			used = true;
 		}
 		for (TheCrewCard card : pile) {
-			if (win.match(card) && !card.equals(owner.getLastPlayed())) {
+			if (win == null || (win.match(card) && !card.equals(owner.getLastPlayed()))) {
 				winRemaining--;
 				if (winner.equals(owner)) won = true;
 			}
@@ -85,11 +85,11 @@ public class WinTrickUsingTask extends TheCrewTask {
 
 	@Override
 	public void reset() {
-		winRemaining = win.getTotalCardsMatching();
+		winRemaining = win != null ? win.getTotalCardsMatching() : 40;
 		for (TheCrewCard card : owner.getHand()) {
 			if (using.match(card)) {
 				usingRemaining++;
-				if (win.match(card)) {
+				if (win != null && win.match(card)) {
 					winRemaining--; // Can't win a card using the same card
 				}
 			}

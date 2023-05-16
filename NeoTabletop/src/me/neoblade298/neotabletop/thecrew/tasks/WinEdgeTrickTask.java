@@ -35,7 +35,7 @@ public class WinEdgeTrickTask extends TheCrewTask {
 			str = "last";
 		}
 		
-		display = "Win" + (exclusive ? "only" : "") + " the " + str + " trick";
+		display = "Win" + (exclusive ? " only" : "") + " the " + str + " trick";
 	}
 	
 	public WinEdgeTrickTask(TheCrewPlayer owner, WinEdgeTrickTask src, TheCrewInstance inst) {

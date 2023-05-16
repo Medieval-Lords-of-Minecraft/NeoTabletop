@@ -43,6 +43,7 @@ public class NeoTabletop extends Plugin {
 		tt.register(new CmdTabletopSetHost("sethost", "Sets the game host", null, SubcommandRunner.PLAYER_ONLY));
 		tt.register(new CmdTabletopViewGame("viewgame", "Gets additional info for a game", null, SubcommandRunner.PLAYER_ONLY));
 		tt.register(new CmdTabletopManual("manual", "View a game's manual", null, SubcommandRunner.PLAYER_ONLY));
+		tt.register(new CmdTabletopReturn("return", "Return from a game to a lobby", null, SubcommandRunner.PLAYER_ONLY));
 		
 		SubcommandManager tta = new SubcommandManager("tta", "tabletop.admin", ChatColor.DARK_RED, this);
 		tta.registerCommandList("");
@@ -60,7 +61,8 @@ public class NeoTabletop extends Plugin {
 		thecrew.register(new CmdTheCrewViewTasks("viewtasks", "Views assigned tasks", null, SubcommandRunner.PLAYER_ONLY));
 		thecrew.register(new CmdTheCrewViewHand("viewhand", "Views a player's hand", null, SubcommandRunner.PLAYER_ONLY));
 		thecrew.register(new CmdTheCrewMod("mod", "Views moderation list for The Crew", null, SubcommandRunner.PLAYER_ONLY));
-		thecrew.register(new CmdTheCrewTest("test", "Tests runtimes", "tabletop.admin", SubcommandRunner.BOTH));
+		thecrew.register(new CmdTheCrewRestartRound("restartround", "Restarts the round", null, SubcommandRunner.PLAYER_ONLY));
+		thecrew.register(new CmdTheCrewRestartGame("test", "Restarts the gamed", null, SubcommandRunner.PLAYER_ONLY));
 	}
 	
 	public static NeoTabletop inst() {

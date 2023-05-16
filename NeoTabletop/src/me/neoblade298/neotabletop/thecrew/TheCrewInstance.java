@@ -141,8 +141,8 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 				viewer.sendMessage(SharedUtil.createText("&8[&7Click or hover to view accepted tasks&8]",
 						createTaskHover(), "/thecrew viewtasks").create());
 				ComponentBuilder b = SharedUtil.createText("&8[&7Click to redo round&8]", "Click here!", "/thecrew restartround");
-				SharedUtil.appendText(b, " [&7Click to restart from round 1&8]", "Click here!", "/thecrew restartgame");
-				SharedUtil.appendText(b, " [&7Click to return to lobby&8]", "Click here!", "/tt return");
+				SharedUtil.appendText(b, " &8[&7Click to restart from round 1&8]", "Click here!", "/thecrew restartgame");
+				SharedUtil.appendText(b, "\n&8[&7Click to return to lobby&8]", "Click here!", "/tt return");
 				viewer.sendMessage(b.create());
 			}
 			else {
@@ -496,7 +496,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		}
 		
 		int remainingPlayers = players.size() - turn;
-		if (tasks.size() <= remainingPlayers) {
+		if (tasks.size() == remainingPlayers) {
 			Util.msgRaw(p, "&cAll remaining tasks must be accepted this round!");
 			return;
 		}

@@ -83,7 +83,7 @@ public class GameManager implements Listener {
 			ProxiedPlayer p = ProxyServer.getInstance().getPlayer(uuid);
 			inSession.remove(p.getUniqueId());
 		}
-		lob.broadcast("&c[&4&lMLMC&4] &7Due to the host leaving, lobby &e" + lob.getName() + " &7was disbanded.");
+		lob.broadcast("&4[&4&lMLMC&c] &7Due to the host leaving, lobby &e" + lob.getName() + " &7was disbanded.");
 		lobbies.remove(lob.getName().toLowerCase());
 	}
 	
@@ -138,11 +138,12 @@ public class GameManager implements Listener {
 	}
 	
 	public static void endGame(GameLobby<? extends GamePlayer> lob, GameInstance<? extends GamePlayer> inst) {
-		lob.broadcast("The game has ended and you've all been returned to the lobby.");
+		inst.broadcast("The game has ended and you've all been returned to the lobby.");
 		instances.remove(inst.getName());
 		lobbies.put(lob.getName(), lob);
 		for (GamePlayer gp : inst.getPlayers().values()) {
 			inSession.put(gp.getUniqueId(), lob);
+			lob.displayInfo(gp.getPlayer(), gp.getPlayer());
 		}
 	}
 }

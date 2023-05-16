@@ -75,9 +75,14 @@ public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> 
 			broadcast("&e" + p.getName() + " &7left the lobby!");
 			
 			if (p.getUniqueId().equals(host)) {
-				GamePlayer next = players.values().iterator().next();
-				host = next.getUniqueId();
-				broadcast("&7Because the host left, the new host is now &e" + gp.getName() + "&7!");
+				if (players.size() != 0) {
+					GamePlayer next = players.values().iterator().next();
+					host = next.getUniqueId();
+					broadcast("&7Because the host left, the new host is now &e" + next.getName() + "&7!");
+				}
+				else {
+					
+				}
 			}
 			handleLeave(gp);
 		}
