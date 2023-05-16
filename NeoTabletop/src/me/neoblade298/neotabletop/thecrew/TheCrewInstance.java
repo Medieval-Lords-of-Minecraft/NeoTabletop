@@ -6,8 +6,6 @@ import java.util.Comparator;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import org.bukkit.ChatColor;
-
 import me.neoblade298.neocore.bungee.BungeeCore;
 import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neocore.shared.util.SharedUtil;
@@ -19,6 +17,7 @@ import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
 import me.neoblade298.neotabletop.thecrew.tasks.CompareWinsTask;
 import me.neoblade298.neotabletop.thecrew.tasks.TheCrewTask;
 import me.neoblade298.neotabletop.thecrew.tasks.WinTricksPredictTask;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -144,7 +143,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 				ComponentBuilder b = SharedUtil.createText("&8[&7Click to redo round&8]", "Click here!", "/thecrew restartround");
 				SharedUtil.appendText(b, " [&7Click to restart from round 1&8]", "Click here!", "/thecrew restartgame");
 				SharedUtil.appendText(b, " [&7Click to return to lobby&8]", "Click here!", "/tt return");
-				viewer.sendMessage();
+				viewer.sendMessage(b.create());
 			}
 			else {
 				Util.msgRaw(viewer, "&cYou lost! Waiting for host to decide what to do next...");
@@ -532,10 +531,31 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 	
 	public void advanceTurn() {
 		if (phase == GamePhase.LOSE) return; // Lost during calculate trick winner
+		
+		if (getRoundsLeft() == 0) {
+			calculateEndGame();
+			return;
+		}
 		GamePhase temp = phase;
 		phase = GamePhase.WAITING;
 		turn++;
 		displayTurn(temp);
+	}
+	
+	public void calculateEndGame() {
+		for (TheCrewPlayer p : players.values()) {
+			for (TheCrewTask task : p.getTasks()) {
+				if (!task.isComplete()) {
+					phase = GamePhase.LOSE;
+					lossReason = task;
+					broadcastInfo();
+					return;
+				}
+			}
+		}
+		
+		broadcast("&aYou won! Sending you back to lobby...");
+		endGame();
 	}
 	
 	public void displayTurn(GamePhase temp) {

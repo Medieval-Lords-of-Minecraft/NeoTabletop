@@ -35,7 +35,7 @@ public class WinEdgeTrickTask extends TheCrewTask {
 			str = "last";
 		}
 		
-		display = "Win " + (exclusive ? "only" : "") + " the " + str + " trick";
+		display = "Win" + (exclusive ? "only" : "") + " the " + str + " trick";
 	}
 	
 	public WinEdgeTrickTask(TheCrewPlayer owner, WinEdgeTrickTask src, TheCrewInstance inst) {
@@ -57,10 +57,10 @@ public class WinEdgeTrickTask extends TheCrewTask {
 		int round = inst.getRound(), roundsLeft = inst.getRoundsLeft();
 		if (winner.equals(owner) && exclusive) {
 			if (first && last) {
-				return round != 0 && roundsLeft != 0;
+				return round != 1 && roundsLeft != 0;
 			}
 			else if (first) {
-				return round != 0;
+				return round != 1;
 			}
 			else {
 				return roundsLeft != 0;
@@ -68,7 +68,7 @@ public class WinEdgeTrickTask extends TheCrewTask {
 		}
 		
 		else if (!winner.equals(owner)) {
-			if (first && round == 0) {
+			if (first && round == 1) {
 				return true;
 			}
 			else if (last && roundsLeft == 0) {
@@ -80,7 +80,7 @@ public class WinEdgeTrickTask extends TheCrewTask {
 
 	@Override
 	public boolean update(TheCrewInstance inst, TheCrewPlayer winner, ArrayList<TheCrewCardInstance> pile) {
-		if (winner.equals(owner) && !exclusive && first && !last && inst.getRound() == 0) {
+		if (winner.equals(owner) && !exclusive && first && !last && inst.getRound() == 1) {
 			return true;
 		}
 		

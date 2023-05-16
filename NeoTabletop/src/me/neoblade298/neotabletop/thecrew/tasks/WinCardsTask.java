@@ -3,6 +3,7 @@ package me.neoblade298.neotabletop.thecrew.tasks;
 import java.util.ArrayList;
 
 import me.neoblade298.neocore.bungee.util.Util;
+import me.neoblade298.neotabletop.thecrew.TheCrewCard;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
@@ -42,7 +43,7 @@ public class WinCardsTask extends TheCrewTask {
 	public WinCardsTask(TheCrewPlayer owner, WinCardsTask src, TheCrewInstance inst) {
 		super(owner, src, inst);
 		
-		for (CardMatcher card : cards) {
+		for (CardMatcher card : src.cards) {
 			this.cards.add(card);
 		}
 		this.negate = src.negate;
@@ -72,19 +73,19 @@ public class WinCardsTask extends TheCrewTask {
 
 	@Override
 	public boolean update(TheCrewInstance inst, TheCrewPlayer winner, ArrayList<TheCrewCardInstance> pile) {
-		ArrayList<Integer> toRemove = new ArrayList<Integer>(cards.size());
-		for (TheCrewCardInstance card : pile) {
+		ArrayList<Integer> toComplete = new ArrayList<Integer>(cards.size());
+		for (TheCrewCard card : pile) {
 			for (int i = 0; i < cards.size(); i++) {
 				CardMatcher matcher = cards.get(i);
 				if (matcher.match(card)) {
-					if (winner.getUniqueId().equals(owner.getUniqueId())) { // Only remove cards without negate (since negate matches multiple)
-						toRemove.add(i);
+					if (winner.getUniqueId().equals(owner.getUniqueId()) && !negate) { // Only remove cards without negate (since negate matches multiple)
+						toComplete.add(i);
 					}
 				}
 			}
 		}
 		
-		for (int i : toRemove) {
+		for (int i : toComplete) {
 			completed.add(cards.remove(i));
 		}
 
