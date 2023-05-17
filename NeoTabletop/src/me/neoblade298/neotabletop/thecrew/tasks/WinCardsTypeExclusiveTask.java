@@ -31,7 +31,6 @@ public class WinCardsTypeExclusiveTask extends TheCrewTask {
 		super(owner, src, inst);
 		this.win = src.win;
 		this.exclude = src.exclude;
-		this.display = src.display;
 	}
 
 	@Override

@@ -34,7 +34,6 @@ public class NoOpenTrickTask extends TheCrewTask {
 	public NoOpenTrickTask(TheCrewPlayer owner, NoOpenTrickTask src, TheCrewInstance inst) {
 		super(owner, src, inst);
 
-		this.display = src.display;
 		this.cards = src.cards;
 	}
 

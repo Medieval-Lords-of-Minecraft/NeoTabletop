@@ -3,6 +3,7 @@ package me.neoblade298.neotabletop.thecrew.tasks;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import me.neoblade298.neocore.shared.util.SharedUtil;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
@@ -17,7 +18,7 @@ public abstract class TheCrewTask {
 	
 	public TheCrewTask(TheCrewPlayer owner, TheCrewTask src, TheCrewInstance inst) {
 		this.owner = owner;
-		this.display = src.display;
+		this.display = SharedUtil.translateColors(src.display);
 		this.difficulty = src.difficulty;
 	}
 	
@@ -33,9 +34,8 @@ public abstract class TheCrewTask {
 		return difficulty;
 	}
 	
-	// TODO FIX
 	public int getDifficulty(int players) {
-		return difficulty.get(3);
+		return difficulty.getOrDefault(players, 3);
 	}
 	public String getDisplay() {
 		return display;

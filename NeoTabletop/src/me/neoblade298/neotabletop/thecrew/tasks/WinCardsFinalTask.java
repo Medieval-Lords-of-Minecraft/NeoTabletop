@@ -28,7 +28,6 @@ public class WinCardsFinalTask extends TheCrewTask {
 	public WinCardsFinalTask(TheCrewPlayer owner, WinCardsFinalTask src, TheCrewInstance inst) {
 		super(owner, src, inst);
 
-		this.display = src.display;
 		this.card = src.card;
 	}
 

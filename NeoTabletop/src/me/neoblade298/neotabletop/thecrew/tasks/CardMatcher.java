@@ -1,5 +1,6 @@
 package me.neoblade298.neotabletop.thecrew.tasks;
 
+import me.neoblade298.neocore.shared.util.SharedUtil;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
 
@@ -62,6 +63,8 @@ public class CardMatcher {
 			display = "&8[" + type.getColor() + type.getDisplay() + " " + value + "&8]";
 			totalCardsMatching = 1;
 		}
+		
+		display = SharedUtil.translateColors(display);
 	}
 	
 	public boolean match(TheCrewCard card) {

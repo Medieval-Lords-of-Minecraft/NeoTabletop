@@ -34,7 +34,6 @@ public class CompareWinsTask extends TheCrewTask {
 	public CompareWinsTask(TheCrewPlayer owner, CompareWinsTask src, TheCrewInstance inst) {
 		super(owner, src, inst);
 
-		this.display = src.display;
 		this.comp = src.comp;
 		this.with = src.with;
 	}

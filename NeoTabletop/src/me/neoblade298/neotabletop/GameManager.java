@@ -144,6 +144,8 @@ public class GameManager implements Listener {
 		for (GamePlayer gp : inst.getPlayers().values()) {
 			inSession.put(gp.getUniqueId(), lob);
 			lob.addPlayerForce(gp.getPlayer());
+		}
+		for (GamePlayer gp : inst.getPlayers().values()) {
 			lob.displayInfo(gp.getPlayer(), gp.getPlayer());
 		}
 	}

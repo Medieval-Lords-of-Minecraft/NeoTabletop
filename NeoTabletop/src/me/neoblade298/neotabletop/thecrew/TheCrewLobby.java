@@ -2,7 +2,6 @@ package me.neoblade298.neotabletop.thecrew;
 
 import java.util.UUID;
 
-import me.neoblade298.neotabletop.BooleanParameterSetter;
 import me.neoblade298.neotabletop.GameInstance;
 import me.neoblade298.neotabletop.GameLobby;
 import me.neoblade298.neotabletop.GameParameter;

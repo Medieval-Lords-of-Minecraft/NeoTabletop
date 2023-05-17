@@ -1,7 +1,5 @@
 package me.neoblade298.neotabletop;
 
-import java.util.logging.Level;
-
 import me.neoblade298.neocore.bungee.commands.SubcommandManager;
 import me.neoblade298.neocore.shared.commands.SubcommandRunner;
 import me.neoblade298.neotabletop.commands.*;

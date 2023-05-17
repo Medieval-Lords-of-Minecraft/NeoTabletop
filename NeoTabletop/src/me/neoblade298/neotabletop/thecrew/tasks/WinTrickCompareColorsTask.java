@@ -45,7 +45,6 @@ public class WinTrickCompareColorsTask extends TheCrewTask {
 	public WinTrickCompareColorsTask(TheCrewPlayer owner, WinTrickCompareColorsTask src, TheCrewInstance inst) {
 		super(owner, src, inst);
 
-		this.display = src.display;
 		this.card = src.card;
 		this.comp = src.comp;
 		this.allowZero = src.allowZero;

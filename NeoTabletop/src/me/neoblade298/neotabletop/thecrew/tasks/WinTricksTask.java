@@ -28,7 +28,6 @@ public class WinTricksTask extends TheCrewTask {
 	public WinTricksTask(TheCrewPlayer owner, WinTricksTask src, TheCrewInstance inst) {
 		super(owner, src, inst);
 
-		this.display = src.display;
 		this.amount = src.amount;
 	}
 

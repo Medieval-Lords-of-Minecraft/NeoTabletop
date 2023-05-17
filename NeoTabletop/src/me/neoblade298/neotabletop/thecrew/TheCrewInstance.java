@@ -141,9 +141,9 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 				p.displayHand(viewer);
 				viewer.sendMessage(SharedUtil.createText("&8[&7Click or hover to view accepted tasks&8]",
 						createTaskHover(), "/thecrew viewtasks").create());
-				ComponentBuilder b = SharedUtil.createText("&8[&7Click to redo round&8]", "Click here!", "/thecrew restartround");
-				SharedUtil.appendText(b, " &8[&7Click to restart from round 1&8]", "Click here!", "/thecrew restartgame");
-				SharedUtil.appendText(b, "\n&8[&7Click to return to lobby&8]", "Click here!", "/tt return");
+				ComponentBuilder b = SharedUtil.createText("&8[&cClick to redo round&8]", "Click here!", "/thecrew restartround");
+				SharedUtil.appendText(b, " &8[&cClick to restart from round 1&8]", "Click here!", "/thecrew restartgame");
+				SharedUtil.appendText(b, "\n&8[&cClick to return to lobby&8]", "Click here!", "/tt return");
 				viewer.sendMessage(b.create());
 			}
 			else {
@@ -347,7 +347,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 				p.sendMessage(b.create());
 			}
 
-			int remainingPlayers = players.size() - (turn + 1);
+			int remainingPlayers = players.size() - turn;
 			
 			if (tasks.size() != remainingPlayers) {
 				p.sendMessage(SharedUtil.createText("&8[&7Click to pass&8]", "This means players after you will\nhave to accept these tasks!",
@@ -396,13 +396,12 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		if (pile.size() == players.size()) {
 			sch.schedule(NeoTabletop.inst(), () -> {
 				calculateTrickWinner();
+				advanceTurn();
 			}, time, TimeUnit.SECONDS);
 		}
-		
-		sch.schedule(NeoTabletop.inst(), () -> {
-			if (phase == GamePhase.WIN) return; 
-			advanceTurn(); // Scheduled at same time because advanceTurn has a 1s delay
-		}, time, TimeUnit.SECONDS);
+		else {
+			advanceTurn();
+		}
 	}
 	
 	public void calculateTrickWinner() {
@@ -437,12 +436,16 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		}
 		tcp.addWin(-1); // Reset win because tcp.winTrick adds it later
 		
+		boolean win = true;
 		for (TheCrewPlayer p : turnOrder) {
 			for (TheCrewTask task : p.getTasks()) {
 				if (task.isComplete()) continue; // Skip completed tasks
 				if (task.update(this, tcp, pile)) {
 					task.setComplete(true);
 					broadcast("&e" + p.getName() + " &7completed task: &f" + task.getDisplay());
+				}
+				else {
+					win = false;
 				}
 			}
 		}
@@ -451,9 +454,15 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		broadcast("&e" + tcp.getName() + " &7won the round with " + winningCard.getDisplay() + "&7!");
 		setFirst(tcp.getUniqueId());
 		
-		if (getRoundsLeft() == 0) {
-			calculateEndGame();
-			return;
+		if (win) {
+			phase = GamePhase.WIN;
+			sch.schedule(NeoTabletop.inst(), () -> {
+				broadcast("&aYou won! Sending you back to lobby in 3 seconds...");
+			}, 1, TimeUnit.SECONDS);
+			
+			sch.schedule(NeoTabletop.inst(), () -> {
+				endGame();
+			}, 4, TimeUnit.SECONDS);
 		}
 	}
 	
@@ -558,47 +567,39 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		phase = GamePhase.WAITING;
 		this.round = round;
 		turn = 0;
-		displayTurn(temp);
+		displayTurn(temp, true);
 	}
 	
 	public void advanceTurn() {
-		if (phase == GamePhase.LOSE) return; // Lost during calculate trick winner
+		if (phase == GamePhase.LOSE || phase == GamePhase.WIN) return;
 		
 		GamePhase temp = phase;
 		phase = GamePhase.WAITING;
 		turn++;
-		displayTurn(temp);
-	}
-	
-	public void calculateEndGame() {
-		for (TheCrewPlayer p : players.values()) {
-			for (TheCrewTask task : p.getTasks()) {
-				if (!task.isComplete()) {
-					phase = GamePhase.LOSE;
-					lossReason = task;
-					broadcastInfo();
-					return;
-				}
-			}
-		}
-		
-		broadcast("&aYou won! Sending you back to lobby...");
-		endGame();
-	}
-	
-	public void displayTurn(GamePhase temp) {
-		int time = 1;
 		if (turn >= players.size()) {
 			turn = 0;
-			sch.schedule(NeoTabletop.inst(), () -> {
-				broadcast("Round " + (++round) + "...");
-			}, time++, TimeUnit.SECONDS);
+			round++;
 		}
-		sch.schedule(NeoTabletop.inst(), () -> {
-			phase = temp;
-			promptPlayer();
-			broadcast("&e" + turnOrder.get(turn).getName() + "&7's turn");
-		}, time, TimeUnit.SECONDS);
+		displayTurn(temp, turn == 0);
+	}
+	
+	public void displayTurn(GamePhase temp, boolean showRound) {
+		int time = 1;
+		if (showRound) {
+			broadcast("Round " + round + "...");
+			sch.schedule(NeoTabletop.inst(), () -> {
+				phase = temp;
+				promptPlayer();
+				broadcast("&e" + turnOrder.get(turn).getName() + "&7's turn");
+			}, time, TimeUnit.SECONDS);
+		}
+		else {
+			sch.schedule(NeoTabletop.inst(), () -> {
+				phase = temp;
+				promptPlayer();
+				broadcast("&e" + turnOrder.get(turn).getName() + "&7's turn");
+			}, time, TimeUnit.SECONDS);
+		}
 	}
 	
 	public void rerollTasks(ProxiedPlayer p) {

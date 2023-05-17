@@ -76,8 +76,6 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 	public void addPlayerForce(ProxiedPlayer p) {
 		GameManager.addToLobby(p, this);
 		players.add(p.getUniqueId());
-		displayInfo(p, p);
-		broadcast("&e" + p.getName() + " &7joined the lobby!");
 	}
 
 	@Override
@@ -198,17 +196,17 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 	
 	public void setParameter(ProxiedPlayer p, String param, String str) {
 		if (!params.containsKey(param)) {
-			Util.msgRaw(p, "&cThat parameter doesn't exist!");
+			Util.msg(p, "&cThat parameter doesn't exist!");
 			return;
 		}
 		
 		boolean success = params.get(param).set(str);
 		if (success) {
-			Util.msgRaw(p, "Successfully set parameter &e" + param + " &7to &e" + str);
+			Util.msg(p, "Successfully set parameter &e" + param + " &7to &e" + str);
 			broadcast("&4[&c&lMLMC&4] &7The host has set parameter &e" + param + " &7to &e" + str);
 		}
 		else {
-			Util.msgRaw(p, "&cFailed to set parameter. Invalid value for parameter.");
+			Util.msg(p, "&cFailed to set parameter. Invalid value for parameter.");
 		}
 	}
 }

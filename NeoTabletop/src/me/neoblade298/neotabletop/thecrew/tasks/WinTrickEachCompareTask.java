@@ -32,7 +32,6 @@ public class WinTrickEachCompareTask extends TheCrewTask {
 	public WinTrickEachCompareTask(TheCrewPlayer owner, WinTrickEachCompareTask src, TheCrewInstance inst) {
 		super(owner, src, inst);
 
-		this.display = src.display;
 		this.value = src.value;
 		this.more = src.more;
 	}

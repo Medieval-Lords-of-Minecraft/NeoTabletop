@@ -30,7 +30,6 @@ public class WinTrickEvenOddTask extends TheCrewTask {
 	public WinTrickEvenOddTask(TheCrewPlayer owner, WinTrickEvenOddTask src, TheCrewInstance inst) {
 		super(owner, src, inst);
 
-		this.display = src.display;
 		this.even = src.even;
 	}
 

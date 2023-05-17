@@ -32,7 +32,6 @@ public class WinTrickTotalEqualTask extends TheCrewTask {
 	public WinTrickTotalEqualTask(TheCrewPlayer owner, WinTrickTotalEqualTask src, TheCrewInstance inst) {
 		super(owner, src, inst);
 
-		this.display = src.display;
 		this.totals = src.totals;
 	}
 

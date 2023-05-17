@@ -41,7 +41,6 @@ public class WinEdgeTrickTask extends TheCrewTask {
 	public WinEdgeTrickTask(TheCrewPlayer owner, WinEdgeTrickTask src, TheCrewInstance inst) {
 		super(owner, src, inst);
 
-		this.display = src.display;
 		this.first = src.first;
 		this.last = src.last;
 		this.exclusive = src.exclusive;

@@ -33,7 +33,6 @@ public class WinTrickUsingTask extends TheCrewTask {
 	public WinTrickUsingTask(TheCrewPlayer owner, WinTrickUsingTask src, TheCrewInstance inst) {
 		super(owner, src, inst);
 		
-		this.display = src.display;
 		this.win = src.win;
 		this.using = src.using;
 		reset();

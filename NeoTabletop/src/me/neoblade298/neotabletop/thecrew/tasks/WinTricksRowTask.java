@@ -34,7 +34,6 @@ public class WinTricksRowTask extends TheCrewTask {
 	public WinTricksRowTask(TheCrewPlayer owner, WinTricksRowTask src, TheCrewInstance inst) {
 		super(owner, src, inst);
 
-		this.display = src.display;
 		this.negate = src.negate;
 		this.wins = src.wins;
 		this.exclusive = src.exclusive;
