@@ -42,10 +42,12 @@ public class WinCardsTypeExclusiveTask extends TheCrewTask {
 	@Override
 	public boolean hasFailed(TheCrewInstance inst, TheCrewPlayer winner, ArrayList<TheCrewCardInstance> pile) {
 		for (TheCrewCardInstance card : pile) {
-			if (win.match(card) && !winner.getUniqueId().equals(owner.getUniqueId())) {
-				return true;
+			if (win.match(card)) {
+				if (!winner.equals(owner)) {
+					return true;
+				}
 			}
-			else if (exclude.match(card) && winner.getUniqueId().equals(owner.getUniqueId())) {
+			else if (exclude.match(card) && winner.equals(owner)) { // Only lose if it DOESN'T match win (since they're same matcher)
 				return true;
 			}
 		}
@@ -55,10 +57,10 @@ public class WinCardsTypeExclusiveTask extends TheCrewTask {
 	@Override
 	public boolean update(TheCrewInstance inst, TheCrewPlayer winner, ArrayList<TheCrewCardInstance> pile) {
 		for (TheCrewCardInstance card : pile) {
-			if (win.match(card) && winner.getUniqueId().equals(owner.getUniqueId())) {
-				hasWon = true;
+			if (win.match(card)) {
+				hasWon = winner.equals(owner);
 			}
-			else if (exclude.match(card) && winner.getUniqueId().equals(owner.getUniqueId())) {
+			else if (exclude.match(card) && !winner.equals(owner)) {
 				numExcluded++;
 			}
 		}

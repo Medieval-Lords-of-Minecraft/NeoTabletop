@@ -65,8 +65,15 @@ public class WinTricksRowTask extends TheCrewTask {
 			return false;
 		}
 		else {
-			return ++consecutive >= wins;
+			if (exclusive && !completedRow) {
+				completedRow = true;
+			}
+			else if (!exclusive) {
+				return ++consecutive >= wins;
+			}
 		}
+		
+		return inst.getRoundsLeft() == 0 && completedRow;
 	}
 
 	@Override

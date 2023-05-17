@@ -72,6 +72,13 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 		displayInfo(p, p);
 		broadcast("&e" + p.getName() + " &7joined the lobby!");
 	}
+	
+	public void addPlayerForce(ProxiedPlayer p) {
+		GameManager.addToLobby(p, this);
+		players.add(p.getUniqueId());
+		displayInfo(p, p);
+		broadcast("&e" + p.getName() + " &7joined the lobby!");
+	}
 
 	@Override
 	public void adminKickPlayer(CommandSender s, String name) {
@@ -198,6 +205,7 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 		boolean success = params.get(param).set(str);
 		if (success) {
 			Util.msgRaw(p, "Successfully set parameter &e" + param + " &7to &e" + str);
+			broadcast("&4[&c&lMLMC&4] &7The host has set parameter &e" + param + " &7to &e" + str);
 		}
 		else {
 			Util.msgRaw(p, "&cFailed to set parameter. Invalid value for parameter.");

@@ -24,7 +24,7 @@ public class WinFirstTricksTask extends TheCrewTask {
 		negate = cfg.getBoolean("negate");
 		amount = cfg.getInt("amount");
 		
-		display = (negate ? "Do not win" : "Win") + " the first " + amount + " tricks";
+		display = (negate ? "Do not win" : "Win") + " the first &e" + amount + " &ftricks";
 	}
 	
 	public WinFirstTricksTask(TheCrewPlayer owner, WinFirstTricksTask src, TheCrewInstance inst) {

@@ -3,6 +3,7 @@ package me.neoblade298.neotabletop.thecrew;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -153,6 +154,12 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 						createTaskHover(), "/thecrew viewtasks").create());
 			}
 			break;
+		case PREPLAY:
+			break;
+		case WIN:
+			break;
+		default:
+			break;
 		}
 			
 	}
@@ -215,9 +222,15 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 				}
 			}
 		}
+		turnOrder.addAll(players.values());
+		
+		// Edge case if captain is null because it was the last card left
+		if (captain == null) {
+			TheCrewPlayer cpt = turnOrder.get(new Random().nextInt(players.size()));
+			cpt.addCard(deck.remove(0));
+		}
 
 		// Announce captain and turn order
-		turnOrder.addAll(players.values());
 		Collections.sort(turnOrder, new Comparator<TheCrewPlayer>() {
 			@Override
 			public int compare(TheCrewPlayer c1, TheCrewPlayer c2) {
@@ -325,6 +338,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 			ProxiedPlayer p = turnOrder.get(turn).getPlayer();
 			p.sendMessage(SharedUtil.createText("&8[&7Click or hover to view accepted tasks&8]",
 					createTaskHover(), "/thecrew viewtasks").create());
+			players.get(p.getName().toLowerCase()).displayHand(p);
 			Util.msgRaw(p, "&7Choose a task:");
 			int num = 0;
 			for (TheCrewTask task : tasks) {
@@ -334,8 +348,8 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 			}
 
 			int remainingPlayers = players.size() - (turn + 1);
-			//todo
-			if (tasks.size() >= remainingPlayers) {
+			
+			if (tasks.size() != remainingPlayers) {
 				p.sendMessage(SharedUtil.createText("&8[&7Click to pass&8]", "This means players after you will\nhave to accept these tasks!",
 						"/thecrew passtask").create());
 			}
@@ -386,6 +400,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		}
 		
 		sch.schedule(NeoTabletop.inst(), () -> {
+			if (phase == GamePhase.WIN) return; 
 			advanceTurn(); // Scheduled at same time because advanceTurn has a 1s delay
 		}, time, TimeUnit.SECONDS);
 	}
@@ -427,7 +442,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 				if (task.isComplete()) continue; // Skip completed tasks
 				if (task.update(this, tcp, pile)) {
 					task.setComplete(true);
-					broadcast("&e" + p.getName() + " &7completed task: " + task.getDisplay());
+					broadcast("&e" + p.getName() + " &7completed task: &f" + task.getDisplay());
 				}
 			}
 		}
@@ -435,6 +450,11 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		tcp.winTrick(pile);
 		broadcast("&e" + tcp.getName() + " &7won the round with " + winningCard.getDisplay() + "&7!");
 		setFirst(tcp.getUniqueId());
+		
+		if (getRoundsLeft() == 0) {
+			calculateEndGame();
+			return;
+		}
 	}
 	
 	public void acceptTask(ProxiedPlayer p, int num) {
@@ -544,10 +564,6 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 	public void advanceTurn() {
 		if (phase == GamePhase.LOSE) return; // Lost during calculate trick winner
 		
-		if (getRoundsLeft() == 0) {
-			calculateEndGame();
-			return;
-		}
 		GamePhase temp = phase;
 		phase = GamePhase.WAITING;
 		turn++;
@@ -638,7 +654,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 					text += "\n&7&m&o- " + ChatColor.stripColor(task.getDisplay());
 				}
 				else {
-					text += "\n&7- " + task.getDisplay();
+					text += "\n&7- &f" + task.getDisplay();
 				}
 			}
 			if (++count < turnOrder.size()) {
@@ -656,7 +672,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 					Util.msgRaw(p, "&7&m&o- " + ChatColor.stripColor(task.getDisplay()));
 				}
 				else {
-					Util.msgRaw(p, "&7- " + task.getDisplay());
+					Util.msgRaw(p, "&7- &f" + task.getDisplay());
 				}
 			}
 		}
@@ -701,7 +717,9 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		WAITING,
 		ROLL_TASKS,
 		SELECT_TASKS,
+		PREPLAY,
 		PLAY,
+		WIN,
 		LOSE;
 	}
 

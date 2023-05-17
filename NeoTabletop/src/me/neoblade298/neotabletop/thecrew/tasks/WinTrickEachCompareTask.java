@@ -73,9 +73,10 @@ public class WinTrickEachCompareTask extends TheCrewTask {
 						(more ? card.getValue() <= value : card.getValue() >= value)) {
 					return false;
 				}
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 
 	@Override

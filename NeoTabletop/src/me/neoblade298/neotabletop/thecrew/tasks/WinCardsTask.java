@@ -1,6 +1,7 @@
 package me.neoblade298.neotabletop.thecrew.tasks;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard;
@@ -12,6 +13,7 @@ import net.md_5.bungee.config.Configuration;
 
 public class WinCardsTask extends TheCrewTask {
 	protected boolean negate = false;
+	protected HashMap<CardMatcher, Integer> negateRemaining = new HashMap<CardMatcher, Integer>();
 	protected ArrayList<CardMatcher> cards = new ArrayList<CardMatcher>(), completed = new ArrayList<CardMatcher>();
 	
 	@Override
@@ -44,6 +46,7 @@ public class WinCardsTask extends TheCrewTask {
 			this.cards.add(card);
 		}
 		this.negate = src.negate;
+		reset();
 	}
 
 	@Override
@@ -58,8 +61,8 @@ public class WinCardsTask extends TheCrewTask {
 				CardMatcher matcher = cards.get(i);
 				if (matcher.match(card)) {
 					if (!winner.getUniqueId().equals(owner.getUniqueId()) ^ negate) {
-						// 1: Winner isn't player and negate is false
-						// 2: winner is player and negate is true
+						// 1: Winner isn't player and negate is false (true xor false)
+						// 2: winner is player and negate is true (false xor true)
 						return true;
 					}
 				}
@@ -75,8 +78,21 @@ public class WinCardsTask extends TheCrewTask {
 			for (int i = 0; i < cards.size(); i++) {
 				CardMatcher matcher = cards.get(i);
 				if (matcher.match(card)) {
-					if (winner.getUniqueId().equals(owner.getUniqueId()) && !negate) { // Only remove cards without negate (since negate matches multiple)
-						toComplete.add(i);
+					if (!negate) {
+						if (winner.getUniqueId().equals(owner.getUniqueId())) {
+							toComplete.add(i);
+						}
+					}
+					else {
+						negateRemaining.put(matcher, negateRemaining.get(matcher) - 1);
+						boolean succeed = true;
+						for (Integer j : negateRemaining.values()) {
+							if (j != 0) {
+								succeed = false;
+								break;
+							}
+						}
+						if (succeed) return true;
 					}
 				}
 			}
@@ -93,5 +109,8 @@ public class WinCardsTask extends TheCrewTask {
 	public void reset() {
 		cards.addAll(completed);
 		completed.clear();
+		for (CardMatcher card : cards) {
+			negateRemaining.put(card, card.getTotalCardsMatching());
+		}
 	}
 }
