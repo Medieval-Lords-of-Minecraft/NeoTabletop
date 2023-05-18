@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import java.util.TreeSet;
 import java.util.UUID;
 
+import javax.swing.text.html.HTMLWriter;
+
 import me.neoblade298.neocore.shared.util.SharedUtil;
 import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
@@ -21,7 +23,7 @@ public class TheCrewPlayer extends GamePlayer {
 	private ArrayList<TheCrewCardInstance> cardsWon = new ArrayList<TheCrewCardInstance>();
 	private TreeSet<Integer> cardValues = new TreeSet<Integer>();
 	private TheCrewCardInstance lastPlayed;
-	private int tricksWon = 0;
+	private int tricksWon = 0, int sonarTokens;
 
 	public TheCrewPlayer(UUID uuid, ProxiedPlayer p) {
 		super(uuid, p);
@@ -57,6 +59,10 @@ public class TheCrewPlayer extends GamePlayer {
 		tasks.add(task);
 	}
 	
+	public void setSonarTokens(int tokens) {
+		this.sonarTokens = tokens;
+	}
+	
 	public void sortHand() {
 		Collections.sort(hand, new Comparator<TheCrewCard>() {
 			@Override
@@ -88,6 +94,66 @@ public class TheCrewPlayer extends GamePlayer {
 			SharedUtil.appendText(b, iter.next().getDisplay(), isOwner ? "Click to play!" : null, "/thecrew play " + ++pos);
 		}
 		viewer.sendMessage(b.create());
+	}
+	
+	public void displaySonarButton() {
+		if (sonarTokens == 0) return;
+		ComponentBuilder b = SharedUtil.createText("&8[&7Click to use a sonar token&8]",
+				"You have &e" + sonarTokens + " &7tokens remaining!", "/thecrew usesonars");
+		p.sendMessage(b.create());
+	}
+	
+	public void displaySonarOptions() {
+		TheCrewCard curr, prev, next;
+		ComponentBuilder b = new ComponentBuilder("&7Use sonar token on: ");
+		if (hand.size() == 0) return;
+		else if (hand.size() == 1) {
+			p.sendMessage(buildSonarOption(b, null, hand.getFirst(), null).create());
+			return;
+		}
+		else {
+			Iterator<TheCrewCardInstance> iter = hand.iterator();
+			curr = iter.next();
+			next = iter.next();
+			while (iter.hasNext()) {
+				prev = curr;
+				curr = next;
+				next = iter.next();
+				
+				buildSonarOption(b, prev, curr, next);
+			}
+			
+			prev = curr;
+			curr = next;
+			next = null;
+			buildSonarOption(b, prev, curr, next);
+			p.sendMessage(b.create());
+		}
+		
+	}
+	
+	private ComponentBuilder buildSonarOption(ComponentBuilder b, TheCrewCard prev, TheCrewCard curr, TheCrewCard next) {
+		boolean prevDif = prev == null || prev.getType() != curr.getType();
+		boolean nextDif = next == null || next.getType() != curr.getType();
+		
+		if (prevDif && nextDif) {
+			SharedUtil.appendText(b, curr.getDisplay() + " ",
+					"Click to use sonar token", "/thecrew sonaronly " + curr.toCardMatcher());
+		}
+		else if (prevDif) {
+			SharedUtil.appendText(b, curr.getDisplay() + " ",
+					"Click to use sonar token", "/thecrew sonarmin " + curr.toCardMatcher());
+		}
+		else if (nextDif) {
+			SharedUtil.appendText(b, curr.getDisplay() + " ",
+					"Click to use sonar token", "/thecrew sonarmax " + curr.toCardMatcher());
+		}
+		else if (nextDif) {
+			SharedUtil.appendText(b, curr.getDisplay() + " ",
+					"&cYou may only use sonar tokens on\n" +
+							"&ccards that are the max, min, or only\n" +
+							"&ccard of that color.", null);
+		}
 	}
 	
 	// Only for spectators

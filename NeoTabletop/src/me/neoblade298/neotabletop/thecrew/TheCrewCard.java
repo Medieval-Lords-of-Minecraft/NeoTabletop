@@ -54,6 +54,10 @@ public class TheCrewCard {
 		}
 	}
 	
+	public CardMatcher toCardMatcher() {
+		return new CardMatcher(this);
+	}
+	
 	public TheCrewCardInstance createInstance() {
 		return new TheCrewCardInstance(this);
 	}

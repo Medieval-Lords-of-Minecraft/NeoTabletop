@@ -9,6 +9,10 @@ public class CardMatcher {
 	private CardType type;
 	private String display, base;
 	private int totalCardsMatching;
+	
+	public CardMatcher(TheCrewCard card) {
+		this(card.getValue() + "" + card.getType().name().charAt(0));
+	}
 	public CardMatcher(String matcher) {
 		if (matcher == null) {
 			value = -1;
