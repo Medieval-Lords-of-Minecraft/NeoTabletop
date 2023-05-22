@@ -13,20 +13,29 @@ import javax.swing.text.html.HTMLWriter;
 import me.neoblade298.neocore.shared.util.SharedUtil;
 import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
+import me.neoblade298.neotabletop.thecrew.TheCrewCard.SonarType;
+import me.neoblade298.neotabletop.thecrew.tasks.CardMatcher;
 import me.neoblade298.neotabletop.thecrew.tasks.TheCrewTask;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class TheCrewPlayer extends GamePlayer {
 	private LinkedList<TheCrewCardInstance> hand = new LinkedList<TheCrewCardInstance>();
+	private LinkedList<TheCrewCardInstance> revealedCards = new LinkedList<TheCrewCardInstance>();
 	private LinkedList<TheCrewTask> tasks = new LinkedList<TheCrewTask>();
 	private ArrayList<TheCrewCardInstance> cardsWon = new ArrayList<TheCrewCardInstance>();
 	private TreeSet<Integer> cardValues = new TreeSet<Integer>();
 	private TheCrewCardInstance lastPlayed;
+	private TheCrewInstance inst;
 	private int tricksWon = 0, int sonarTokens;
 
-	public TheCrewPlayer(UUID uuid, ProxiedPlayer p) {
+	public TheCrewPlayer(UUID uuid, ProxiedPlayer p, TheCrewInstance inst) {
 		super(uuid, p);
+		this.inst = inst;
+	}
+	
+	public TheCrewInstance getInstance() {
+		return inst;
 	}
 	
 	public TheCrewCardInstance getCard(int num) {
@@ -99,7 +108,7 @@ public class TheCrewPlayer extends GamePlayer {
 	public void displaySonarButton() {
 		if (sonarTokens == 0) return;
 		ComponentBuilder b = SharedUtil.createText("&8[&7Click to use a sonar token&8]",
-				"You have &e" + sonarTokens + " &7tokens remaining!", "/thecrew usesonars");
+				"You have &e" + sonarTokens + " &7tokens remaining!", sonarTokens > 0 ? "/thecrew usesonars" : null);
 		p.sendMessage(b.create());
 	}
 	
@@ -138,15 +147,15 @@ public class TheCrewPlayer extends GamePlayer {
 		
 		if (prevDif && nextDif) {
 			SharedUtil.appendText(b, curr.getDisplay() + " ",
-					"Click to use sonar token", "/thecrew sonaronly " + curr.toCardMatcher());
+					"Click to use sonar token", "/thecrew sonar " + curr.toCardMatcher() + " ONLY");
 		}
 		else if (prevDif) {
 			SharedUtil.appendText(b, curr.getDisplay() + " ",
-					"Click to use sonar token", "/thecrew sonarmin " + curr.toCardMatcher());
+					"Click to use sonar token", "/thecrew sonar " + curr.toCardMatcher() + " MIN");
 		}
 		else if (nextDif) {
 			SharedUtil.appendText(b, curr.getDisplay() + " ",
-					"Click to use sonar token", "/thecrew sonarmax " + curr.toCardMatcher());
+					"Click to use sonar token", "/thecrew sonar " + curr.toCardMatcher() + " MAX");
 		}
 		else if (nextDif) {
 			SharedUtil.appendText(b, curr.getDisplay() + " ",
@@ -154,6 +163,39 @@ public class TheCrewPlayer extends GamePlayer {
 							"&ccards that are the max, min, or only\n" +
 							"&ccard of that color.", null);
 		}
+	}
+	
+	public boolean useSonarToken(CardMatcher cm, SonarType stype) {
+		if (sonarTokens == 0) {
+			Util.msg(p, "&cYou don't have any sonar tokens!");
+			return false;
+		}
+		
+		for (TheCrewCardInstance card : revealedCards) {
+			if (cm.match(card)) {
+				Util.msg(p, "&cYou've already revealed this card!");
+				return false;
+			}
+		}
+		
+		TheCrewCardInstance card;
+		for (TheCrewCardInstance c : hand) {
+			if (cm.match(c)) {
+				card = c;
+			}
+		}
+		
+		if (card == null) {
+			Util.msg(p, "&cYou don't have this card!");
+			return false;
+		}
+		
+		CardType type = card.getType();
+		inst.broadcast("&e" + getName() + "&f reveals that " + card.getDisplay() + " &fis their &e" +
+				stype.getDisplay() + type.getColor() + " " + type.getDisplay() + " &fcard.");
+		sonarTokens--;
+		revealedCards.add(card);
+		return true;
 	}
 	
 	// Only for spectators
@@ -227,5 +269,9 @@ public class TheCrewPlayer extends GamePlayer {
 	
 	public void addWin(int num) {
 		tricksWon += num;
+	}
+	
+	public LinkedList<TheCrewCardInstance> getRevealedCards() {
+		return revealedCards;
 	}
 }

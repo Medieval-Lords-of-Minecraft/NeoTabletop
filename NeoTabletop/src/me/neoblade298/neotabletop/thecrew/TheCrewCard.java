@@ -13,6 +13,16 @@ public class TheCrewCard {
 		display = type.color + (this.type == CardType.SUB ? "&l&n" : "") + value;
 	}
 	
+	@Override
+	public boolean equals(Object o) {
+		if ((o instanceof TheCrewCard)) {
+			return false;
+		}
+		TheCrewCard c = (TheCrewCard) o;
+		
+		return c.type == type && c.value == value;
+	}
+	
 	public CardType getType() {
 		return type;
 	}
@@ -60,5 +70,21 @@ public class TheCrewCard {
 	
 	public TheCrewCardInstance createInstance() {
 		return new TheCrewCardInstance(this);
+	}
+
+	
+	public enum SonarType {
+		MAX("highest"),
+		MIN("lowest"),
+		ONLY("only");
+		
+		private final String display;
+		private SonarType(String display) {
+			this.display = display;
+		}
+		
+		public String getDisplay() {
+			return display;
+		}
 	}
 }

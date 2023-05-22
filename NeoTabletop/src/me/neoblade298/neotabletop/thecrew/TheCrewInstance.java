@@ -3,6 +3,7 @@ package me.neoblade298.neotabletop.thecrew;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -15,6 +16,7 @@ import me.neoblade298.neotabletop.GameLobby;
 import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.NeoTabletop;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
+import me.neoblade298.neotabletop.thecrew.tasks.CardMatcher;
 import me.neoblade298.neotabletop.thecrew.tasks.CompareWinsTask;
 import me.neoblade298.neotabletop.thecrew.tasks.TheCrewTask;
 import me.neoblade298.neotabletop.thecrew.tasks.WinTricksPredictTask;
@@ -49,7 +51,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		super(lobby);
 		for (UUID uuid : lobby.getPlayers()) {
 			ProxiedPlayer p = ProxyServer.getInstance().getPlayer(uuid);
-			this.players.put(p.getName().toLowerCase(), new TheCrewPlayer(uuid, p));
+			this.players.put(p.getName().toLowerCase(), new TheCrewPlayer(uuid, p, this));
 		}
 		
 		difficulty = (int) params.get("difficulty").get();
@@ -453,6 +455,20 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		tcp.winTrick(pile);
 		broadcast("&e" + tcp.getName() + " &7won the round with " + winningCard.getDisplay() + "&7!");
 		setFirst(tcp.getUniqueId());
+		
+		// Remove revealed cards if they were played (after it's not possible to lose)
+		for (TheCrewPlayer p : players.values()) {
+			Iterator<TheCrewCardInstance> revealed = p.getRevealedCards().iterator();
+			while (revealed.hasNext()) {
+				TheCrewCard card = revealed.next();
+				for (TheCrewCard c : pile) {
+					if (c.equals(card)) {
+						revealed.remove();
+						break;
+					}
+				}
+			}
+		}
 		
 		if (win) {
 			phase = GamePhase.WIN;
