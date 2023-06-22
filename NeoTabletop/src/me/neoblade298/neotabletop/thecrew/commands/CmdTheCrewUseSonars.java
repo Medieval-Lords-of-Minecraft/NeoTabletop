@@ -36,6 +36,11 @@ public class CmdTheCrewUseSonars extends Subcommand {
 
 		TheCrewInstance inst = (TheCrewInstance) sess;
 		TheCrewPlayer tcp = inst.getPlayers().get(p.getName().toLowerCase());
+		
+		if (tcp.getSonarTokens() == 0) {
+			Util.msg(s, "&cYou don't have any sonar tokens!");
+			return;
+		}
 		tcp.displaySonarOptions();
 	}
 

@@ -61,6 +61,8 @@ public class NeoTabletop extends Plugin {
 		thecrew.register(new CmdTheCrewMod("mod", "Views moderation list for The Crew", null, SubcommandRunner.PLAYER_ONLY));
 		thecrew.register(new CmdTheCrewRestartRound("restartround", "Restarts the round", null, SubcommandRunner.PLAYER_ONLY));
 		thecrew.register(new CmdTheCrewRestartGame("restartgame", "Restarts the game", null, SubcommandRunner.PLAYER_ONLY));
+		thecrew.register(new CmdTheCrewUseSonars("usesonars", "Uses a sonars", null, SubcommandRunner.PLAYER_ONLY));
+		thecrew.register(new CmdTheCrewSonar("sonar", "Brings up sonar menu", null, SubcommandRunner.PLAYER_ONLY));
 	}
 	
 	public static NeoTabletop inst() {

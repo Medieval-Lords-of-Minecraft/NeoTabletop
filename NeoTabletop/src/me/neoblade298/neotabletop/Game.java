@@ -2,6 +2,7 @@ package me.neoblade298.neotabletop;
 
 import java.io.File;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import me.neoblade298.neocore.bungee.BungeeCore;
 import me.neoblade298.neocore.bungee.messaging.MessagingManager;
@@ -27,6 +28,7 @@ public abstract class Game {
 		});
 		
 		GameManager.registerGame(this);
+		NeoTabletop.inst().getProxy().getLogger().log(Level.INFO, "[NeoTabletop] Registering " + key + "...");
 	}
 	public String getKey() {
 		return key;
@@ -57,8 +59,8 @@ public abstract class Game {
 	}
 	public void displayManual(ProxiedPlayer p, int page) {
 		page--;
-		if (page < 0 || page + 1 >= manual.length) {
-			Util.msgRaw(p, "&cThat page in the manual doesn't exist! Choose between page 1-" + manual.length + ".");
+		if (page < 0 || page + 1 > manual.length) {
+			Util.msgRaw(p, "&cThat page in the manual doesn't exist!");
 			return;
 		}
 		p.sendMessage(manual[page]);

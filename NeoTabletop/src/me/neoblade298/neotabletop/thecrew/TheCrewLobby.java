@@ -18,7 +18,7 @@ public class TheCrewLobby extends GameLobby<TheCrewPlayer> {
 				Integer.valueOf(6), new IntegerParameterSetter(1, 25)));
 		
 		params.put("sonar_tokens", new GameParameter("sonar_tokens", "Sonar Tokens",
-				"Number of sonar tokens you're allowed to use to communicate. Can be 0-3",
+				"Number of sonar tokens per user you're allowed to use to communicate. Can be 0-3",
 				Integer.valueOf(1), new IntegerParameterSetter(0, 3)));
 	}
 	

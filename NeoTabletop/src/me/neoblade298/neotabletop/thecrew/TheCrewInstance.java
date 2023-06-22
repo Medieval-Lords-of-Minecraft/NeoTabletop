@@ -49,12 +49,15 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 
 	public TheCrewInstance(GameLobby<TheCrewPlayer> lobby) {
 		super(lobby);
+		difficulty = (int) params.get("difficulty").get();
+		int sonarTokens = (int) params.get("sonar_tokens").get();
+		
 		for (UUID uuid : lobby.getPlayers()) {
 			ProxiedPlayer p = ProxyServer.getInstance().getPlayer(uuid);
-			this.players.put(p.getName().toLowerCase(), new TheCrewPlayer(uuid, p, this));
+			TheCrewPlayer tcp = new TheCrewPlayer(uuid, p, this);
+			tcp.setSonarTokens(sonarTokens);
+			this.players.put(p.getName().toLowerCase(), tcp);
 		}
-		
-		difficulty = (int) params.get("difficulty").get();
 		
 		setupGame();
 	}

@@ -24,10 +24,10 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 	}
 
 	public void startGame(ProxiedPlayer s) {
-		/*if (game.getMinPlayers() > players.size()) {
+		if (game.getMinPlayers() > players.size()) {
 			Util.msgRaw(s, "&cYou need at least &e" + game.getMinPlayers() + " &cplayers to start!");
 			return;
-		}*/
+		}
 		GameManager.startGame(this, onStart());
 	}
 

@@ -73,6 +73,10 @@ public class TheCrewPlayer extends GamePlayer {
 		this.sonarTokens = tokens;
 	}
 	
+	public int getSonarTokens() {
+		return this.sonarTokens;
+	}
+	
 	public void sortHand() {
 		Collections.sort(hand, new Comparator<TheCrewCard>() {
 			@Override
@@ -104,19 +108,19 @@ public class TheCrewPlayer extends GamePlayer {
 			SharedUtil.appendText(b, iter.next().getDisplay(), isOwner ? "Click to play!" : null, "/thecrew play " + ++pos);
 		}
 		viewer.sendMessage(b.create());
-		displaySonarButton();
+		if (isOwner) displaySonarButton(viewer);
 	}
 	
-	public void displaySonarButton() {
+	public void displaySonarButton(ProxiedPlayer viewer) {
 		if (sonarTokens == 0) return;
 		ComponentBuilder b = SharedUtil.createText("&8[&7Click to use a sonar token&8]",
 				"You have &e" + sonarTokens + " &7tokens remaining!", sonarTokens > 0 ? "/thecrew usesonars" : null);
-		p.sendMessage(b.create());
+		viewer.sendMessage(b.create());
 	}
 	
 	public void displaySonarOptions() {
 		TheCrewCard curr, prev, next;
-		ComponentBuilder b = new ComponentBuilder("&7Use sonar token on: ");
+		ComponentBuilder b = new ComponentBuilder("§7Use sonar token on: ");
 		if (hand.size() == 0) return;
 		else if (hand.size() == 1) {
 			p.sendMessage(buildSonarOption(b, null, hand.getFirst(), null).create());
