@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import javax.swing.text.html.HTMLWriter;
 
+import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neocore.shared.util.SharedUtil;
 import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
@@ -27,7 +28,7 @@ public class TheCrewPlayer extends GamePlayer {
 	private TreeSet<Integer> cardValues = new TreeSet<Integer>();
 	private TheCrewCardInstance lastPlayed;
 	private TheCrewInstance inst;
-	private int tricksWon = 0, int sonarTokens;
+	private int tricksWon = 0, sonarTokens = 0;
 
 	public TheCrewPlayer(UUID uuid, ProxiedPlayer p, TheCrewInstance inst) {
 		super(uuid, p);
@@ -103,6 +104,7 @@ public class TheCrewPlayer extends GamePlayer {
 			SharedUtil.appendText(b, iter.next().getDisplay(), isOwner ? "Click to play!" : null, "/thecrew play " + ++pos);
 		}
 		viewer.sendMessage(b.create());
+		displaySonarButton();
 	}
 	
 	public void displaySonarButton() {
@@ -163,6 +165,7 @@ public class TheCrewPlayer extends GamePlayer {
 							"&ccards that are the max, min, or only\n" +
 							"&ccard of that color.", null);
 		}
+		return b;
 	}
 	
 	public boolean useSonarToken(CardMatcher cm, SonarType stype) {
@@ -178,7 +181,7 @@ public class TheCrewPlayer extends GamePlayer {
 			}
 		}
 		
-		TheCrewCardInstance card;
+		TheCrewCardInstance card = null;
 		for (TheCrewCardInstance c : hand) {
 			if (cm.match(c)) {
 				card = c;
