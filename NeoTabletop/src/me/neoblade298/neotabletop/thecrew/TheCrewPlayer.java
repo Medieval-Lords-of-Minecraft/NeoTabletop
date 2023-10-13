@@ -8,8 +8,6 @@ import java.util.LinkedList;
 import java.util.TreeSet;
 import java.util.UUID;
 
-import javax.swing.text.html.HTMLWriter;
-
 import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neocore.shared.util.SharedUtil;
 import me.neoblade298.neotabletop.GamePlayer;

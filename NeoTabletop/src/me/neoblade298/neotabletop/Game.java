@@ -4,8 +4,9 @@ import java.io.File;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import com.velocitypowered.api.command.CommandSource;
+
 import me.neoblade298.neocore.bungee.BungeeCore;
-import me.neoblade298.neocore.bungee.messaging.MessagingManager;
 import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neocore.shared.util.SharedUtil;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -24,7 +25,7 @@ public abstract class Game {
 			maxPlayers = cfg.getInt("max-players");
 		});
 		BungeeCore.loadFiles(new File(baseDir, "manual.yml"), (cfg, file) -> {
-			manual = MessagingManager.parsePage(cfg);
+			manual = MiniMessageManager.
 		});
 		
 		GameManager.registerGame(this);
@@ -48,7 +49,7 @@ public abstract class Game {
 	public int getMaxPlayers() {
 		return maxPlayers;
 	}
-	public void displayInfo(ProxiedPlayer p) {
+	public void displayInfo(CommandSource p) {
 		Util.msgRaw(p, "&7<< &6" + name + "&7>>");
 		Util.msgRaw(p, desc);
 		Util.msgRaw(p, "&7=====");

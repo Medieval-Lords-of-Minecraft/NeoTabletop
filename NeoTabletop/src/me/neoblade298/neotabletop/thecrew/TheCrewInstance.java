@@ -16,7 +16,6 @@ import me.neoblade298.neotabletop.GameLobby;
 import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.NeoTabletop;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
-import me.neoblade298.neotabletop.thecrew.tasks.CardMatcher;
 import me.neoblade298.neotabletop.thecrew.tasks.CompareWinsTask;
 import me.neoblade298.neotabletop.thecrew.tasks.TheCrewTask;
 import me.neoblade298.neotabletop.thecrew.tasks.WinTricksPredictTask;
