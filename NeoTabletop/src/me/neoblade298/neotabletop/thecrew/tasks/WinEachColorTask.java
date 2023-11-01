@@ -10,7 +10,7 @@ import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
-import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.CommandSource;
 import net.md_5.bungee.config.Configuration;
 
 public class WinEachColorTask extends TheCrewTask {
@@ -18,7 +18,7 @@ public class WinEachColorTask extends TheCrewTask {
 	protected HashSet<CardType> cardsWon = new HashSet<CardType>();
 	
 	@Override
-	public void showDebug(CommandSender s) {
+	public void showDebug(CommandSource s) {
 		Util.msgRaw(s, "cardsRemaining: " + cardsRemaining);
 	}
 	

@@ -7,7 +7,7 @@ import me.neoblade298.neocore.shared.commands.SubcommandRunner;
 import me.neoblade298.neocore.shared.util.SharedUtil;
 import me.neoblade298.neotabletop.Game;
 import me.neoblade298.neotabletop.GameManager;
-import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.CommandSource;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 
 public class CmdTabletopGames extends Subcommand {
@@ -18,7 +18,7 @@ public class CmdTabletopGames extends Subcommand {
 	}
 
 	@Override
-	public void run(CommandSender s, String[] args) {
+	public void run(CommandSource s, String[] args) {
 		ComponentBuilder b = SharedUtil.createText("&7List of games:", null, null);
 		for (Entry<String, Game> ent : GameManager.getGames().entrySet()) {
 			SharedUtil.appendText(b, "\n&7- &c" + ent.getKey(), "&6" + ent.getValue().getName() +

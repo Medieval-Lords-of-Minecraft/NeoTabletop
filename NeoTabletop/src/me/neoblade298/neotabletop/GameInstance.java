@@ -4,17 +4,20 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
 
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.Player;
+
+import me.neoblade298.neocore.bungee.BungeeCore;
 import me.neoblade298.neocore.bungee.util.Util;
-import me.neoblade298.neocore.shared.util.SharedUtil;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent.Builder;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> {
 	protected HashMap<String, T> players = new HashMap<String, T>();
-	protected HashSet<ProxiedPlayer> spectators = new HashSet<ProxiedPlayer>();
+	protected HashSet<Player> spectators = new HashSet<Player>();
 	public GameInstance(GameLobby<T> lobby) {
 		super(lobby.getName(), lobby.getGame(), lobby.getHost(), lobby.isPublic(), lobby.getParameters());
 	}
@@ -22,57 +25,57 @@ public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> 
 	public abstract void handleLeave(GamePlayer gp);
 
 	@Override
-	public void adminKickPlayer(CommandSender s, String name) {
-		ProxiedPlayer p = ProxyServer.getInstance().getPlayer(name);
+	public void adminKickPlayer(CommandSource s, String name) {
+		Player p = BungeeCore.proxy().getPlayer(name).get();
 		GamePlayer gp = players.remove(name.toLowerCase());
 		GameManager.removeFromSession(gp.getUniqueId());
-		broadcast("&e" + p.getName() + " &7was kicked from the game by an admin!");
+		broadcast("&e" + p.getUsername() + " &7was kicked from the game by an admin!");
 		handleLeave(gp);
 	}
 	
 	@Override
-	public void kickPlayer(ProxiedPlayer p, String name) {
+	public void kickPlayer(Player p, String name) {
 		if (!p.getUniqueId().equals(host)) {
-			Util.msgRaw(p, "&cOnly the host may kick other players!");
+			Util.displayError(p, "Only the host may kick other players!");
 			return;
 		}
 		
 		if (!players.containsKey(name.toLowerCase())) {
-			Util.msgRaw(p, "&cThat player isn't in your game!");
+			Util.displayError(p, "That player isn't in your game!");
 			return;
 		}
 		
 		GamePlayer gp = players.remove(name.toLowerCase());
 		GameManager.removeFromSession(gp.getUniqueId());
-		broadcast("&e" + p.getName() + " &7was kicked from the game!");
+		broadcast("&e" + p.getUsername() + " &7was kicked from the game!");
 		handleLeave(gp);
 	}
 
 	@Override
 	public void broadcast(String msg) {
 		for (GamePlayer gp : players.values()) {
-			Util.msgRaw(gp.getPlayer(), msg);
+			Util.msgRaw(gp.getPlayer(), BungeeCore.miniMessage().deserialize(msg));
 		}
-		for (ProxiedPlayer p : spectators) {
-			Util.msgRaw(p, msg);
+		for (Player p : spectators) {
+			Util.msgRaw(p, BungeeCore.miniMessage().deserialize(msg));
 		}
 	}
 	
-	public void broadcast(BaseComponent[] bc) {
+	public void broadcast(Component bc) {
 		for (GamePlayer gp : players.values()) {
 			gp.getPlayer().sendMessage(bc);
 		}
-		for (ProxiedPlayer p : spectators) {
+		for (Player p : spectators) {
 			p.sendMessage(bc);
 		}
 	}
 
 	@Override
-	public void leavePlayer(ProxiedPlayer p) {
-		if (players.containsKey(p.getName().toLowerCase())) {
-			GamePlayer gp = players.remove(p.getName().toLowerCase());
+	public void leavePlayer(Player p) {
+		if (players.containsKey(p.getUsername().toLowerCase())) {
+			GamePlayer gp = players.remove(p.getUsername().toLowerCase());
 			GameManager.removeFromSession(p.getUniqueId());
-			broadcast("&e" + p.getName() + " &7left the lobby!");
+			broadcast("&e" + p.getUsername() + " &7left the lobby!");
 			
 			if (p.getUniqueId().equals(host)) {
 				if (players.size() != 0) {
@@ -89,10 +92,10 @@ public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> 
 		else if (spectators.contains(p)) {
 			spectators.remove(p);
 			GameManager.removeFromSession(p.getUniqueId());
-			broadcast("&e" + p.getName() + " &7stopped spectating!");
+			broadcast("&e" + p.getUsername() + " &7stopped spectating!");
 		}
 		else {
-			Util.msgRaw(p, "&cSomething went wrong! You were unable to leave game &e" + name + "&c.");
+			Util.displayError(p, "Something went wrong! You were unable to leave game &e" + name + "&c.");
 			return;
 		}
 	}
@@ -101,9 +104,9 @@ public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> 
 		return players;
 	}
 	
-	public void addSpectator(ProxiedPlayer p) {
+	public void addSpectator(Player p) {
 		spectators.add(p);
-		broadcast("&e" + p.getName() + " &7began spectating!");
+		broadcast("&e" + p.getUsername() + " &7began spectating!");
 		onSpectate(p);
 	}
 	
@@ -111,28 +114,44 @@ public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> 
 		GameManager.endGame(onEnd(), this);
 	}
 	
-	public void displayKickList(CommandSender cmdUser) {
-		Util.msgRaw(cmdUser, "&7Players:");
-		Util.msgRaw(cmdUser, "&7- &c" + cmdUser.getName() + " &7(&eHost&7)");
-		ComponentBuilder b = new ComponentBuilder();
-		
+	public void displayKickList(CommandSource cmdUser) {
+		Player p = (Player) cmdUser;
+		Util.msgRaw(cmdUser, Component.text("Players:", NamedTextColor.GRAY));
+		Component c = Component.text().content("- ").color(NamedTextColor.GRAY)
+				.append(Component.text(p.getUsername(), NamedTextColor.RED))
+				.append(Component.text(" ("))
+				.append(Component.text("Host", NamedTextColor.YELLOW))
+				.append(Component.text(")")).build();
+		p.sendMessage(c);
 		boolean first = true;
+		Builder b = Component.text();
 		for (GamePlayer gp : players.values()) {
 			UUID uuid = gp.getUniqueId();
 			if (uuid.equals(host)) continue;
 			if (!first) {
-				SharedUtil.appendText(b, "\n");
+				b.appendNewline();
 			}
 			first = false;
 			
-			SharedUtil.appendText(b, "&7- &c" + gp.getName());
-			SharedUtil.appendText(b, " &8[&cClick to kick&8]", "Click to kick " + gp.getName(), "/tt kick " + gp.getName());
-			SharedUtil.appendText(b, " &8[&cClick to give host&8]", "Click to give host to " + gp.getName(), "/tt sethost " + gp.getName());
-			cmdUser.sendMessage(b.create());
+			b.append(Component.text("- ", NamedTextColor.GRAY)).append(Component.text(gp.getName(), NamedTextColor.RED));
+			b.appendNewline();
+			
+			Component kick = Component.text().content(" [").color(NamedTextColor.DARK_GRAY)
+					.append(Component.text("Click to kick", NamedTextColor.RED))
+					.append(Component.text("]")).build();
+			kick.hoverEvent(HoverEvent.showText(Component.text("Click to kick " + gp.getName())));
+			kick.clickEvent(ClickEvent.runCommand("/tt kick " + gp.getName()));
+			Component giveHost = Component.text().content(" [").color(NamedTextColor.DARK_GRAY)
+					.append(Component.text("Click to give host", NamedTextColor.RED))
+					.append(Component.text("]")).build();
+			kick.hoverEvent(HoverEvent.showText(Component.text("Click to give host to " + gp.getName())));
+			kick.clickEvent(ClickEvent.runCommand("/tt sethost " + gp.getName()));
+			
+			cmdUser.sendMessage(b.append(kick).append(giveHost).build());
 		}
 	}
 	
-	public abstract void onSpectate(ProxiedPlayer p);
-	public abstract void showDebug(CommandSender s);
+	public abstract void onSpectate(Player p);
+	public abstract void showDebug(CommandSource s);
 	public abstract GameLobby<T> onEnd();
 }

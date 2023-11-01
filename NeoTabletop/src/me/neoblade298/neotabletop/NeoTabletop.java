@@ -1,15 +1,20 @@
 package me.neoblade298.neotabletop;
 
+import com.velocitypowered.api.command.CommandManager;
+import com.velocitypowered.api.plugin.Plugin;
+import com.velocitypowered.api.proxy.ProxyServer;
+import com.velocitypowered.api.scheduler.Scheduler;
+
+import me.neoblade298.neocore.bungee.BungeeCore;
 import me.neoblade298.neocore.bungee.commands.SubcommandManager;
 import me.neoblade298.neocore.shared.commands.SubcommandRunner;
 import me.neoblade298.neotabletop.commands.*;
 import me.neoblade298.neotabletop.thecrew.commands.*;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.plugin.Plugin;
-import net.md_5.bungee.api.scheduler.TaskScheduler;
+import net.kyori.adventure.text.format.NamedTextColor;
 
-public class NeoTabletop extends Plugin {
+@Plugin(id = "neotabletop", name = "NeoTabletop", version = "0.1.0-SNAPSHOT",
+        url = "https://ml-mc.com", description = "Neo's tabletop games plugin", authors = {"Ascheladd"})
+public class NeoTabletop {
 	private static NeoTabletop inst;
 	
 	public void onEnable() {
@@ -17,11 +22,12 @@ public class NeoTabletop extends Plugin {
 		initCommands();
     	
     	// getProxy().getPluginManager().registerListener(this, new PaystubIO());
-		getProxy().getPluginManager().registerListener(this, new GameManager());
+		BungeeCore.proxy().getEventManager().register(this, new GameManager());
 	}
 	
 	private void initCommands() {
-		SubcommandManager tt = new SubcommandManager("tt", "tabletop.use", ChatColor.RED, this);
+		CommandManager mngr = BungeeCore.proxy().getCommandManager();
+		SubcommandManager tt = new SubcommandManager("tt", "tabletop.use", NamedTextColor.RED, mngr, this);
 		tt.registerCommandList("");
 		tt.register(new CmdTabletopCreate("create", "Creates a lobby for a game", null, SubcommandRunner.PLAYER_ONLY));
 		tt.register(new CmdTabletopInvite("invite", "Invites players to your lobby", null, SubcommandRunner.PLAYER_ONLY));
@@ -43,14 +49,14 @@ public class NeoTabletop extends Plugin {
 		tt.register(new CmdTabletopManual("manual", "View a game's manual", null, SubcommandRunner.PLAYER_ONLY));
 		tt.register(new CmdTabletopReturn("return", "Return from a game to a lobby", null, SubcommandRunner.PLAYER_ONLY));
 		
-		SubcommandManager tta = new SubcommandManager("tta", "tabletop.admin", ChatColor.DARK_RED, this);
+		SubcommandManager tta = new SubcommandManager("tta", "tabletop.admin", NamedTextColor.DARK_RED, mngr, this);
 		tta.registerCommandList("");
 		tta.register(new CmdTabletopAdminKick("kick", "Force kicks a player from a session", null, SubcommandRunner.BOTH));
 		tta.register(new CmdTabletopAdminSetHost("sethost", "Force sets a host for a session", null, SubcommandRunner.BOTH));
 		tta.register(new CmdTabletopAdminDisband("end", "Force sets a host for a session", null, SubcommandRunner.BOTH));
 		tta.register(new CmdTabletopAdminDebug("debug", "Show debug for an instance", null, SubcommandRunner.PLAYER_ONLY));
 
-		SubcommandManager thecrew = new SubcommandManager("thecrew", "tabletop.use", ChatColor.RED, this);
+		SubcommandManager thecrew = new SubcommandManager("thecrew", "tabletop.use", NamedTextColor.RED, mngr, this);
 		thecrew.register(new CmdTheCrewPlay("play", "Plays a card in your hand", null, SubcommandRunner.PLAYER_ONLY));
 		thecrew.register(new CmdTheCrewAcceptTasks("accepttasks", "Accepts rolled tasks", null, SubcommandRunner.PLAYER_ONLY));
 		thecrew.register(new CmdTheCrewAcceptTask("accepttask", "Accepts a task", null, SubcommandRunner.PLAYER_ONLY));
@@ -69,11 +75,11 @@ public class NeoTabletop extends Plugin {
 		return inst;
 	}
 	
-	public static TaskScheduler scheduler() {
-		return inst.getProxy().getScheduler();
+	public static Scheduler scheduler() {
+		return BungeeCore.proxy().getScheduler();
 	}
 	
 	public static ProxyServer proxy() {
-		return inst.getProxy();
+		return BungeeCore.proxy();
 	}
 }

@@ -6,14 +6,14 @@ import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
-import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.CommandSource;
 import net.md_5.bungee.config.Configuration;
 
 public class WinTricksPredictTask extends TheCrewTask {
 	protected int amount;
 	
 	@Override
-	public void showDebug(CommandSender s) {
+	public void showDebug(CommandSource s) {
 		Util.msgRaw(s, "amount: " + amount);
 	}
 	

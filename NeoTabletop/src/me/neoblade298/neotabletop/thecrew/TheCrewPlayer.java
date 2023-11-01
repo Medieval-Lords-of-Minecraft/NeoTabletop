@@ -16,7 +16,7 @@ import me.neoblade298.neotabletop.thecrew.TheCrewCard.SonarType;
 import me.neoblade298.neotabletop.thecrew.tasks.CardMatcher;
 import me.neoblade298.neotabletop.thecrew.tasks.TheCrewTask;
 import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.connection.Player;
 
 public class TheCrewPlayer extends GamePlayer {
 	private LinkedList<TheCrewCardInstance> hand = new LinkedList<TheCrewCardInstance>();
@@ -28,7 +28,7 @@ public class TheCrewPlayer extends GamePlayer {
 	private TheCrewInstance inst;
 	private int tricksWon = 0, sonarTokens = 0;
 
-	public TheCrewPlayer(UUID uuid, ProxiedPlayer p, TheCrewInstance inst) {
+	public TheCrewPlayer(UUID uuid, Player p, TheCrewInstance inst) {
 		super(uuid, p);
 		this.inst = inst;
 	}
@@ -89,10 +89,10 @@ public class TheCrewPlayer extends GamePlayer {
 		});
 	}
 	
-	public void displayHand(ProxiedPlayer viewer) {
+	public void displayHand(Player viewer) {
 		boolean isOwner = viewer.getUniqueId().equals(uuid);
 		
-		ComponentBuilder b = SharedUtil.createText((isOwner ? "Hand" : p.getName() + "'s hand") + ": ");
+		ComponentBuilder b = SharedUtil.createText((isOwner ? "Hand" : p.getUsername() + "'s hand") + ": ");
 		if (hand.isEmpty()) {
 			viewer.sendMessage(SharedUtil.appendText(b, "empty!").create());
 			return;
@@ -109,7 +109,7 @@ public class TheCrewPlayer extends GamePlayer {
 		if (isOwner) displaySonarButton(viewer);
 	}
 	
-	public void displaySonarButton(ProxiedPlayer viewer) {
+	public void displaySonarButton(Player viewer) {
 		if (sonarTokens == 0) return;
 		ComponentBuilder b = SharedUtil.createText("&8[&7Click to use a sonar token&8]",
 				"You have &e" + sonarTokens + " &7tokens remaining!", sonarTokens > 0 ? "/thecrew usesonars" : null);
@@ -205,7 +205,7 @@ public class TheCrewPlayer extends GamePlayer {
 	
 	// Only for spectators
 	public String createHandHoverText() {
-		String text = p.getName() + "'s hand:";
+		String text = p.getUsername() + "'s hand:";
 		if (hand.isEmpty()) text += " empty!";
 		else {
 			for (TheCrewCard card : hand) {

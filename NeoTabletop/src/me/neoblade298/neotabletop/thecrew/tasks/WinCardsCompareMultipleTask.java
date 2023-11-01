@@ -9,7 +9,7 @@ import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
-import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.CommandSource;
 import net.md_5.bungee.config.Configuration;
 
 public class WinCardsCompareMultipleTask extends TheCrewTask {
@@ -19,7 +19,7 @@ public class WinCardsCompareMultipleTask extends TheCrewTask {
 	protected int amount;
 	
 	@Override
-	public void showDebug(CommandSender s) {
+	public void showDebug(CommandSource s) {
 		String text = "cards:";
 		for (CardMatcher cm : cards) text += " " + cm;
 		Util.msgRaw(s, text);

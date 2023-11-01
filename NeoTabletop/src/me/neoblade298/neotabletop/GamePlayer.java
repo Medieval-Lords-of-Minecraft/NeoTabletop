@@ -2,16 +2,16 @@ package me.neoblade298.neotabletop;
 
 import java.util.UUID;
 
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import com.velocitypowered.api.proxy.Player;
 
 public class GamePlayer {
 	protected UUID uuid;
 	protected String name;
-	protected ProxiedPlayer p;
-	public GamePlayer(UUID uuid, ProxiedPlayer p) {
+	protected Player p;
+	public GamePlayer(UUID uuid, Player p) {
 		super();
 		this.uuid = uuid;
-		this.name = p.getName();
+		this.name = p.getUsername();
 		this.p = p;
 	}
 	public UUID getUniqueId() {
@@ -20,7 +20,7 @@ public class GamePlayer {
 	public String getName() {
 		return name;
 	}
-	public ProxiedPlayer getPlayer() {
+	public Player getPlayer() {
 		return p;
 	}
 	@Override

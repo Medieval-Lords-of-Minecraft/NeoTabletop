@@ -10,10 +10,10 @@ import me.neoblade298.neocore.shared.util.SharedUtil;
 import me.neoblade298.neotabletop.GameLobby;
 import me.neoblade298.neotabletop.GameManager;
 import me.neoblade298.neotabletop.GamePlayer;
-import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.CommandSource;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.connection.Player;
 
 public class CmdTabletopLobbies extends Subcommand {
 
@@ -23,7 +23,7 @@ public class CmdTabletopLobbies extends Subcommand {
 	}
 
 	@Override
-	public void run(CommandSender s, String[] args) {
+	public void run(CommandSource s, String[] args) {
 		if (GameManager.getLobbies().size() == 0) {
 			Util.msg(s, "&cThere are currently no active lobbies!");
 			return;
@@ -45,14 +45,14 @@ public class CmdTabletopLobbies extends Subcommand {
 		String col = lob.isFull() ? "&a" : "&c";
 		text += "\n&7Playercount: " + col + lob.getPlayers().size() + " &7/ " + lob.getGame().getMaxPlayers();
 		
-		ProxiedPlayer host = ProxyServer.getInstance().getPlayer(lob.getHost());
+		Player host = ProxyServer.getInstance().getPlayer(lob.getHost());
 		text += "\n&7- &c" + host.getName() + " &7(&6Host&7)";
 		
 		for (UUID uuid : lob.getPlayers()) {
 			if (uuid.equals(lob.getHost())) continue;
 			
-			ProxiedPlayer p = ProxyServer.getInstance().getPlayer(uuid);
-			text += "\n&7- &c" + p.getName();
+			Player p = ProxyServer.getInstance().getPlayer(uuid);
+			text += "\n&7- &c" + p.getUsername();
 		}
 		return text;
 	}

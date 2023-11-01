@@ -7,9 +7,9 @@ import me.neoblade298.neocore.shared.commands.SubcommandRunner;
 import me.neoblade298.neotabletop.GameManager;
 import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.GameSession;
-import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.CommandSource;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.connection.Player;
 
 public class CmdTabletopInfo extends Subcommand {
 
@@ -21,15 +21,15 @@ public class CmdTabletopInfo extends Subcommand {
 	}
 
 	@Override
-	public void run(CommandSender s, String[] args) {
-		ProxiedPlayer p = args.length > 0 ? ProxyServer.getInstance().getPlayer(args[0]) : (ProxiedPlayer) s;
+	public void run(CommandSource s, String[] args) {
+		Player p = args.length > 0 ? ProxyServer.getInstance().getPlayer(args[0]) : (Player) s;
 		GameSession<? extends GamePlayer> sess = GameManager.getSession(p.getUniqueId());
 		if (sess == null) {
 			Util.msg(p, "&cPlayer is not currently in a session!");
 			return;
 		}
 
-		sess.displayInfo((ProxiedPlayer) s, p);
+		sess.displayInfo((Player) s, p);
 	}
 
 }

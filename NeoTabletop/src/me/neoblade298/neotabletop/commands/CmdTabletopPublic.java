@@ -9,8 +9,8 @@ import me.neoblade298.neotabletop.GameLobby;
 import me.neoblade298.neotabletop.GameManager;
 import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.GameSession;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.CommandSource;
+import net.md_5.bungee.api.connection.Player;
 
 public class CmdTabletopPublic extends Subcommand {
 
@@ -21,8 +21,8 @@ public class CmdTabletopPublic extends Subcommand {
 	}
 
 	@Override
-	public void run(CommandSender s, String[] args) {
-		ProxiedPlayer p = (ProxiedPlayer) s;
+	public void run(CommandSource s, String[] args) {
+		Player p = (Player) s;
 		UUID uuid = p.getUniqueId();
 		GameSession<? extends GamePlayer> sess = GameManager.getSession(uuid);
 		if (sess == null || !(sess instanceof GameLobby)) {

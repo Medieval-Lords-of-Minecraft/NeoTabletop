@@ -6,7 +6,7 @@ import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
-import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.CommandSource;
 import net.md_5.bungee.config.Configuration;
 
 public class CompareColorsTask extends TheCrewTask {
@@ -15,7 +15,7 @@ public class CompareColorsTask extends TheCrewTask {
 	protected int cardsLeft = 9, compsLeft = 9;
 
 	@Override
-	public void showDebug(CommandSender s) {
+	public void showDebug(CommandSource s) {
 		Util.msgRaw(s, "card: " + card + ", comp: " + comp + ", more: " + more + ", allowZero: " + allowZero + ", cardsLeft: " +
 				cardsLeft + ", compsLeft: " + compsLeft);
 	}

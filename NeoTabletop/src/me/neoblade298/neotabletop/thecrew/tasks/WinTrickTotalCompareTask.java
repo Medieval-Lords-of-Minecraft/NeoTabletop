@@ -9,7 +9,7 @@ import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
-import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.CommandSource;
 import net.md_5.bungee.config.Configuration;
 
 public class WinTrickTotalCompareTask extends TheCrewTask {
@@ -18,7 +18,7 @@ public class WinTrickTotalCompareTask extends TheCrewTask {
 	protected int total;
 	
 	@Override
-	public void showDebug(CommandSender s) {
+	public void showDebug(CommandSource s) {
 		Util.msgRaw(s, "more: " + more + ", total: " + total);
 	}
 	

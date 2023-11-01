@@ -10,8 +10,8 @@ import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.GameSession;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.CommandSource;
+import net.md_5.bungee.api.connection.Player;
 
 public class CmdTheCrewUseSonars extends Subcommand {
 
@@ -22,8 +22,8 @@ public class CmdTheCrewUseSonars extends Subcommand {
 	}
 
 	@Override
-	public void run(CommandSender s, String[] args) {
-		ProxiedPlayer p = (ProxiedPlayer) s;
+	public void run(CommandSource s, String[] args) {
+		Player p = (Player) s;
 		UUID uuid = p.getUniqueId();
 		GameSession<? extends GamePlayer> sess = GameManager.getSession(uuid);
 		if (sess == null || !(sess instanceof TheCrewInstance)) {
@@ -32,7 +32,7 @@ public class CmdTheCrewUseSonars extends Subcommand {
 		}
 
 		TheCrewInstance inst = (TheCrewInstance) sess;
-		TheCrewPlayer tcp = inst.getPlayers().get(p.getName().toLowerCase());
+		TheCrewPlayer tcp = inst.getPlayers().get(p.getUsername().toLowerCase());
 		
 		if (tcp.getSonarTokens() == 0) {
 			Util.msg(s, "&cYou don't have any sonar tokens!");

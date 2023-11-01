@@ -8,7 +8,7 @@ import me.neoblade298.neotabletop.thecrew.TheCrewCard;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
-import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.CommandSource;
 import net.md_5.bungee.config.Configuration;
 
 public class WinCardsTask extends TheCrewTask {
@@ -17,7 +17,7 @@ public class WinCardsTask extends TheCrewTask {
 	protected ArrayList<CardMatcher> cards = new ArrayList<CardMatcher>(), completed = new ArrayList<CardMatcher>();
 	
 	@Override
-	public void showDebug(CommandSender s) {
+	public void showDebug(CommandSource s) {
 		Util.msgRaw(s, "cards: " + cards);
 		Util.msgRaw(s, "completed: " + completed);
 		Util.msgRaw(s, "negate: " + negate);

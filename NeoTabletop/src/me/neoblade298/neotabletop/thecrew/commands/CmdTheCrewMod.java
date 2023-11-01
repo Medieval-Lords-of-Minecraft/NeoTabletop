@@ -10,9 +10,9 @@ import me.neoblade298.neotabletop.GameInstance;
 import me.neoblade298.neotabletop.GameManager;
 import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.GameSession;
-import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.CommandSource;
 import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.connection.Player;
 
 public class CmdTheCrewMod extends Subcommand {
 
@@ -23,8 +23,8 @@ public class CmdTheCrewMod extends Subcommand {
 	}
 
 	@Override
-	public void run(CommandSender s, String[] args) {
-		ProxiedPlayer p = (ProxiedPlayer) s;
+	public void run(CommandSource s, String[] args) {
+		Player p = (Player) s;
 		UUID uuid = p.getUniqueId();
 		GameSession<? extends GamePlayer> sess = GameManager.getSession(uuid);
 		if (sess == null || !(sess instanceof GameInstance)) {

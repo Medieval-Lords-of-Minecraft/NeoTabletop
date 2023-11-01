@@ -7,7 +7,7 @@ import me.neoblade298.neocore.shared.util.SharedUtil;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
-import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.CommandSource;
 import net.md_5.bungee.config.Configuration;
 
 public abstract class TheCrewTask {
@@ -51,7 +51,7 @@ public abstract class TheCrewTask {
 	}
 
 	public abstract void reset();
-	public abstract void showDebug(CommandSender s);
+	public abstract void showDebug(CommandSource s);
 	public abstract TheCrewTask clone(TheCrewPlayer owner, TheCrewInstance inst);
 	public abstract boolean hasFailed(TheCrewInstance inst, TheCrewPlayer winner, ArrayList<TheCrewCardInstance> pile);
 	public abstract boolean update(TheCrewInstance inst, TheCrewPlayer winner, ArrayList<TheCrewCardInstance> pile);

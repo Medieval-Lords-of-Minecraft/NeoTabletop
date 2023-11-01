@@ -1,12 +1,16 @@
 package me.neoblade298.neotabletop;
 
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.UUID;
 
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.Player;
+
+import me.neoblade298.neocore.bungee.BungeeCore;
 import me.neoblade298.neocore.bungee.util.Util;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 public abstract class GameSession<T extends GamePlayer> {
 	protected String name;
@@ -40,21 +44,22 @@ public abstract class GameSession<T extends GamePlayer> {
 	public boolean isPublic() {
 		return isPublic;
 	}
-	public void setHost(CommandSender cmdUser, String username) {
-		ProxiedPlayer p = ProxyServer.getInstance().getPlayer(username);
-		if (p == null) {
-			Util.msgRaw(cmdUser, "&cThat player isn't online!");
+	public void setHost(CommandSource cmdUser, String username) {
+		Player cmdr = (Player) cmdUser;
+		Optional<Player> p = BungeeCore.proxy().getPlayer(username);
+		if (p.isEmpty()) {
+			Util.msgRaw(cmdUser, Component.text("That player isn't online!", NamedTextColor.RED));
 			return;
 		}
 		
-		host = p.getUniqueId();
-		broadcast("&e" + cmdUser.getName() + " &7set the game's host to &e" + p.getName());
+		host = p.get().getUniqueId();
+		broadcast("&e" + cmdr.getUsername() + " &7set the game's host to &e" + p.get().getUsername());
 	}
 	public HashMap<String, GameParameter> getParameters() {
 		return params;
 	}
-	public abstract void leavePlayer(ProxiedPlayer p);
-	public abstract void kickPlayer(ProxiedPlayer s, String username);
-	public abstract void adminKickPlayer(CommandSender s, String username);
-	public abstract void displayInfo(ProxiedPlayer viewer, ProxiedPlayer viewed);
+	public abstract void leavePlayer(Player p);
+	public abstract void kickPlayer(Player s, String username);
+	public abstract void adminKickPlayer(CommandSource s, String username);
+	public abstract void displayInfo(Player viewer, Player viewed);
 }

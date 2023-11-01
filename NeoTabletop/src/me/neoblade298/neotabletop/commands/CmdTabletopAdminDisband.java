@@ -7,7 +7,7 @@ import me.neoblade298.neocore.shared.commands.SubcommandRunner;
 import me.neoblade298.neotabletop.GameManager;
 import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.GameSession;
-import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.CommandSource;
 
 public class CmdTabletopAdminDisband extends Subcommand {
 
@@ -18,7 +18,7 @@ public class CmdTabletopAdminDisband extends Subcommand {
 	}
 
 	@Override
-	public void run(CommandSender s, String[] args) {
+	public void run(CommandSource s, String[] args) {
 		GameSession<? extends GamePlayer> sess = GameManager.getSession(args[0]);
 		if (sess == null) {
 			Util.msg(s, "&cThat instance doesn't exist!");

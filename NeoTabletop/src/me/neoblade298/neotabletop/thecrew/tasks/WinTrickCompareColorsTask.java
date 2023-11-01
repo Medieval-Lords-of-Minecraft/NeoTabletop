@@ -8,7 +8,7 @@ import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
-import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.CommandSource;
 import net.md_5.bungee.config.Configuration;
 
 public class WinTrickCompareColorsTask extends TheCrewTask {
@@ -19,7 +19,7 @@ public class WinTrickCompareColorsTask extends TheCrewTask {
 	protected boolean allowZero;
 	
 	@Override
-	public void showDebug(CommandSender s) {
+	public void showDebug(CommandSource s) {
 		Util.msgRaw(s, "card: " + card + ", comp: " + comp + ", more: " + more + ", allowZero: " + allowZero);
 		Util.msgRaw(s, "cardsRemaining: " + cardsRemaining + ", compsRemaining: " + compsRemaining);
 	}

@@ -3,15 +3,15 @@ package me.neoblade298.neotabletop;
 import java.util.HashMap;
 import java.util.UUID;
 
+import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.connection.DisconnectEvent;
+import com.velocitypowered.api.proxy.Player;
+
+import me.neoblade298.neocore.bungee.BungeeCore;
 import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neotabletop.thecrew.TheCrew;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.event.PlayerDisconnectEvent;
-import net.md_5.bungee.api.plugin.Listener;
-import net.md_5.bungee.event.EventHandler;
 
-public class GameManager implements Listener {
+public class GameManager {
 	private static HashMap<String, GameLobby<? extends GamePlayer>> lobbies = new HashMap<String, GameLobby<? extends GamePlayer>>();
 	private static HashMap<String, GameInstance<? extends GamePlayer>> instances = new HashMap<String, GameInstance<? extends GamePlayer>>();
 	private static HashMap<UUID, GameSession<? extends GamePlayer>> inSession = new HashMap<UUID, GameSession<? extends GamePlayer>>(); // Can be lobby or instance
@@ -23,9 +23,9 @@ public class GameManager implements Listener {
 	}
 	
 	// Kick player out of lobbies on disconnect, disband lobby if host is kicked
-    @EventHandler
-    public void onLeave(PlayerDisconnectEvent e) {
-    	ProxiedPlayer p = e.getPlayer();
+    @Subscribe
+    public void onLeave(DisconnectEvent e) {
+    	Player p = e.getPlayer();
     	UUID uuid = p.getUniqueId();
     	if (inSession.containsKey(uuid)) {
     		GameSession<? extends GamePlayer> sess = inSession.get(uuid);
@@ -60,12 +60,12 @@ public class GameManager implements Listener {
     }
     
     // Creates a lobby
-	public static void createLobby(String name, ProxiedPlayer sender, Game game, boolean isPublic) {
+	public static void createLobby(String name, Player sender, Game game, boolean isPublic) {
 		UUID uuid = sender.getUniqueId();
 		GameLobby<? extends GamePlayer> lobby = game.createLobby(name, uuid, isPublic);
 		lobbies.put(name.toLowerCase(), lobby);
 		inSession.put(sender.getUniqueId(), lobby);
-		Util.msg(sender, "Successfully created lobby &e" + lobby.getName() + "&7!");
+		Util.msg(sender, BungeeCore.miniMessage().deserialize("Successfully created lobby <yellow>" + lobby.getName() + "</yellow>!"));
 		lobby.displayInfo(sender, sender);
 	}
 	
@@ -80,8 +80,7 @@ public class GameManager implements Listener {
     
 	public static void disbandLobby(GameLobby<? extends GamePlayer> lob) {
 		for (UUID uuid : lob.getPlayers()) {
-			ProxiedPlayer p = ProxyServer.getInstance().getPlayer(uuid);
-			inSession.remove(p.getUniqueId());
+			inSession.remove(uuid);
 		}
 		lob.broadcast("&4[&4&lMLMC&c] &7Due to the host leaving, lobby &e" + lob.getName() + " &7was disbanded.");
 		lobbies.remove(lob.getName().toLowerCase());
@@ -111,7 +110,7 @@ public class GameManager implements Listener {
 		return instances;
 	}
 	
-	public static void addToLobby(ProxiedPlayer p, GameLobby<? extends GamePlayer> lob) {
+	public static void addToLobby(Player p, GameLobby<? extends GamePlayer> lob) {
 		inSession.put(p.getUniqueId(), lob);
 	}
 	

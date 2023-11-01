@@ -6,7 +6,7 @@ import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
-import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.CommandSource;
 import net.md_5.bungee.config.Configuration;
 
 public class CompareWinsTask extends TheCrewTask {
@@ -14,7 +14,7 @@ public class CompareWinsTask extends TheCrewTask {
 	protected CompareTo with;
 	
 	@Override
-	public void showDebug(CommandSender s) {
+	public void showDebug(CommandSource s) {
 		Util.msgRaw(s, "with: " + with + ", comp: " + comp);
 	}
 	

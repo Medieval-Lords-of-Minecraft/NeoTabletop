@@ -9,9 +9,9 @@ import me.neoblade298.neocore.shared.commands.SubcommandRunner;
 import me.neoblade298.neotabletop.GameManager;
 import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.GameSession;
-import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.CommandSource;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.connection.Player;
 
 public class CmdTabletopAdminKick extends Subcommand {
 
@@ -22,8 +22,8 @@ public class CmdTabletopAdminKick extends Subcommand {
 	}
 
 	@Override
-	public void run(CommandSender s, String[] args) {
-		ProxiedPlayer p = ProxyServer.getInstance().getPlayer(args[0]);
+	public void run(CommandSource s, String[] args) {
+		Player p = ProxyServer.getInstance().getPlayer(args[0]);
 		
 		if (p == null) {
 			Util.msg(s, "&cThat player isn't online!");
@@ -38,7 +38,7 @@ public class CmdTabletopAdminKick extends Subcommand {
 			return;
 		}
 
-		sess.adminKickPlayer(s, p.getName());
+		sess.adminKickPlayer(s, p.getUsername());
 	}
 
 }

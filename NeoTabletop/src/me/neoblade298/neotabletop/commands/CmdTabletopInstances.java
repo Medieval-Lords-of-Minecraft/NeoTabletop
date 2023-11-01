@@ -8,7 +8,7 @@ import me.neoblade298.neocore.shared.util.SharedUtil;
 import me.neoblade298.neotabletop.GameInstance;
 import me.neoblade298.neotabletop.GameManager;
 import me.neoblade298.neotabletop.GamePlayer;
-import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.CommandSource;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 
 public class CmdTabletopInstances extends Subcommand {
@@ -19,7 +19,7 @@ public class CmdTabletopInstances extends Subcommand {
 	}
 
 	@Override
-	public void run(CommandSender s, String[] args) {
+	public void run(CommandSource s, String[] args) {
 		if (GameManager.getInstances().size() == 0) {
 			Util.msg(s, "&cThere are currently no active instances!");
 			return;

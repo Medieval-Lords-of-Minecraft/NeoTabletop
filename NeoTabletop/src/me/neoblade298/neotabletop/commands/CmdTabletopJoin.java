@@ -7,8 +7,8 @@ import me.neoblade298.neocore.shared.commands.SubcommandRunner;
 import me.neoblade298.neotabletop.GameLobby;
 import me.neoblade298.neotabletop.GameManager;
 import me.neoblade298.neotabletop.GamePlayer;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.CommandSource;
+import net.md_5.bungee.api.connection.Player;
 
 public class CmdTabletopJoin extends Subcommand {
 
@@ -20,8 +20,8 @@ public class CmdTabletopJoin extends Subcommand {
 	}
 
 	@Override
-	public void run(CommandSender s, String[] args) {
-		ProxiedPlayer p = (ProxiedPlayer) s;
+	public void run(CommandSource s, String[] args) {
+		Player p = (Player) s;
 		if (GameManager.getSession(p.getUniqueId()) != null) {
 			Util.msg(p, "&cYou're already in a session! Use /tt leave!");
 			return;
@@ -38,7 +38,7 @@ public class CmdTabletopJoin extends Subcommand {
 			return;
 		}
 		
-		lob.addPlayer((ProxiedPlayer) s);
+		lob.addPlayer((Player) s);
 	}
 
 }

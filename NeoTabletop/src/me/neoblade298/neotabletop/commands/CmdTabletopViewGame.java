@@ -6,8 +6,8 @@ import me.neoblade298.neocore.shared.commands.Arg;
 import me.neoblade298.neocore.shared.commands.SubcommandRunner;
 import me.neoblade298.neotabletop.Game;
 import me.neoblade298.neotabletop.GameManager;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.CommandSource;
+import net.md_5.bungee.api.connection.Player;
 
 public class CmdTabletopViewGame extends Subcommand {
 
@@ -19,13 +19,13 @@ public class CmdTabletopViewGame extends Subcommand {
 	}
 
 	@Override
-	public void run(CommandSender s, String[] args) {
+	public void run(CommandSource s, String[] args) {
 		Game g = GameManager.getGame(args[0]);
 		if (g == null) {
 			Util.msg(s, "&cThat game doesn't exist! Try using /tt games to see a full list!");
 			return;
 		}
 
-		g.displayInfo((ProxiedPlayer) s);
+		g.displayInfo((Player) s);
 	}
 }
