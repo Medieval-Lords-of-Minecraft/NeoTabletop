@@ -54,10 +54,10 @@ public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> 
 	@Override
 	public void broadcast(String msg) {
 		for (GamePlayer gp : players.values()) {
-			Util.msgRaw(gp.getPlayer(), BungeeCore.miniMessage().deserialize(msg));
+			Util.msgRaw(gp.getPlayer(), BungeeCore.miniMessage().deserialize(msg).colorIfAbsent(NamedTextColor.GRAY));
 		}
 		for (Player p : spectators) {
-			Util.msgRaw(p, BungeeCore.miniMessage().deserialize(msg));
+			Util.msgRaw(p, BungeeCore.miniMessage().deserialize(msg).colorIfAbsent(NamedTextColor.GRAY));
 		}
 	}
 	

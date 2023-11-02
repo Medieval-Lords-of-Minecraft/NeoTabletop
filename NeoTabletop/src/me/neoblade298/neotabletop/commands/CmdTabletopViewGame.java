@@ -6,8 +6,10 @@ import me.neoblade298.neocore.shared.commands.Arg;
 import me.neoblade298.neocore.shared.commands.SubcommandRunner;
 import me.neoblade298.neotabletop.Game;
 import me.neoblade298.neotabletop.GameManager;
-import net.md_5.bungee.api.CommandSource;
-import net.md_5.bungee.api.connection.Player;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.Player;
 
 public class CmdTabletopViewGame extends Subcommand {
 
@@ -22,7 +24,7 @@ public class CmdTabletopViewGame extends Subcommand {
 	public void run(CommandSource s, String[] args) {
 		Game g = GameManager.getGame(args[0]);
 		if (g == null) {
-			Util.msg(s, "&cThat game doesn't exist! Try using /tt games to see a full list!");
+			Util.msg(s, Component.text("That game doesn't exist! Try using /tt games", NamedTextColor.RED));
 			return;
 		}
 

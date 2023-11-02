@@ -10,10 +10,10 @@ import me.neoblade298.neocore.shared.util.SharedUtil;
 import me.neoblade298.neotabletop.GameLobby;
 import me.neoblade298.neotabletop.GameManager;
 import me.neoblade298.neotabletop.GamePlayer;
-import net.md_5.bungee.api.CommandSource;
+import com.velocitypowered.api.command.CommandSource;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.connection.Player;
+import com.velocitypowered.api.proxy.Player;
 
 public class CmdTabletopLobbies extends Subcommand {
 

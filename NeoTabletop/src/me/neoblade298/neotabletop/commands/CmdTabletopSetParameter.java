@@ -10,8 +10,10 @@ import me.neoblade298.neotabletop.GameLobby;
 import me.neoblade298.neotabletop.GameManager;
 import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.GameSession;
-import net.md_5.bungee.api.CommandSource;
-import net.md_5.bungee.api.connection.Player;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.Player;
 
 public class CmdTabletopSetParameter extends Subcommand {
 
@@ -29,13 +31,13 @@ public class CmdTabletopSetParameter extends Subcommand {
 		UUID uuid = p.getUniqueId();
 		GameSession<? extends GamePlayer> sess = GameManager.getSession(uuid);
 		if (sess == null || !(sess instanceof GameLobby)) {
-			Util.msg(p, "&cYou're not in a game lobby!");
+			Util.msg(s, Component.text("You're not in a game lobby!", NamedTextColor.RED));
 			return;
 		}
 		GameLobby<? extends GamePlayer> lob = (GameLobby<? extends GamePlayer>) sess;
 		
 		if (!sess.getHost().equals(uuid)) {
-			Util.msg(p, "&cOnly the host may change game parameters!");
+			Util.msg(s, Component.text("Only the host may change the game parameters!", NamedTextColor.RED));
 			return;
 		}
 

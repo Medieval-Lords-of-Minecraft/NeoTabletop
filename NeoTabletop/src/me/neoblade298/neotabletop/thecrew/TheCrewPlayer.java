@@ -16,7 +16,7 @@ import me.neoblade298.neotabletop.thecrew.TheCrewCard.SonarType;
 import me.neoblade298.neotabletop.thecrew.tasks.CardMatcher;
 import me.neoblade298.neotabletop.thecrew.tasks.TheCrewTask;
 import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.connection.Player;
+import com.velocitypowered.api.proxy.Player;
 
 public class TheCrewPlayer extends GamePlayer {
 	private LinkedList<TheCrewCardInstance> hand = new LinkedList<TheCrewCardInstance>();

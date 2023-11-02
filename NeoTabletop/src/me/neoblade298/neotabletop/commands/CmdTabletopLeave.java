@@ -8,8 +8,10 @@ import me.neoblade298.neocore.shared.commands.SubcommandRunner;
 import me.neoblade298.neotabletop.GameManager;
 import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.GameSession;
-import net.md_5.bungee.api.CommandSource;
-import net.md_5.bungee.api.connection.Player;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.Player;
 
 public class CmdTabletopLeave extends Subcommand {
 
@@ -24,7 +26,7 @@ public class CmdTabletopLeave extends Subcommand {
 		UUID uuid = p.getUniqueId();
 		GameSession<? extends GamePlayer> sess = GameManager.getSession(uuid);
 		if (sess == null) {
-			Util.msg(p, "&cYou're not in a game session!");
+			Util.msg(s, Component.text("You're not in a game session!", NamedTextColor.RED));
 			return;
 		}
 

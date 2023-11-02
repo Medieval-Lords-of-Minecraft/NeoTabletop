@@ -9,8 +9,10 @@ import me.neoblade298.neocore.shared.commands.SubcommandRunner;
 import me.neoblade298.neotabletop.GameInstance;
 import me.neoblade298.neotabletop.GameManager;
 import me.neoblade298.neotabletop.GamePlayer;
-import net.md_5.bungee.api.CommandSource;
-import net.md_5.bungee.api.connection.Player;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.Player;
 
 public class CmdTabletopSpectate extends Subcommand {
 
@@ -26,13 +28,13 @@ public class CmdTabletopSpectate extends Subcommand {
 		Player p = (Player) s;
 		UUID uuid = p.getUniqueId();
 		if (GameManager.getSession(uuid) != null) {
-			Util.msg(p, "&cYou're already in a session! Use /tt leave!");
+			Util.msg(s, Component.text("You're already in a session! Use /tt leave", NamedTextColor.RED));
 			return;
 		}
 
 		GameInstance<? extends GamePlayer> inst = GameManager.getInstance(args[0]);
 		if (inst == null) {
-			Util.msg(p, "&cCould not find that game instance! Maybe the game hasn't started yet?");
+			Util.msg(s, Component.text("Couldn't find that game instance! Maybe the game is still in lobby phase?", NamedTextColor.RED));
 			return;
 		}
 		

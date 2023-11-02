@@ -177,31 +177,41 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 		// Player list
 		Util.msgRaw(viewer, Component.text("Players:", NamedTextColor.GRAY));
 		Util.msgRaw(viewer, SharedUtil.color("<gray>- <red>" + h.get().getUsername() + " </red>(<yellow>Host</yellow>)"));
+		b = Component.text();
+		Component kick = SharedUtil.color("<dark_gray> [<red>Click to kick!</red>]");
+		Component giveHost = SharedUtil.color("<dark_gray> [<red>Click to kick!</red>]");
 		if (players.size() > 1) {
-			b = new ComponentBuilder();
 			first = true;
 			for (UUID uuid : players) {
 				if (uuid.equals(host)) continue;
 				if (!first) {
-					SharedUtil.appendText(b, "\n");
+					b.appendNewline();
 				}
 				first = false;
-				Player p = ProxyServer.getInstance().getPlayer(uuid);
-				SharedUtil.appendText(b, "&7- &c" + p.getUsername());
+				Optional<Player> opt = BungeeCore.proxy().getPlayer(uuid);
+				b.append(Component.text("- ", NamedTextColor.GRAY));
 				if (viewer.getUniqueId().equals(host)) {
-					SharedUtil.appendText(b, " &8[&cClick to kick&8]", "Click to kick " + p.getUsername(), "/tt kick " + p.getUsername());
-					SharedUtil.appendText(b, " &8[&cClick to give host&8]", "Click to give host to " + p.getUsername(), "/tt sethost " + p.getUsername());
+					kick = kick.hoverEvent(HoverEvent.showText(Component.text("Click to kick " + opt.get().getUsername())));
+					kick = kick.clickEvent(ClickEvent.suggestCommand("/tt kick " + opt.get().getUsername()));
+					
+					giveHost = giveHost.hoverEvent(HoverEvent.showText(Component.text("Click to give host to " + opt.get().getUsername())));
+					giveHost = giveHost.clickEvent(ClickEvent.suggestCommand("/tt sethost " + opt.get().getUsername()));
 				}
 			}
-			viewer.sendMessage(b.create());
+			viewer.sendMessage(c.append(kick).append(giveHost));
 		}
 
-		b = new ComponentBuilder();
+		c = SharedUtil.color("<dark_gray>[<gray>Click here to read about the game!</gray>]");
+		c = c.hoverEvent(HoverEvent.showText(Component.text("Click me!")));
+		c = c.clickEvent(ClickEvent.suggestCommand("/tt viewgame " + game.getKey()));
 		if (viewer.getUniqueId().equals(host)) {
-			SharedUtil.appendText(b, "&8[&aClick here to start!&8] ", "Click me to start!", "/tt start");
+			Component start = SharedUtil.color("<dark_gray>[<green>Click here to start!</green>] ");
+			start = start.hoverEvent(HoverEvent.showText(Component.text("Click me to start!")));
+			start = start.clickEvent(ClickEvent.runCommand("/tt start"));
+			
+			c = start.append(c);
 		}
-		SharedUtil.appendText(b, "&8[&7Click here to read about the game!&8]", "Click me!", "/tt viewgame " + game.getKey());
-		viewer.sendMessage(b.create());
+		viewer.sendMessage(c);
 	}
 	
 	public boolean isFull() {

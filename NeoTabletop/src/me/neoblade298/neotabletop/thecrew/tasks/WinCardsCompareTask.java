@@ -7,7 +7,7 @@ import me.neoblade298.neotabletop.thecrew.TheCrewCard;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
-import net.md_5.bungee.api.CommandSource;
+import com.velocitypowered.api.command.CommandSource;
 import net.md_5.bungee.config.Configuration;
 
 public class WinCardsCompareTask extends TheCrewTask {

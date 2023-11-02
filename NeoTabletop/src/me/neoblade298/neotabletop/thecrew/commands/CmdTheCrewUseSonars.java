@@ -10,8 +10,8 @@ import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.GameSession;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
-import net.md_5.bungee.api.CommandSource;
-import net.md_5.bungee.api.connection.Player;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.Player;
 
 public class CmdTheCrewUseSonars extends Subcommand {
 

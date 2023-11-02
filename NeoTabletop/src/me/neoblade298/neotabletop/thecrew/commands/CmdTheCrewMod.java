@@ -10,9 +10,9 @@ import me.neoblade298.neotabletop.GameInstance;
 import me.neoblade298.neotabletop.GameManager;
 import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.GameSession;
-import net.md_5.bungee.api.CommandSource;
+import com.velocitypowered.api.command.CommandSource;
 import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.connection.Player;
+import com.velocitypowered.api.proxy.Player;
 
 public class CmdTheCrewMod extends Subcommand {
 

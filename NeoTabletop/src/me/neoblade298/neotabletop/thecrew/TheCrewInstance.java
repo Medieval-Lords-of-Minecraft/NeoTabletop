@@ -20,10 +20,10 @@ import me.neoblade298.neotabletop.thecrew.tasks.CompareWinsTask;
 import me.neoblade298.neotabletop.thecrew.tasks.TheCrewTask;
 import me.neoblade298.neotabletop.thecrew.tasks.WinTricksPredictTask;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.CommandSource;
+import com.velocitypowered.api.command.CommandSource;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.connection.Player;
+import com.velocitypowered.api.proxy.Player;
 import net.md_5.bungee.api.scheduler.TaskScheduler;
 
 public class TheCrewInstance extends GameInstance<TheCrewPlayer> {

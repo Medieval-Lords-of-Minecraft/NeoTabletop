@@ -9,8 +9,10 @@ import me.neoblade298.neotabletop.GameLobby;
 import me.neoblade298.neotabletop.GameManager;
 import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.GameSession;
-import net.md_5.bungee.api.CommandSource;
-import net.md_5.bungee.api.connection.Player;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.Player;
 
 public class CmdTabletopStart extends Subcommand {
 
@@ -26,12 +28,12 @@ public class CmdTabletopStart extends Subcommand {
 		UUID uuid = p.getUniqueId();
 		GameSession<? extends GamePlayer> sess = GameManager.getSession(uuid);
 		if (sess == null || !(sess instanceof GameLobby)) {
-			Util.msg(p, "&cYou're not in a game lobby!");
+			Util.msg(s, Component.text("You're not in a game lobby!", NamedTextColor.RED));
 			return;
 		}
 		
 		if (!sess.getHost().equals(uuid)) {
-			Util.msg(p, "&cOnly the host may start the game!");
+			Util.msg(s, Component.text("Only the host may start the game!", NamedTextColor.RED));
 			return;
 		}
 		

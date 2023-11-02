@@ -3,17 +3,21 @@ package me.neoblade298.neotabletop.commands;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.Player;
+
 import me.neoblade298.neocore.bungee.commands.Subcommand;
 import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neocore.shared.commands.Arg;
 import me.neoblade298.neocore.shared.commands.SubcommandRunner;
+import me.neoblade298.neocore.shared.util.SharedUtil;
 import me.neoblade298.neotabletop.Game;
 import me.neoblade298.neotabletop.GameLobby;
 import me.neoblade298.neotabletop.GameManager;
 import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.GameSession;
-import net.md_5.bungee.api.CommandSource;
-import net.md_5.bungee.api.connection.Player;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 public class CmdTabletopCreate extends Subcommand {
 
@@ -44,16 +48,18 @@ public class CmdTabletopCreate extends Subcommand {
 		GameSession<? extends GamePlayer> sess = GameManager.getSession(uuid);
 		if (sess != null) {
 			String sessionType = sess instanceof GameLobby ? "lobby" : "instance";
-			Util.msg(s, "&cYou're already in " + sessionType + " &e" + sess.getName() + " &7for game &e" + sess.getGame().getName() + "&7!");
+			Util.msg(s, SharedUtil
+					.color("<red>You're already in " + sessionType + " <yellow>" + sess.getName() 
+					+ " </yellow>for game <yellow>" + sess.getGame().getName() + "</yellow>!"));
 			return;
 		}
 		else if (GameManager.sessionExists(args[1])) {
-			Util.msg(s, "&cThe name &e" + args[1] + "&c is already taken!");
+			Util.msg(s, SharedUtil.color("<red>The name <yellow>" + args[1] + "</yellow> is already taken!"));
 			return;
 		}
 		Game g = GameManager.getGame(game);
 		if (g == null) {
-			Util.msg(s, "&cThat game doesn't exist! Try using /tt games to see a full list!");
+			Util.msg(s, Component.text("That game doesn't exist! Try using /tt games", NamedTextColor.RED));
 			return;
 		}
 

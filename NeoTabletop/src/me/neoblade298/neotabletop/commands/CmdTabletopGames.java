@@ -2,13 +2,17 @@ package me.neoblade298.neotabletop.commands;
 
 import java.util.Map.Entry;
 
+import com.velocitypowered.api.command.CommandSource;
+
 import me.neoblade298.neocore.bungee.commands.Subcommand;
 import me.neoblade298.neocore.shared.commands.SubcommandRunner;
-import me.neoblade298.neocore.shared.util.SharedUtil;
 import me.neoblade298.neotabletop.Game;
 import me.neoblade298.neotabletop.GameManager;
-import net.md_5.bungee.api.CommandSource;
-import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent.Builder;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 public class CmdTabletopGames extends Subcommand {
 
@@ -19,11 +23,18 @@ public class CmdTabletopGames extends Subcommand {
 
 	@Override
 	public void run(CommandSource s, String[] args) {
-		ComponentBuilder b = SharedUtil.createText("&7List of games:", null, null);
+		Builder b = Component.text().content("List of games:").color(NamedTextColor.GRAY);
 		for (Entry<String, Game> ent : GameManager.getGames().entrySet()) {
-			SharedUtil.appendText(b, "\n&7- &c" + ent.getKey(), "&6" + ent.getValue().getName() +
-					"\n&fClick for more information!", "/tt viewgame " + ent.getValue().getKey());
+			b.appendNewline();
+			Component c = Component.text("- ", NamedTextColor.GRAY)
+					.append(Component.text(ent.getKey(), NamedTextColor.RED));
+			
+			Component hover = Component.text(ent.getValue().getName(), NamedTextColor.GOLD)
+					.append(Component.text("\nClick for more information!", NamedTextColor.WHITE));
+			c = c.hoverEvent(HoverEvent.showText(hover));
+			
+			c = c.clickEvent(ClickEvent.runCommand("/tt viewgame " + ent.getValue().getKey()));
 		}
-		s.sendMessage(b.create());
+		s.sendMessage(b.build());
 	}
 }

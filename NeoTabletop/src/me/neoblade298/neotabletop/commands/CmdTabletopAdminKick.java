@@ -1,7 +1,12 @@
 package me.neoblade298.neotabletop.commands;
 
+import java.util.Optional;
 import java.util.UUID;
 
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.proxy.Player;
+
+import me.neoblade298.neocore.bungee.BungeeCore;
 import me.neoblade298.neocore.bungee.commands.Subcommand;
 import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neocore.shared.commands.Arg;
@@ -9,9 +14,8 @@ import me.neoblade298.neocore.shared.commands.SubcommandRunner;
 import me.neoblade298.neotabletop.GameManager;
 import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.GameSession;
-import net.md_5.bungee.api.CommandSource;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.connection.Player;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 public class CmdTabletopAdminKick extends Subcommand {
 
@@ -23,22 +27,22 @@ public class CmdTabletopAdminKick extends Subcommand {
 
 	@Override
 	public void run(CommandSource s, String[] args) {
-		Player p = ProxyServer.getInstance().getPlayer(args[0]);
+		Optional<Player> opt = BungeeCore.proxy().getPlayer(args[0]);
 		
-		if (p == null) {
-			Util.msg(s, "&cThat player isn't online!");
+		if (opt.isEmpty()) {
+			Util.msg(s, Component.text("That player isn't online!", NamedTextColor.RED));
 			return;
 		}
 		
 		// Check if the name exists already, or player is already in a game
-		UUID uuid = p.getUniqueId();
+		UUID uuid = opt.get().getUniqueId();
 		GameSession<? extends GamePlayer> sess = GameManager.getSession(uuid);
 		if (sess == null) {
-			Util.msg(s, "&cThat player isn't in a game session!");
+			Util.msg(s, Component.text("That player isn't in a game session!", NamedTextColor.RED));
 			return;
 		}
 
-		sess.adminKickPlayer(s, p.getUsername());
+		sess.adminKickPlayer(s, opt.get().getUsername());
 	}
 
 }
