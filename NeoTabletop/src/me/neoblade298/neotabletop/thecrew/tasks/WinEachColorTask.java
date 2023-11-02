@@ -9,9 +9,10 @@ import me.neoblade298.neotabletop.thecrew.TheCrewCard;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
+import net.kyori.adventure.text.Component;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
 import com.velocitypowered.api.command.CommandSource;
-import net.md_5.bungee.config.Configuration;
+import me.neoblade298.neocore.shared.io.Section;
 
 public class WinEachColorTask extends TheCrewTask {
 	protected HashMap<CardType, Integer> cardsRemaining = new HashMap<CardType, Integer>();
@@ -22,9 +23,9 @@ public class WinEachColorTask extends TheCrewTask {
 		Util.msgRaw(s, "cardsRemaining: " + cardsRemaining);
 	}
 	
-	public WinEachColorTask(Configuration cfg) {
+	public WinEachColorTask(Section cfg) {
 		super(cfg);
-		display = "Win at least one card of each color";
+		display = Component.text("Win at least one card of each color");
 	}
 	
 	public WinEachColorTask(TheCrewPlayer owner, WinEachColorTask src, TheCrewInstance inst) {

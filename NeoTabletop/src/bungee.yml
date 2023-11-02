@@ -1,6 +1,6 @@
 name: NeoTabletop
 main: me.neoblade298.neotabletop.NeoTabletop
-author: [Neoblade298]
+author: [Ascheladd]
 depends: [NeoCore]
 version: 1.0
 api-version: 1.16

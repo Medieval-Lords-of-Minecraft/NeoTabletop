@@ -6,8 +6,10 @@ import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
+import net.kyori.adventure.text.Component;
+
 import com.velocitypowered.api.command.CommandSource;
-import net.md_5.bungee.config.Configuration;
+import me.neoblade298.neocore.shared.io.Section;
 
 public class WinTricksPredictTask extends TheCrewTask {
 	protected int amount;
@@ -17,16 +19,16 @@ public class WinTricksPredictTask extends TheCrewTask {
 		Util.msgRaw(s, "amount: " + amount);
 	}
 	
-	public WinTricksPredictTask(Configuration cfg) {
+	public WinTricksPredictTask(Section cfg) {
 		super(cfg);
 		
-		display = "Predict exactly how many tricks you'll win at the start of the game";
+		display = Component.text("Predict exactly how many tricks you'll win at the start of the game");
 	}
 	
 	public WinTricksPredictTask(TheCrewPlayer owner, WinTricksPredictTask src, TheCrewInstance inst, int amount) {
 		super(owner, src, inst);
 
-		display = "Win exactly " + amount + " tricks (Predicted at start of game)";
+		display = Component.text("Win exactly " + amount + " tricks (Predicted at start of game)");
 		this.amount = amount;
 	}
 	

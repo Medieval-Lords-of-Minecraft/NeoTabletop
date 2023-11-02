@@ -2,19 +2,38 @@ package me.neoblade298.neotabletop.thecrew.commands;
 
 import java.util.UUID;
 
+import me.neoblade298.neocore.bungee.BungeeCore;
 import me.neoblade298.neocore.bungee.commands.Subcommand;
 import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neocore.shared.commands.SubcommandRunner;
-import me.neoblade298.neocore.shared.util.SharedUtil;
 import me.neoblade298.neotabletop.GameInstance;
 import me.neoblade298.neotabletop.GameManager;
 import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.GameSession;
 import com.velocitypowered.api.command.CommandSource;
-import net.md_5.bungee.api.chat.ComponentBuilder;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import com.velocitypowered.api.proxy.Player;
 
 public class CmdTheCrewMod extends Subcommand {
+	private static final Component mod;
+	
+	static {
+		Component redo = BungeeCore.miniMessage().deserialize("<dark_gray>[<red>Click to redo round</red>]");
+		redo = redo.clickEvent(ClickEvent.runCommand("/thecrew restartround"));
+		redo = redo.hoverEvent(Component.text("Click here!"));
+		
+		Component restart = BungeeCore.miniMessage().deserialize("<dark_gray>[<red>Click to restart from round 1</red>]");
+		redo = redo.clickEvent(ClickEvent.runCommand("/thecrew restartgame"));
+		redo = redo.hoverEvent(Component.text("Click here!"));
+		
+		Component lobby = BungeeCore.miniMessage().deserialize("<dark_gray>[<red>Click to return to lobby</red>]");
+		redo = redo.clickEvent(ClickEvent.runCommand("/tt return"));
+		redo = redo.hoverEvent(Component.text("Click here!"));
+		mod = redo.append(restart.append(lobby));
+	}
 
 	// /tt kicklist
 	public CmdTheCrewMod(String key, String desc, String perm, SubcommandRunner runner) {
@@ -28,21 +47,18 @@ public class CmdTheCrewMod extends Subcommand {
 		UUID uuid = p.getUniqueId();
 		GameSession<? extends GamePlayer> sess = GameManager.getSession(uuid);
 		if (sess == null || !(sess instanceof GameInstance)) {
-			Util.msgRaw(p, "&cYou're not in a game instance!");
+			Util.msgRaw(p, Component.text("You're not in a game instance!", NamedTextColor.RED));
 			return;
 		}
 		
 		if (!sess.getHost().equals(uuid)) {
-			Util.msgRaw(p, "&cOnly the host may access the kick list!");
+			Util.msgRaw(p, Component.text("Only the host may access the kick list!", NamedTextColor.RED));
 			return;
 		}
 
 		GameInstance<? extends GamePlayer> inst = (GameInstance<? extends GamePlayer>) sess;
 		inst.displayKickList(s);
-		ComponentBuilder b = SharedUtil.createText("&8[&cClick to redo round&8]", "Click here!", "/thecrew restartround");
-		SharedUtil.appendText(b, " &8[&cClick to restart from round 1&8]", "Click here!", "/thecrew restartgame");
-		SharedUtil.appendText(b, "\n&8[&cClick to return to lobby&8]", "Click here!", "/tt return");
-		s.sendMessage(b.create());
+		s.sendMessage(mod);
 	}
 
 }

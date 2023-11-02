@@ -7,7 +7,8 @@ import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
 import com.velocitypowered.api.command.CommandSource;
-import net.md_5.bungee.config.Configuration;
+import me.neoblade298.neocore.shared.io.Section;
+import me.neoblade298.neocore.shared.util.SharedUtil;
 
 public class WinFirstTricksTask extends TheCrewTask {
 	protected boolean negate;
@@ -18,13 +19,13 @@ public class WinFirstTricksTask extends TheCrewTask {
 		Util.msgRaw(s, "amount: " + amount + ", negate: " + negate);
 	}
 	
-	public WinFirstTricksTask(Configuration cfg) {
+	public WinFirstTricksTask(Section cfg) {
 		super(cfg);
 
 		negate = cfg.getBoolean("negate");
 		amount = cfg.getInt("amount");
 		
-		display = (negate ? "Do not win" : "Win") + " the first &e" + amount + " &ftricks";
+		display = SharedUtil.color((negate ? "Do not win" : "Win") + " the first <yellow>" + amount + " </yellow>tricks");
 	}
 	
 	public WinFirstTricksTask(TheCrewPlayer owner, WinFirstTricksTask src, TheCrewInstance inst) {

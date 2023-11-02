@@ -1,7 +1,15 @@
 package me.neoblade298.neotabletop;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.util.logging.Logger;
+
+import com.google.inject.Inject;
 import com.velocitypowered.api.command.CommandManager;
+import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
+import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.scheduler.Scheduler;
 
@@ -16,13 +24,24 @@ import net.kyori.adventure.text.format.NamedTextColor;
         url = "https://ml-mc.com", description = "Neo's tabletop games plugin", authors = {"Ascheladd"})
 public class NeoTabletop {
 	private static NeoTabletop inst;
+	private static Logger logger;
+	private static File folder;
+	private static ProxyServer proxy;
 	
-	public void onEnable() {
+	@Inject
+	public NeoTabletop(ProxyServer server, Logger logger, @DataDirectory Path dataDirectory) {
+        inst = this;
+        proxy = server;
+        NeoTabletop.logger = logger;
+		folder = dataDirectory.toFile();
+	}
+
+	@Subscribe
+    public void onProxyInitialization(ProxyInitializeEvent e) {
 		inst = this;
 		initCommands();
     	
-    	// getProxy().getPluginManager().registerListener(this, new PaystubIO());
-		BungeeCore.proxy().getEventManager().register(this, new GameManager());
+		proxy.getEventManager().register(this, new GameManager());
 	}
 	
 	private void initCommands() {
@@ -76,10 +95,18 @@ public class NeoTabletop {
 	}
 	
 	public static Scheduler scheduler() {
-		return BungeeCore.proxy().getScheduler();
+		return proxy.getScheduler();
 	}
 	
 	public static ProxyServer proxy() {
-		return BungeeCore.proxy();
+		return proxy;
+	}
+	
+	public static Logger logger() {
+		return logger;
+	}
+	
+	public static File folder() {
+		return folder;
 	}
 }

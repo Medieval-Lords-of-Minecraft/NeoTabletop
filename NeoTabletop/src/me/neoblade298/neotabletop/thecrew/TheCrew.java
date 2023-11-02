@@ -8,17 +8,17 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 import me.neoblade298.neocore.bungee.BungeeCore;
+import me.neoblade298.neocore.shared.io.Section;
 import me.neoblade298.neotabletop.Game;
 import me.neoblade298.neotabletop.GameLobby;
 import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.NeoTabletop;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
 import me.neoblade298.neotabletop.thecrew.tasks.*;
-import net.md_5.bungee.config.Configuration;
 
 public class TheCrew extends Game {
 	private static TheCrew inst;
-	private static File BASE_DIR = new File(NeoTabletop.inst().getDataFolder(), "/The Crew");
+	private static File BASE_DIR = new File(NeoTabletop.folder(), "/The Crew");
 	private static ArrayList<TheCrewCard> deck = new ArrayList<TheCrewCard>(44);
 	public static LinkedList<TheCrewTask> tasks = new LinkedList<TheCrewTask>();
 	
@@ -39,7 +39,7 @@ public class TheCrew extends Game {
 		BungeeCore.loadFiles(new File(BASE_DIR, "tasks.yml"), (cfg, file) -> {
 			for (String key : cfg.getKeys()) {
 				try {
-					Configuration sec = cfg.getSection(key);
+					Section sec = cfg.getSection(key);
 					TheCrewTask task = null;
 					switch (sec.getString("type")) {
 					case "WIN_CARDS":
@@ -107,14 +107,14 @@ public class TheCrew extends Game {
 						break;
 					}
 					if (task == null) {
-						NeoTabletop.inst().getProxy().getLogger().log(Level.WARNING, "[NeoTabletop] Failed to load task " + key);
+						NeoTabletop.logger().log(Level.WARNING, "[NeoTabletop] Failed to load task " + key);
 					}
 					else {
 						tasks.add(task);
 					}
 				}
 				catch (Exception e) {
-					NeoTabletop.inst().getProxy().getLogger().log(Level.WARNING, "[NeoTabletop] Failed to load task " + key);
+					NeoTabletop.logger().log(Level.WARNING, "[NeoTabletop] Failed to load task " + key);
 					e.printStackTrace();
 				}
 			}

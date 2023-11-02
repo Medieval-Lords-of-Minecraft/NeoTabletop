@@ -7,7 +7,8 @@ import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
 import com.velocitypowered.api.command.CommandSource;
-import net.md_5.bungee.config.Configuration;
+import me.neoblade298.neocore.shared.io.Section;
+import me.neoblade298.neocore.shared.util.SharedUtil;
 
 public class WinTricksRowTask extends TheCrewTask {
 	protected boolean completedRow = false;
@@ -22,13 +23,13 @@ public class WinTricksRowTask extends TheCrewTask {
 		Util.msgRaw(s, "consecutive: " + consecutive + ", completedRow: " + completedRow);
 	}
 	
-	public WinTricksRowTask(Configuration cfg) {
+	public WinTricksRowTask(Section cfg) {
 		super(cfg);
 
 		wins = cfg.getInt("wins");
 		exclusive = cfg.getBoolean("exclusive");
 		negate = cfg.getBoolean("negate");
-		display = "Win " + (exclusive ? "only &e" : "&e") + wins + " &ftricks in a row";
+		display = SharedUtil.color("Win " + (exclusive ? "only " : "") + "<yellow>" + wins + " </yellow>tricks in a row");
 	}
 	
 	public WinTricksRowTask(TheCrewPlayer owner, WinTricksRowTask src, TheCrewInstance inst) {

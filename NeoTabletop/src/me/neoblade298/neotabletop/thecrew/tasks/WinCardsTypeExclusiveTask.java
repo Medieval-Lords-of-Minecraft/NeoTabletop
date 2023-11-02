@@ -6,8 +6,10 @@ import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
+import net.kyori.adventure.text.Component;
+
 import com.velocitypowered.api.command.CommandSource;
-import net.md_5.bungee.config.Configuration;
+import me.neoblade298.neocore.shared.io.Section;
 
 public class WinCardsTypeExclusiveTask extends TheCrewTask {
 	protected boolean hasWon = false;
@@ -19,12 +21,14 @@ public class WinCardsTypeExclusiveTask extends TheCrewTask {
 		Util.msgRaw(s, "hasWon: " + hasWon + ", numExcluded: " + numExcluded + ", win: " + win + ", exclude: " + exclude);
 	}
 	
-	public WinCardsTypeExclusiveTask(Configuration cfg) {
+	public WinCardsTypeExclusiveTask(Section cfg) {
 		super(cfg);
 		win = new CardMatcher(cfg.getString("win"));
 		exclude = new CardMatcher(cfg.getString("exclude"));
 
-		display = "Win " + win.getDisplay() + " &fand no other card of that type";
+		display = Component.text().content("Win ")
+				.append(win.getDisplay())
+				.append(Component.text(" and no other card of that type")).build();
 	}
 	
 	public WinCardsTypeExclusiveTask(TheCrewPlayer owner, WinCardsTypeExclusiveTask src, TheCrewInstance inst) {

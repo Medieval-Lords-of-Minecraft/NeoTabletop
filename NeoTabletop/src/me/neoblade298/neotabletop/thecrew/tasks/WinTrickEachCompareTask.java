@@ -9,7 +9,8 @@ import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
 import com.velocitypowered.api.command.CommandSource;
-import net.md_5.bungee.config.Configuration;
+import me.neoblade298.neocore.shared.io.Section;
+import me.neoblade298.neocore.shared.util.SharedUtil;
 
 public class WinTrickEachCompareTask extends TheCrewTask {
 	protected boolean more; // Either more or less
@@ -20,12 +21,12 @@ public class WinTrickEachCompareTask extends TheCrewTask {
 		Util.msgRaw(s, "more: " + more + ", value: " + value);
 	}
 	
-	public WinTrickEachCompareTask(Configuration cfg) {
+	public WinTrickEachCompareTask(Section cfg) {
 		super(cfg);
 
 		value = cfg.getInt("value");
 		more = cfg.getString("comparator").equals(">");
-		display = "Win a trick where each card is " + (more ? "greater" : "less") + " than &e" + value + "&f. *No subs";
+		display = SharedUtil.color("Win a trick where each card is " + (more ? "greater" : "less") + " than <yellow>" + value + "</yellow>. *No subs");
 		
 	}
 	

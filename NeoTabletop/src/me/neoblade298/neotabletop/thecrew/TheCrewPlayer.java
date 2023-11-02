@@ -15,7 +15,11 @@ import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.SonarType;
 import me.neoblade298.neotabletop.thecrew.tasks.CardMatcher;
 import me.neoblade298.neotabletop.thecrew.tasks.TheCrewTask;
-import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent.Builder;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import com.velocitypowered.api.proxy.Player;
 
 public class TheCrewPlayer extends GamePlayer {
@@ -92,36 +96,51 @@ public class TheCrewPlayer extends GamePlayer {
 	public void displayHand(Player viewer) {
 		boolean isOwner = viewer.getUniqueId().equals(uuid);
 		
-		ComponentBuilder b = SharedUtil.createText((isOwner ? "Hand" : p.getUsername() + "'s hand") + ": ");
+		Builder b = Component.text().content((isOwner ? "Hand" : p.getUsername() + "'s hand") + ": ");
 		if (hand.isEmpty()) {
-			viewer.sendMessage(SharedUtil.appendText(b, "empty!").create());
+			viewer.sendMessage(b.append(Component.text("Empty!")));
 			return;
 		}
 		
 		int pos = 0;
 		Iterator<TheCrewCardInstance> iter = hand.iterator();
-		SharedUtil.appendText(b, iter.next().getDisplay(), isOwner ? "Click to play!" : null, "/thecrew play " + pos);
-		while (iter.hasNext()) {
-			SharedUtil.appendText(b, " ");
-			SharedUtil.appendText(b, iter.next().getDisplay(), isOwner ? "Click to play!" : null, "/thecrew play " + ++pos);
+		
+		Component card = iter.next().getDisplay();
+		if (isOwner) {
+			card = card.clickEvent(ClickEvent.runCommand("/thecrew play " + pos))
+					.hoverEvent(HoverEvent.showText(Component.text("Click to play!")));
 		}
-		viewer.sendMessage(b.create());
+		b.append(card);
+		
+		while (iter.hasNext()) {
+			b.appendSpace();
+			card = iter.next().getDisplay();
+			if (isOwner) {
+				card.clickEvent(ClickEvent.runCommand("/thecrew play " + ++pos))
+					.hoverEvent(HoverEvent.showText(Component.text("Click to play!")));
+			}
+			b.append(card);
+		}
+		viewer.sendMessage(b.build());
 		if (isOwner) displaySonarButton(viewer);
 	}
 	
 	public void displaySonarButton(Player viewer) {
 		if (sonarTokens == 0) return;
-		ComponentBuilder b = SharedUtil.createText("&8[&7Click to use a sonar token&8]",
-				"You have &e" + sonarTokens + " &7tokens remaining!", sonarTokens > 0 ? "/thecrew usesonars" : null);
-		viewer.sendMessage(b.create());
+		Component c = SharedUtil.color("<dark_gray>[<gray>Click to use a sonar token</gray>]");
+		c = c.hoverEvent(HoverEvent.showText(SharedUtil.color("You have <yellow>" + sonarTokens + "</yellow> tokens remaining!")));
+		if (sonarTokens > 0) {
+			c = c.clickEvent(sonarTokens > 0 ? ClickEvent.runCommand("/thecrew usesonars") : null);
+		}
+		viewer.sendMessage(c);
 	}
 	
 	public void displaySonarOptions() {
 		TheCrewCard curr, prev, next;
-		ComponentBuilder b = new ComponentBuilder("§7Use sonar token on: ");
+		Builder b = Component.text().content("Use sonar token on: ").color(NamedTextColor.GRAY);
 		if (hand.size() == 0) return;
 		else if (hand.size() == 1) {
-			p.sendMessage(buildSonarOption(b, null, hand.getFirst(), null).create());
+			p.sendMessage(buildSonarOption(b, null, hand.getFirst(), null).build());
 			return;
 		}
 		else {
@@ -140,34 +159,35 @@ public class TheCrewPlayer extends GamePlayer {
 			curr = next;
 			next = null;
 			buildSonarOption(b, prev, curr, next);
-			p.sendMessage(b.create());
+			p.sendMessage(b.build());
 		}
 		
 	}
 	
-	private ComponentBuilder buildSonarOption(ComponentBuilder b, TheCrewCard prev, TheCrewCard curr, TheCrewCard next) {
+	private Builder buildSonarOption(Builder b, TheCrewCard prev, TheCrewCard curr, TheCrewCard next) {
 		boolean prevDif = prev == null || prev.getType() != curr.getType();
 		boolean nextDif = next == null || next.getType() != curr.getType();
 		
+		Component c = curr.getDisplay().appendSpace();
 		if (prevDif && nextDif) {
-			SharedUtil.appendText(b, curr.getDisplay() + " ",
-					"Click to use sonar token", "/thecrew sonar " + curr.toCardMatcher() + " ONLY");
+			c = c.clickEvent(ClickEvent.runCommand("/thecrew sonar " + curr.toCardMatcher() + " ONLY"))
+					.hoverEvent(HoverEvent.showText(Component.text("Click to use sonar token")));
 		}
 		else if (prevDif) {
-			SharedUtil.appendText(b, curr.getDisplay() + " ",
-					"Click to use sonar token", "/thecrew sonar " + curr.toCardMatcher() + " MIN");
+			c = c.clickEvent(ClickEvent.runCommand("/thecrew sonar " + curr.toCardMatcher() + " MIN"))
+					.hoverEvent(HoverEvent.showText(Component.text("Click to use sonar token")));
 		}
 		else if (nextDif) {
-			SharedUtil.appendText(b, curr.getDisplay() + " ",
-					"Click to use sonar token", "/thecrew sonar " + curr.toCardMatcher() + " MAX");
+			c = c.clickEvent(ClickEvent.runCommand("/thecrew sonar " + curr.toCardMatcher() + " MAX"))
+					.hoverEvent(HoverEvent.showText(Component.text("Click to use sonar token")));
 		}
-		else if (nextDif) {
-			SharedUtil.appendText(b, curr.getDisplay() + " ",
-					"&cYou may only use sonar tokens on\n" +
-							"&ccards that are the max, min, or only\n" +
-							"&ccard of that color.", null);
+		else {
+			String s = "<red>You may only use sonar tokens on\n" +
+					"cards that are the max, min, or only\n" +
+					"card of that color.";
+			c = c.hoverEvent(HoverEvent.showText(SharedUtil.color(s)));
 		}
-		return b;
+		return b.append(c);
 	}
 	
 	public boolean useSonarToken(CardMatcher cm, SonarType stype) {

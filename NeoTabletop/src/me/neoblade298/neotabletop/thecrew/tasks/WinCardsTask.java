@@ -8,8 +8,11 @@ import me.neoblade298.neotabletop.thecrew.TheCrewCard;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent.Builder;
+
 import com.velocitypowered.api.command.CommandSource;
-import net.md_5.bungee.config.Configuration;
+import me.neoblade298.neocore.shared.io.Section;
 
 public class WinCardsTask extends TheCrewTask {
 	protected boolean negate = false;
@@ -23,19 +26,19 @@ public class WinCardsTask extends TheCrewTask {
 		Util.msgRaw(s, "negate: " + negate);
 	}
 	
-	public WinCardsTask(Configuration cfg) {
+	public WinCardsTask(Section cfg) {
 		super(cfg);
 		for (String str : cfg.getStringList("cards")) {
 			cards.add(new CardMatcher(str));
 		}
 		negate = cfg.getBoolean("negate", false);
 		
-		display = negate ? "Don't win " : "Win ";
+		Builder b = Component.text().content(negate ? "Don't win " : "Win ");
 		for (int i = 0; i < cards.size(); i++) {
 			if (i != 0) {
-				display += "&f, ";
+				b.append(Component.text(", "));
 			}
-			display += cards.get(i).getDisplay();
+			b.append(cards.get(i).getDisplay());
 		}
 	}
 	

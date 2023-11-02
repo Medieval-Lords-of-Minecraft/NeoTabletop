@@ -3,27 +3,31 @@ package me.neoblade298.neotabletop.thecrew.tasks;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import me.neoblade298.neocore.shared.util.SharedUtil;
+import me.neoblade298.neocore.shared.io.Section;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
 import com.velocitypowered.api.command.CommandSource;
-import net.md_5.bungee.config.Configuration;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 public abstract class TheCrewTask {
 	protected TheCrewPlayer owner;
 	protected HashMap<Integer, Integer> difficulty = new HashMap<Integer, Integer>();
-	protected String display;
+	protected Component display;
+	protected String displayString;
 	protected boolean isComplete = false;
 	
 	public TheCrewTask(TheCrewPlayer owner, TheCrewTask src, TheCrewInstance inst) {
 		this.owner = owner;
-		this.display = SharedUtil.translateColors(src.display);
+		this.display = src.display;
+		this.displayString = src.displayString;
 		this.difficulty = src.difficulty;
 	}
 	
-	public TheCrewTask(Configuration sec) {
-		Configuration diff = sec.getSection("difficulty");
+	public TheCrewTask(Section sec) {
+		Section diff = sec.getSection("difficulty");
 		for (String key : diff.getKeys()) {
 			int ikey = Integer.parseInt(key);
 			difficulty.put(ikey, diff.getInt(key));
@@ -37,8 +41,14 @@ public abstract class TheCrewTask {
 	public int getDifficulty(int players) {
 		return difficulty.getOrDefault(players, 3);
 	}
-	public String getDisplay() {
+	public Component getDisplay() {
 		return display;
+	}
+	public String getDisplayString() {
+		if (displayString == null) {
+			displayString = PlainTextComponentSerializer.plainText().serialize(display);
+		}
+		return displayString;
 	}
 	public boolean isComplete() {
 		return isComplete;

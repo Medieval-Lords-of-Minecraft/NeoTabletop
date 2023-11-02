@@ -1,6 +1,7 @@
 package me.neoblade298.neotabletop.commands;
 
 import java.util.Map.Entry;
+
 import me.neoblade298.neocore.bungee.commands.Subcommand;
 import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neocore.shared.commands.SubcommandRunner;
@@ -9,9 +10,11 @@ import me.neoblade298.neotabletop.GameInstance;
 import me.neoblade298.neotabletop.GameManager;
 import me.neoblade298.neotabletop.GamePlayer;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent.Builder;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import com.velocitypowered.api.command.CommandSource;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 
 public class CmdTabletopInstances extends Subcommand {
 
@@ -26,14 +29,15 @@ public class CmdTabletopInstances extends Subcommand {
 			Util.msg(s, Component.text("There are currently no active instances!", NamedTextColor.RED));
 			return;
 		}
-		ComponentBuilder b = SharedUtil.createText("&7List of instances (click to spectate):", null, null);
+		Builder b = Component.text("List of instances (click to spectate):", NamedTextColor.GRAY).toBuilder();
 		for (Entry<String, GameInstance<? extends GamePlayer>> ent : GameManager.getInstances().entrySet()) {
 			GameInstance<? extends GamePlayer> inst = ent.getValue();
-			SharedUtil.appendText(b, "\n&7- &c" + inst.getName() + " &7(&6"
-					+ inst.getGame().getName() + "&7)",
-					"Click to spectate this game!",
-					"/tt spectate " + inst.getName());
+			Component c = SharedUtil.color("\n<gray>- <red>" + inst.getName() + " </red>(<gold>" +
+					inst.getGame().getName() + "</gold>)");
+			c = c.hoverEvent(HoverEvent.showText(Component.text("Click to spectate this game!")));
+			c = c.clickEvent(ClickEvent.runCommand("/tt spectate " + inst.getName()));
+			b.append(c);
 		}
-		s.sendMessage(b.create());
+		s.sendMessage(b.build());
 	}
 }

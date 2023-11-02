@@ -7,9 +7,10 @@ import me.neoblade298.neotabletop.thecrew.TheCrewCard;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
+import net.kyori.adventure.text.Component;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
 import com.velocitypowered.api.command.CommandSource;
-import net.md_5.bungee.config.Configuration;
+import me.neoblade298.neocore.shared.io.Section;
 
 public class WinTrickEvenOddTask extends TheCrewTask {
 	protected boolean even; // Either even or odd
@@ -19,12 +20,12 @@ public class WinTrickEvenOddTask extends TheCrewTask {
 		Util.msgRaw(s, "even: " + even);
 	}
 	
-	public WinTrickEvenOddTask(Configuration cfg) {
+	public WinTrickEvenOddTask(Section cfg) {
 		super(cfg);
 
 		even = cfg.getString("test").equalsIgnoreCase("even");
 		
-		display = "Win a trick with only " + (even ? "even" : "odd") + " cards. *No subs";
+		display = Component.text("Win a trick with only " + (even ? "even" : "odd") + " cards. *No subs");
 	}
 	
 	public WinTrickEvenOddTask(TheCrewPlayer owner, WinTrickEvenOddTask src, TheCrewInstance inst) {

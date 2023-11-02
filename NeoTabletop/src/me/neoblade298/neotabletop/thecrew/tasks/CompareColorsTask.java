@@ -3,11 +3,15 @@ package me.neoblade298.neotabletop.thecrew.tasks;
 import java.util.ArrayList;
 
 import me.neoblade298.neocore.bungee.util.Util;
+import me.neoblade298.neocore.shared.io.Section;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
 import com.velocitypowered.api.command.CommandSource;
-import net.md_5.bungee.config.Configuration;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 
 public class CompareColorsTask extends TheCrewTask {
 	protected CardMatcher card, comp;
@@ -20,25 +24,33 @@ public class CompareColorsTask extends TheCrewTask {
 				cardsLeft + ", compsLeft: " + compsLeft);
 	}
 	
-	public CompareColorsTask(Configuration cfg) {
-		super(cfg);
-		card = new CardMatcher(cfg.getString("card"));
-		comp = new CardMatcher(cfg.getString("comp"));
-		more = cfg.getString("comparator").equals(">");
-		allowZero = cfg.getBoolean("allow_zero");
+	public CompareColorsTask(Section sec) {
+		super(sec);
+		card = new CardMatcher(sec.getString("card"));
+		comp = new CardMatcher(sec.getString("comp"));
+		more = sec.getString("comparator").equals(">");
+		allowZero = sec.getBoolean("allow_zero");
 
 		if (more) {
-			display = "Win more " + card.getDisplay() + " &fthan " + comp.getDisplay() + " &fin one trick.";
+			display = Component.text().content("Win more ")
+					.append(card.getDisplay())
+					.append(Component.text(" than "))
+					.append(comp.getDisplay())
+					.append(Component.text(" in one trick.")).build();
 		}
 		else {
-			display = "Win as many " + card.getDisplay() + " &fas " + comp.getDisplay() + " &fin one trick.";
+			display = Component.text().content("Win as many ")
+					.append(card.getDisplay())
+					.append(Component.text(" as "))
+					.append(comp.getDisplay())
+					.append(Component.text(" in one trick.")).build();
 		}
 		
 		if (allowZero) {
-			display += " &7&o*0 cards is allowed.";
+			display.append(Component.text("*0 cards is allowed.", NamedTextColor.GRAY, TextDecoration.ITALIC));
 		}
 		else {
-			display += " &7&o*0 cards is not allowed.";
+			display.append(Component.text("*0 cards is not allowed.", NamedTextColor.GRAY, TextDecoration.ITALIC));
 		}
 	}
 	

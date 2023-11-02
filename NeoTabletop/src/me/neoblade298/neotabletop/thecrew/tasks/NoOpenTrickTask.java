@@ -3,12 +3,15 @@ package me.neoblade298.neotabletop.thecrew.tasks;
 import java.util.ArrayList;
 
 import me.neoblade298.neocore.bungee.util.Util;
+import me.neoblade298.neocore.shared.io.Section;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
 import com.velocitypowered.api.command.CommandSource;
-import net.md_5.bungee.config.Configuration;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent.Builder;
 
 public class NoOpenTrickTask extends TheCrewTask {
 	protected ArrayList<CardMatcher> cards = new ArrayList<CardMatcher>();
@@ -18,17 +21,19 @@ public class NoOpenTrickTask extends TheCrewTask {
 		Util.msgRaw(s, "cards: " + cards);
 	}
 	
-	public NoOpenTrickTask(Configuration cfg) {
+	public NoOpenTrickTask(Section cfg) {
 		super(cfg);
 		
 		for (String str : cfg.getStringList("cards")) {
 			cards.add(new CardMatcher(str));
 		}
-		
-		display = "Don't open a trick with " + cards.get(0).getDisplay();
+
+		Builder b = Component.text().content("Don't open a trick with ")
+				.append(cards.get(0).getDisplay());
 		for (int i = 1; i < cards.size(); i++) {
-			display += "&f, " + cards.get(i).getDisplay();
+			b.append(Component.text(", ")).append(cards.get(i).getDisplay());
 		}
+		display = b.build();
 	}
 	
 	public NoOpenTrickTask(TheCrewPlayer owner, NoOpenTrickTask src, TheCrewInstance inst) {

@@ -7,8 +7,10 @@ import me.neoblade298.neotabletop.thecrew.TheCrewCard;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
+import net.kyori.adventure.text.Component;
+
 import com.velocitypowered.api.command.CommandSource;
-import net.md_5.bungee.config.Configuration;
+import me.neoblade298.neocore.shared.io.Section;
 
 public class WinCardsFinalTask extends TheCrewTask {
 	protected CardMatcher card;
@@ -18,11 +20,13 @@ public class WinCardsFinalTask extends TheCrewTask {
 		Util.msgRaw(s, "card: " + card);
 	}
 	
-	public WinCardsFinalTask(Configuration cfg) {
+	public WinCardsFinalTask(Section cfg) {
 		super(cfg);
 		card = new CardMatcher(cfg.getString("card"));
-		
-		display = "Win " + card.getDisplay() + " &fon the last trick of the game";
+
+		display = Component.text().content("Win ")
+				.append(card.getDisplay())
+				.append(Component.text(" on the last trick of the game")).build();
 	}
 	
 	public WinCardsFinalTask(TheCrewPlayer owner, WinCardsFinalTask src, TheCrewInstance inst) {

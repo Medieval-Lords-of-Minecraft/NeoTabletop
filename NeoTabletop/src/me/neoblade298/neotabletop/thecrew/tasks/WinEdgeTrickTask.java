@@ -6,8 +6,10 @@ import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
+import net.kyori.adventure.text.Component;
+
 import com.velocitypowered.api.command.CommandSource;
-import net.md_5.bungee.config.Configuration;
+import me.neoblade298.neocore.shared.io.Section;
 
 public class WinEdgeTrickTask extends TheCrewTask {
 	protected boolean first, last, exclusive;
@@ -17,7 +19,7 @@ public class WinEdgeTrickTask extends TheCrewTask {
 		Util.msgRaw(s, "first: " + first + ", last: " + last + ", exclusive: " + exclusive);
 	}
 	
-	public WinEdgeTrickTask(Configuration cfg) {
+	public WinEdgeTrickTask(Section cfg) {
 		super(cfg);
 
 		first = cfg.getBoolean("first");
@@ -35,7 +37,7 @@ public class WinEdgeTrickTask extends TheCrewTask {
 			str = "last";
 		}
 		
-		display = "Win" + (exclusive ? " only" : "") + " the " + str + " trick";
+		display = Component.text("Win" + (exclusive ? " only" : "") + " the " + str + " trick");
 	}
 	
 	public WinEdgeTrickTask(TheCrewPlayer owner, WinEdgeTrickTask src, TheCrewInstance inst) {

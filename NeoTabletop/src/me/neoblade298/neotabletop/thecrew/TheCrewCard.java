@@ -1,17 +1,20 @@
 package me.neoblade298.neotabletop.thecrew;
 
 import me.neoblade298.neotabletop.thecrew.tasks.CardMatcher;
-import net.md_5.bungee.api.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 
 public class TheCrewCard {
 	protected CardType type;
 	protected int value;
-	protected String display;
+	protected Component display;
 	
 	public TheCrewCard(CardType type, int value) {
 		this.type = type;
 		this.value = value;
-		display = type.color + (this.type == CardType.SUB ? "&l&n" : "") + value;
+		display = Component.text(value, type.color);
+		if (this.type == CardType.SUB) display.decorate(TextDecoration.BOLD, TextDecoration.UNDERLINED);
 	}
 	
 	@Override
@@ -31,7 +34,7 @@ public class TheCrewCard {
 		return value;
 	}
 	
-	public String getDisplay() {
+	public Component getDisplay() {
 		return display;
 	}
 	
@@ -40,16 +43,16 @@ public class TheCrewCard {
 	}
 	
 	public enum CardType {
-		RED(1, ChatColor.RED, "Red"),
-		BLUE(2, ChatColor.BLUE, "Blue"),
-		GREEN(3, ChatColor.DARK_GREEN, "Green"),
-		YELLOW(4, ChatColor.YELLOW, "Yellow"),
-		SUB(5, ChatColor.DARK_GRAY, "Sub");
+		RED(1, NamedTextColor.RED, "Red"),
+		BLUE(2, NamedTextColor.BLUE, "Blue"),
+		GREEN(3, NamedTextColor.DARK_GREEN, "Green"),
+		YELLOW(4, NamedTextColor.YELLOW, "Yellow"),
+		SUB(5, NamedTextColor.DARK_GRAY, "Sub");
 		
 		private final int sort;
-		private final ChatColor color;
+		private final NamedTextColor color;
 		private final String display;
-		private CardType(final int sort, final ChatColor color, final String display) {
+		private CardType(final int sort, final NamedTextColor color, final String display) {
 			this.sort = sort;
 			this.color = color;
 			this.display = display;
@@ -57,7 +60,7 @@ public class TheCrewCard {
 		public int getSortPriority() {
 			return sort;
 		}
-		public ChatColor getColor() {
+		public NamedTextColor getColor() {
 			return color;
 		}
 		public String getDisplay() {

@@ -7,9 +7,10 @@ import me.neoblade298.neotabletop.thecrew.TheCrewCard;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
+import net.kyori.adventure.text.Component;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
 import com.velocitypowered.api.command.CommandSource;
-import net.md_5.bungee.config.Configuration;
+import me.neoblade298.neocore.shared.io.Section;
 
 public class WinTrickCompareColorsTask extends TheCrewTask {
 	protected int cardsRemaining, compsRemaining;
@@ -24,7 +25,7 @@ public class WinTrickCompareColorsTask extends TheCrewTask {
 		Util.msgRaw(s, "cardsRemaining: " + cardsRemaining + ", compsRemaining: " + compsRemaining);
 	}
 	
-	public WinTrickCompareColorsTask(Configuration cfg) {
+	public WinTrickCompareColorsTask(Section cfg) {
 		super(cfg);
 		
 		card = new CardMatcher(cfg.getString("card"));
@@ -37,8 +38,11 @@ public class WinTrickCompareColorsTask extends TheCrewTask {
 
 		CardType t = card.getType();
 		CardType tc = comp.getType();
-		display = "Win " + (more ? "more " : "exactly as many ") + t.getDisplay() + " cards&f " + (more ? "than " : "as ") +
-				tc.getDisplay() + " cards &fin one trick";
+		display = Component.text().content("Win " + (more ? "more " : "exactly as many "))
+				.append(Component.text(t.getDisplay() + " cards", t.getColor()))
+				.append(Component.text(more ? "than " : "as "))
+				.append(Component.text(tc.getDisplay() + " cards", tc.getColor()))
+				.append(Component.text(" in one trick")).build();
 		
 	}
 	

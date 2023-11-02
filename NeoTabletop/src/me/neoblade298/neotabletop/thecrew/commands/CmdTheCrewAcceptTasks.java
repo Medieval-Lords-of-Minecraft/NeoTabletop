@@ -9,6 +9,9 @@ import me.neoblade298.neotabletop.GameManager;
 import me.neoblade298.neotabletop.GamePlayer;
 import me.neoblade298.neotabletop.GameSession;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
 
@@ -26,7 +29,7 @@ public class CmdTheCrewAcceptTasks extends Subcommand {
 		UUID uuid = p.getUniqueId();
 		GameSession<? extends GamePlayer> sess = GameManager.getSession(uuid);
 		if (sess == null || !(sess instanceof TheCrewInstance)) {
-			Util.msgRaw(p, "&cYou're not in a game instance of The Crew!");
+			Util.msgRaw(p, Component.text("You're not in a game instance of The Crew!", NamedTextColor.RED));
 			return;
 		}
 

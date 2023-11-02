@@ -3,6 +3,7 @@ package me.neoblade298.neotabletop.commands;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import me.neoblade298.neocore.bungee.BungeeCore;
 import me.neoblade298.neocore.bungee.commands.Subcommand;
 import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neocore.shared.commands.SubcommandRunner;
@@ -11,8 +12,12 @@ import me.neoblade298.neotabletop.GameLobby;
 import me.neoblade298.neotabletop.GameManager;
 import me.neoblade298.neotabletop.GamePlayer;
 import com.velocitypowered.api.command.CommandSource;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.ComponentBuilder;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent.Builder;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import com.velocitypowered.api.proxy.Player;
 
 public class CmdTabletopLobbies extends Subcommand {
@@ -25,35 +30,41 @@ public class CmdTabletopLobbies extends Subcommand {
 	@Override
 	public void run(CommandSource s, String[] args) {
 		if (GameManager.getLobbies().size() == 0) {
-			Util.msg(s, "&cThere are currently no active lobbies!");
+			Util.msg(s, Component.text("There are currently no active lobbies!", NamedTextColor.RED));
 			return;
 		}
-		ComponentBuilder b = SharedUtil.createText("&7List of Lobbies (click to join):", null, null);
+		Builder b = Component.text("List of Lobbies (click to join):", NamedTextColor.GRAY).toBuilder();
 		for (Entry<String, GameLobby<? extends GamePlayer>> ent : GameManager.getLobbies().entrySet()) {
 			GameLobby<? extends GamePlayer> lob = ent.getValue();
-			SharedUtil.appendText(b, "\n&7- &c" + lob.getName() + " &7(&6"
-					+ lob.getGame().getName() + "&7)",
-					createHoverText(lob),
-					"/tt join " + lob.getName());
+			Component c = SharedUtil.color("\n<gray>- <red>" + lob.getName() + " </red>(<gold>" +
+					lob.getGame().getName() + "</gold>)");
+			c = c.hoverEvent(HoverEvent.showText(createHoverText(lob)));
+			c = c.clickEvent(ClickEvent.runCommand("/tt join " + lob.getName()));
+			b.append(c);
 		}
-		s.sendMessage(b.create());
+		s.sendMessage(b.build());
 	}
 
-	private String createHoverText(GameLobby<? extends GamePlayer> lob) {
-		String text = lob.isPublic() ? "&aPublic Lobby" + (lob.isFull() ? ", click to join!" : "") : "&cPrivate Lobby";
-		
-		String col = lob.isFull() ? "&a" : "&c";
-		text += "\n&7Playercount: " + col + lob.getPlayers().size() + " &7/ " + lob.getGame().getMaxPlayers();
-		
-		Player host = ProxyServer.getInstance().getPlayer(lob.getHost());
-		text += "\n&7- &c" + host.getName() + " &7(&6Host&7)";
+	private Component createHoverText(GameLobby<? extends GamePlayer> lob) {
+		Player host = BungeeCore.proxy().getPlayer(lob.getHost()).get();
+		Builder b = Component.text().content(lob.isPublic() ? "Public Lobby" : "Private Lobby")
+				.color(lob.isPublic() ? NamedTextColor.GREEN : NamedTextColor.RED)
+				.append(Component.text("\nPlayercount: ", NamedTextColor.GRAY))
+				.append(Component.text(lob.getPlayers().size(), lob.isFull() ? NamedTextColor.GREEN : NamedTextColor.RED))
+				.append(Component.text(" / " + lob.getGame().getMaxPlayers()))
+				.append(Component.text("\n- "))
+				.append(Component.text(host.getUsername(), NamedTextColor.RED))
+				.append(Component.text(" ("))
+				.append(Component.text("Host", NamedTextColor.GOLD))
+				.append(Component.text(")"));
 		
 		for (UUID uuid : lob.getPlayers()) {
 			if (uuid.equals(lob.getHost())) continue;
 			
-			Player p = ProxyServer.getInstance().getPlayer(uuid);
-			text += "\n&7- &c" + p.getUsername();
+			Player p = BungeeCore.proxy().getPlayer(uuid).get();
+			b.append(Component.text("\n- "))
+				.append(Component.text(p.getUsername(), NamedTextColor.RED));
 		}
-		return text;
+		return b.build();
 	}
 }

@@ -7,15 +7,17 @@ import me.neoblade298.neotabletop.thecrew.TheCrewCard;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
+import net.kyori.adventure.text.Component;
+
 import com.velocitypowered.api.command.CommandSource;
-import net.md_5.bungee.config.Configuration;
+import me.neoblade298.neocore.shared.io.Section;
 
 public class WinTrickUsingTask extends TheCrewTask {
 	protected int winRemaining, usingRemaining;
 	
 	protected CardMatcher win, using;
 	
-	public WinTrickUsingTask(Configuration cfg) {
+	public WinTrickUsingTask(Section cfg) {
 		super(cfg);
 		if (cfg.contains("win")) {
 			win = new CardMatcher(cfg.getString("win"));
@@ -23,10 +25,13 @@ public class WinTrickUsingTask extends TheCrewTask {
 		using = new CardMatcher(cfg.getString("using"));
 		
 		if (win == null) {
-			display = "Win a trick using " + using.getDisplay();
+			display = Component.text("Win a trick using ").append(using.getDisplay());
 		}
 		else {
-			display = "Win " + win.getDisplay() + "&f using " + using.getDisplay();
+			display = Component.text().content("Win ")
+					.append(win.getDisplay())
+					.append(Component.text(" using "))
+					.append(using.getDisplay()).build();
 		}
 	}
 	

@@ -1,13 +1,15 @@
 package me.neoblade298.neotabletop.thecrew.tasks;
 
-import me.neoblade298.neocore.shared.util.SharedUtil;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 public class CardMatcher {
 	private int value;
 	private CardType type;
-	private String display, base;
+	private String base;
+	private Component display;
 	private int totalCardsMatching;
 	
 	public CardMatcher(TheCrewCard card) {
@@ -48,27 +50,25 @@ public class CardMatcher {
 			}
 		}
 		
-		// Calculate total cards matching
-		
+		Component start = Component.text("[", NamedTextColor.DARK_GRAY);
+		Component end = Component.text("]");
 		// Calculate display
 		if (value == -1 && type == null) {
-			display = "&8[&7Any Card&8]";
+			display = start.append(Component.text("Any Card", NamedTextColor.GRAY)).append(end);
 			totalCardsMatching = 40;
 		}
 		else if (value == -1) {
-			display = "&8[" + type.getColor() + "Any " + type.getDisplay() + " Card&8]";
+			display = start.append(Component.text("Any " + type.getDisplay() + " Card", type.getColor())).append(end);
 			totalCardsMatching = (type == CardType.SUB ? 4 : 9);
 		}
 		else if (type == null) {
-			display = "&8[&7Any " + value + " Card&8]";
+			display = start.append(Component.text("Any " + value + " Card", NamedTextColor.GRAY)).append(end);
 			totalCardsMatching = 4;
 		}
 		else {
-			display = "&8[" + type.getColor() + type.getDisplay() + " " + value + "&8]";
+			display = start.append(Component.text(type.getDisplay() + " " + value, type.getColor())).append(end);
 			totalCardsMatching = 1;
 		}
-		
-		display = SharedUtil.translateColors(display);
 	}
 	
 	public boolean match(TheCrewCard card) {
@@ -85,7 +85,7 @@ public class CardMatcher {
 		return type;
 	}
 	
-	public String getDisplay() {
+	public Component getDisplay() {
 		return display;
 	}
 	

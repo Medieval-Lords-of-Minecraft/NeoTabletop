@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import me.neoblade298.neocore.bungee.util.Util;
+import me.neoblade298.neocore.shared.util.SharedUtil;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
 import com.velocitypowered.api.command.CommandSource;
-import net.md_5.bungee.config.Configuration;
+import me.neoblade298.neocore.shared.io.Section;
 
 public class WinCardsCompareMultipleTask extends TheCrewTask {
 	private HashMap<CardType, Integer> numWon = new HashMap<CardType, Integer>(), numRemaining = new HashMap<CardType, Integer>();
@@ -28,14 +29,15 @@ public class WinCardsCompareMultipleTask extends TheCrewTask {
 		Util.msgRaw(s, "numRemaining: " + numRemaining);
 	}
 	
-	public WinCardsCompareMultipleTask(Configuration cfg) {
+	public WinCardsCompareMultipleTask(Section cfg) {
 		super(cfg);
 		amount = cfg.getInt("amount");
 		for (String str : cfg.getStringList("cards")) {
 			cards.add(new CardMatcher(str));
 		}
 		
-		display = "Win exactly &e1 &f" + cards.get(0).getDisplay() + " &fand exactly &e1 &f" + cards.get(1).getDisplay();
+		display = SharedUtil.color("Win exactly <yellow>1 </yellow>" + cards.get(0).getDisplay() + " <white>and exactly <yellow>1 </yellow>"
+				+ cards.get(1).getDisplay());
 	}
 	
 	public WinCardsCompareMultipleTask(TheCrewPlayer owner, WinCardsCompareMultipleTask src, TheCrewInstance inst) {

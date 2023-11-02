@@ -9,7 +9,8 @@ import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
 import com.velocitypowered.api.command.CommandSource;
-import net.md_5.bungee.config.Configuration;
+import me.neoblade298.neocore.shared.io.Section;
+import me.neoblade298.neocore.shared.util.SharedUtil;
 
 public class WinTrickTotalEqualTask extends TheCrewTask {
 	protected ArrayList<Integer> totals = new ArrayList<Integer>();
@@ -19,14 +20,15 @@ public class WinTrickTotalEqualTask extends TheCrewTask {
 		Util.msgRaw(s, "totals: " + totals);
 	}
 	
-	public WinTrickTotalEqualTask(Configuration cfg) {
+	public WinTrickTotalEqualTask(Section cfg) {
 		super(cfg);
 		
 		for (int i : cfg.getIntList("totals")) {
 			totals.add(i);
 		}
 
-		display = "Win a trick with a total value equal to &e" + totals.get(0) + " &for &e" + totals.get(1) + "&f. *No subs";;
+		display = SharedUtil.color("Win a trick with a total value equal to <yellow>" + totals.get(0) + " </yellow>or <yellow>"
+				+ totals.get(1) + "</yellow>. *No subs");
 	}
 	
 	public WinTrickTotalEqualTask(TheCrewPlayer owner, WinTrickTotalEqualTask src, TheCrewInstance inst) {

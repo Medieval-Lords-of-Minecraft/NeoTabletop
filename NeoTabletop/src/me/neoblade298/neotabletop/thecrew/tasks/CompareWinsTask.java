@@ -3,11 +3,13 @@ package me.neoblade298.neotabletop.thecrew.tasks;
 import java.util.ArrayList;
 
 import me.neoblade298.neocore.bungee.util.Util;
+import me.neoblade298.neocore.shared.io.Section;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
 import com.velocitypowered.api.command.CommandSource;
-import net.md_5.bungee.config.Configuration;
+
+import net.kyori.adventure.text.Component;
 
 public class CompareWinsTask extends TheCrewTask {
 	protected Comparator comp;
@@ -18,13 +20,13 @@ public class CompareWinsTask extends TheCrewTask {
 		Util.msgRaw(s, "with: " + with + ", comp: " + comp);
 	}
 	
-	public CompareWinsTask(Configuration cfg) {
+	public CompareWinsTask(Section cfg) {
 		super(cfg);
 
 		comp = Comparator.valueOf(cfg.getString("comparator").toUpperCase());
 		with = CompareTo.valueOf(cfg.getString("with").toUpperCase());
 		
-		display = "Win " + comp.getDisplay() + " " + with.getDisplay();
+		display = Component.text("Win " + comp.getDisplay() + " " + with.getDisplay());
 	}
 	
 	public boolean comparesCaptain() {

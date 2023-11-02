@@ -6,8 +6,10 @@ import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
+import net.kyori.adventure.text.Component;
+
 import com.velocitypowered.api.command.CommandSource;
-import net.md_5.bungee.config.Configuration;
+import me.neoblade298.neocore.shared.io.Section;
 
 public class WinTricksTask extends TheCrewTask {
 	protected int amount;
@@ -17,12 +19,12 @@ public class WinTricksTask extends TheCrewTask {
 		Util.msgRaw(s, "amount: " + amount);
 	}
 	
-	public WinTricksTask(Configuration cfg) {
+	public WinTricksTask(Section cfg) {
 		super(cfg);
 
 		amount = cfg.getInt("amount");
 		
-		display = "Win exactly " + amount + " tricks";
+		display = Component.text("Win exactly " + amount + " tricks");
 	}
 	
 	public WinTricksTask(TheCrewPlayer owner, WinTricksTask src, TheCrewInstance inst) {

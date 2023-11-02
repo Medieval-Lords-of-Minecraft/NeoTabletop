@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import me.neoblade298.neocore.bungee.util.Util;
+import me.neoblade298.neocore.shared.io.Section;
+import me.neoblade298.neocore.shared.util.SharedUtil;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewInstance;
 import me.neoblade298.neotabletop.thecrew.TheCrewPlayer;
+import net.kyori.adventure.text.Component;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard.CardType;
 import com.velocitypowered.api.command.CommandSource;
-import net.md_5.bungee.config.Configuration;
 
 public class WinTrickTotalCompareTask extends TheCrewTask {
 	protected HashMap<Integer, Integer> totals = new HashMap<Integer, Integer>();
@@ -22,18 +24,19 @@ public class WinTrickTotalCompareTask extends TheCrewTask {
 		Util.msgRaw(s, "more: " + more + ", total: " + total);
 	}
 	
-	public WinTrickTotalCompareTask(Configuration cfg) {
+	public WinTrickTotalCompareTask(Section cfg) {
 		super(cfg);
 		
-		Configuration totalSec = cfg.getSection("total");
+		Section totalSec = cfg.getSection("total");
 		for (String key : totalSec.getKeys()) {
 			int ikey = Integer.parseInt(key);
 			totals.put(ikey, totalSec.getInt(key));
 		}
 
-		display = "Win a trick with a total value " + (more ? "greater" : "less") + " than " + totals.get(3) +
-				" (3-player), " + totals.get(4) + " (4-player), " + totals.get(5) + " (5-player). *No subs";
 		more = cfg.getString("comparator").equals(">");
+		String s = "Win a trick with a total value " + (more ? "greater" : "less") + " than " + totals.get(3) +
+				" (3-player), " + totals.get(4) + " (4-player), " + totals.get(5) + " (5-player). *No subs";
+		display = Component.text(s);
 		
 	}
 	
@@ -41,7 +44,7 @@ public class WinTrickTotalCompareTask extends TheCrewTask {
 		super(owner, src, inst);
 
 		this.total = inst.getPlayers().size();
-		display = "Win a trick with a total value " + (more ? "greater" : "less") + " than &e" + total + "&f. *No subs";
+		display = SharedUtil.color("Win a trick with a total value " + (more ? "greater" : "less") + " than &e" + total + "&f. *No subs");
 		this.total = src.total;
 		this.more = src.more;
 	}
