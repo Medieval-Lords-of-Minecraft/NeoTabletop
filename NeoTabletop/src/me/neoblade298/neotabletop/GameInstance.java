@@ -29,7 +29,7 @@ public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> 
 		Player p = BungeeCore.proxy().getPlayer(name).get();
 		GamePlayer gp = players.remove(name.toLowerCase());
 		GameManager.removeFromSession(gp.getUniqueId());
-		broadcast("&e" + p.getUsername() + " &7was kicked from the game by an admin!");
+		broadcast("<yellow>" + p.getUsername() + " <gray>was kicked from the game by an admin!");
 		handleLeave(gp);
 	}
 	
@@ -47,7 +47,7 @@ public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> 
 		
 		GamePlayer gp = players.remove(name.toLowerCase());
 		GameManager.removeFromSession(gp.getUniqueId());
-		broadcast("&e" + p.getUsername() + " &7was kicked from the game!");
+		broadcast("<yellow>" + p.getUsername() + " <gray>was kicked from the game!");
 		handleLeave(gp);
 	}
 
@@ -75,13 +75,13 @@ public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> 
 		if (players.containsKey(p.getUsername().toLowerCase())) {
 			GamePlayer gp = players.remove(p.getUsername().toLowerCase());
 			GameManager.removeFromSession(p.getUniqueId());
-			broadcast("&e" + p.getUsername() + " &7left the lobby!");
+			broadcast("<yellow>" + p.getUsername() + " <gray>left the lobby!");
 			
 			if (p.getUniqueId().equals(host)) {
 				if (players.size() != 0) {
 					GamePlayer next = players.values().iterator().next();
 					host = next.getUniqueId();
-					broadcast("&7Because the host left, the new host is now &e" + next.getName() + "&7!");
+					broadcast("Because the host left, the new host is now <yellow>" + next.getName() + "</yellow>!");
 				}
 				else {
 					
@@ -92,10 +92,10 @@ public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> 
 		else if (spectators.contains(p)) {
 			spectators.remove(p);
 			GameManager.removeFromSession(p.getUniqueId());
-			broadcast("&e" + p.getUsername() + " &7stopped spectating!");
+			broadcast("<yellow>" + p.getUsername() + " <gray>stopped spectating!");
 		}
 		else {
-			Util.displayError(p, "Something went wrong! You were unable to leave game &e" + name + "&c.");
+			Util.displayError(p, "Something went wrong! You were unable to leave game " + name + ".");
 			return;
 		}
 	}
@@ -106,7 +106,7 @@ public abstract class GameInstance<T extends GamePlayer> extends GameSession<T> 
 	
 	public void addSpectator(Player p) {
 		spectators.add(p);
-		broadcast("&e" + p.getUsername() + " &7began spectating!");
+		broadcast("<yellow>" + p.getUsername() + " <gray>began spectating!");
 		onSpectate(p);
 	}
 	

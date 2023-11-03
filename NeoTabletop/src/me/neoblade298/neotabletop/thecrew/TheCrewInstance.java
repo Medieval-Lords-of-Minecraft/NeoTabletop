@@ -108,7 +108,9 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 			else {
 				Util.msgRaw(viewer, Component.text("Captain is deciding whether to reroll the following tasks:", NamedTextColor.GRAY));
 				for (TheCrewTask task : tasks) {
-					Util.msgRaw(viewer, "&7- &f" + task.getDisplay() + " &7(Difficulty: &e" + task.getDifficulty(players.size()) + "&7)");
+					Component c = Component.text("- ", NamedTextColor.GRAY).append(task.getDisplay())
+							.append(SharedUtil.color(" (Difficulty: <yellow>" + task.getDifficulty(players.size()) + "</yellow>)"));
+					Util.msgRaw(viewer, c);
 				}
 			}
 			break;
@@ -122,24 +124,26 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 						.hoverEvent(HoverEvent.showText(createTaskHover()))
 						.clickEvent(ClickEvent.runCommand("/thecrew viewtasks"));
 				viewer.sendMessage(c);
-				Util.msgRaw(viewer, "&e" + tcp.getName() + "&7's turn to select a task:");
+				Util.msgRaw(viewer, "<yellow>" + tcp.getName() + "<gray>'s turn to select a task:");
 				for (TheCrewTask task : tasks) {
-					Util.msgRaw(viewer, "&7- &f" + task.getDisplay() + " &7(Difficulty: &e" + task.getDifficulty(players.size()) + "&7)");
+					Component ct = Component.text("- ", NamedTextColor.GRAY).append(task.getDisplay())
+							.append(SharedUtil.color(" (Difficulty: <yellow>" + task.getDifficulty(players.size()) + "</yellow>)"));
+					Util.msgRaw(viewer, ct);
 				}
 			}
 			break;
 		case PLAY:
-			Util.msgRaw(viewer, "&7Rounds remaining: &e" + (totalRounds - round));
-			Util.msgRaw(viewer, "&7Turn Order:");
+			Util.msgRaw(viewer, "<gray>Rounds remaining: <yellow>" + (totalRounds - round));
+			Util.msgRaw(viewer, "<gray>Turn Order:");
 			int num = 0;
 			for (TheCrewPlayer tcp : turnOrder) {
-				String text = "&7- &c" + tcp.getName() + " &6" + tcp.getWins() + "W&7";
+				String text = "<gray>- <red>" + tcp.getName() + " </red><gold>" + tcp.getWins() + "W</gold>";
 				if (tcp.getUniqueId().equals(captain.getUniqueId())) {
-					text += " (&4Captain&7)";
+					text += " (<dark_red>Captain</dark_red>)";
 				}
 				text += ": ";
 				text += pile.size() > num ? pile.get(num).getDisplay() : "???";
-				Util.msgRaw(viewer, text);
+				Util.msgRaw(viewer, SharedUtil.color(text));
 				num++;
 			}
 			Component c = SharedUtil.color("<dark_gray>[<gray>Click or hover to view accepted tasks</gray>]")
@@ -150,8 +154,9 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 			break;
 		case LOSE:
 			if (viewer.getUniqueId().equals(host)) {
-				Util.msgRaw(viewer, "&cYou lost!");
-				Util.msgRaw(viewer, "&c" + lossReason.getOwner().getName() + " failed to perform task: &f" + lossReason.getDisplay());
+				Util.msgRaw(viewer, "<red>You lost!");
+				Util.msgRaw(viewer, SharedUtil.color("<red>" + lossReason.getOwner().getName() + " failed to perform task: ")
+						.append(lossReason.getDisplay()));
 				p.displayHand(viewer);
 				Component accepted = SharedUtil.createText("<dark_gray>[<gray>Click or hover to view accepted tasks</gray>]",
 						createTaskHover(), ClickEvent.runCommand("/thecrew viewtasks"));
@@ -166,8 +171,9 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 				viewer.sendMessage(redo.append(restart).append(lobby));
 			}
 			else {
-				Util.msgRaw(viewer, "&cYou lost! Waiting for host to decide what to do next...");
-				Util.msgRaw(viewer, "&c" + lossReason.getOwner().getName() + " failed to perform task: &f" + lossReason.getDisplay());
+				Util.msgRaw(viewer, "<red>You lost! Waiting for host to decide what to do next...");
+				Util.msgRaw(viewer, SharedUtil.color("<red>" + lossReason.getOwner().getName() + " failed to perform task: ")
+						.append(lossReason.getDisplay()));
 				p.displayHand(viewer);
 				viewer.sendMessage(SharedUtil.createText("<dark_gray>[<gray>Click or hover to view accepted tasks</gray>]",
 						createTaskHover(), ClickEvent.runCommand("/thecrew viewtasks")));
@@ -192,8 +198,9 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 					createTaskHover(), ClickEvent.runCommand("/thecrew viewtasks")));
 		}
 		else if (phase == GamePhase.LOSE) {
-			Util.msgRaw(viewer, "&cYou lost! Waiting for host to decide what to do next...");
-			Util.msgRaw(viewer, "&c" + lossReason.getOwner().getName() + " failed to perform task: &f" + lossReason.getDisplay());
+			Util.msgRaw(viewer, "<red>You lost! Waiting for host to decide what to do next...");
+			Util.msgRaw(viewer, SharedUtil.color("<red>" + lossReason.getOwner().getName() + " failed to perform task: ")
+					.append(lossReason.getDisplay()));
 			showAllHands(viewer);
 			viewer.sendMessage(SharedUtil.createText("<dark_gray>[<gray>Click or hover to view accepted tasks</gray>]",
 					createTaskHover(), ClickEvent.runCommand("/thecrew viewtasks")));
@@ -258,7 +265,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 			}
 		});
 		setFirst(captain.getUniqueId());
-		broadcast("The captain is &e" + captain.getName() + "&7!");
+		broadcast("The captain is <yellow>" + captain.getName() + "</yellow>!");
 
 		// Sort and display hands
 		for (TheCrewPlayer p : turnOrder) {
@@ -275,12 +282,12 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 	
 	public void restartRound(Player p) {
 		if (phase != GamePhase.LOSE && phase != GamePhase.PLAY) {
-			Util.msgRaw(p, "&cYou can't do that right now!");
+			Util.displayError(p, "You can't do that right now!");
 			return;
 		}
 		
 		if (!p.getUniqueId().equals(host)) {
-			Util.msgRaw(p, "&cOnly the host may restart rounds!");
+			Util.displayError(p, "Only the host may restart rounds!");
 			return;
 		}
 		
@@ -298,12 +305,12 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 	
 	public void restartGame(Player p) {
 		if (phase != GamePhase.LOSE && phase != GamePhase.PLAY) {
-			Util.msgRaw(p, "&cYou can't do that right now!");
+			Util.displayError(p, "You can't do that right now!");
 			return;
 		}
 		
 		if (!p.getUniqueId().equals(host)) {
-			Util.msgRaw(p, "&cOnly the host may restart games!");
+			Util.displayError(p, "Only the host may restart games!");
 			return;
 		}
 		
@@ -340,7 +347,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 	public void displayHand(String viewed, Player viewer) {
 		TheCrewPlayer p = players.get(viewed.toLowerCase());
 		if (p == null) {
-			Util.msgRaw(viewer, "&cThat player isn't in this game!");
+			Util.displayError(viewer, "That player isn't in this game!");
 			return;
 		}
 	}
@@ -348,7 +355,9 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 	public void promptPlayer() {
 		if (phase == GamePhase.ROLL_TASKS) {
 			for (TheCrewTask task : tasks) {
-				Util.msgRaw(captain.getPlayer(), "&7- &f" + task.getDisplay() + " &7(Difficulty: &e" + task.getDifficulty(players.size()) + "&7)");
+				Component ct = Component.text("- ", NamedTextColor.GRAY).append(task.getDisplay())
+						.append(SharedUtil.color(" (Difficulty: <yellow>" + task.getDifficulty(players.size()) + "</yellow>)"));
+				Util.msgRaw(captain.getPlayer(), ct);
 			}
 			Component c = SharedUtil.createText("<dark_gray>[<green>Accept Tasks</green>] ",
 					"Click to accept!", ClickEvent.runCommand("/thecrew accepttasks"));
@@ -361,7 +370,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 			p.sendMessage(SharedUtil.createText("<dark_gray>[<gray>Click or hover to view accepted tasks</gray]",
 					createTaskHover(), ClickEvent.runCommand("/thecrew viewtasks")));
 			players.get(p.getUsername().toLowerCase()).displayHand(p);
-			Util.msgRaw(p, "&7Choose a task:");
+			Util.msgRaw(p, "<gray>Choose a task:");
 			int num = 0;
 			for (TheCrewTask task : tasks) {
 				Builder b = Component.text().content("- ").color(NamedTextColor.GRAY);
@@ -395,12 +404,12 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 	
 	public void play(Player p, int num) {
 		if (phase != GamePhase.PLAY) {
-			Util.msgRaw(p, "&cYou can't do that during this phase!");
+			Util.displayError(p, "You can't do that during this phase!");
 			return;
 		}
 		
 		if (!turnOrder.get(turn).getPlayer().getUniqueId().equals(p.getUniqueId())) {
-			Util.msgRaw(p, "&cIt's not your turn right now!");
+			Util.displayError(p, "It's not your turn right now!");
 			return;
 		}
 		
@@ -409,13 +418,14 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		if (!pile.isEmpty()) { // First card can choose any card without restriction
 			TheCrewCard topCard = pile.get(0);
 			if (!toPlay.isSimilar(topCard) && tcp.hasSimilarCard(pile.get(0))) {
-				Util.msgRaw(p, "&cYou must play a card that's the same type as the top card!");
+				Util.displayError(p, "You must play a card that's the same type as the top card!");
 				return;
 			}
 		}
 		
 		pile.add(pile.size(), tcp.playCard(num));
-		broadcast("&e" + p.getUsername() + " &7plays " + toPlay.getDisplay());
+		Component c = SharedUtil.color("<yellow>" + p.getUsername() + " <gray>plays ");
+		broadcast(c.append(toPlay.getDisplay()));
 
 		int time = 1;
 		if (pile.size() == players.size()) {
@@ -467,7 +477,8 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 				if (task.isComplete()) continue; // Skip completed tasks
 				if (task.update(this, tcp, pile)) {
 					task.setComplete(true);
-					broadcast("&e" + p.getName() + " &7completed task: &f" + task.getDisplay());
+					Component c = SharedUtil.color("<yellow>" + p.getName() + " <gray>completed task: ");
+					broadcast(c.append(task.getDisplay()));
 				}
 				else {
 					win = false;
@@ -476,7 +487,8 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		}
 		
 		tcp.winTrick(pile);
-		broadcast("&e" + tcp.getName() + " &7won the round with " + winningCard.getDisplay() + "&7!");
+		Component cmp = SharedUtil.color("<yellow>" + tcp.getName() + " <gray>won the round with ");
+		broadcast(cmp.append(winningCard.getDisplay()).append(Component.text("!")));
 		setFirst(tcp.getUniqueId());
 		
 		// Remove revealed cards if they were played (after it's not possible to lose)
@@ -496,7 +508,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		if (win) {
 			phase = GamePhase.WIN;
 			sch.buildTask(NeoTabletop.inst(), () -> {
-				broadcast("&aYou won! Sending you back to lobby in 3 seconds...");
+				broadcast("<green>You won! Sending you back to lobby in 3 seconds...");
 			}).delay(1, TimeUnit.SECONDS);
 			
 			sch.buildTask(NeoTabletop.inst(), () -> {
@@ -507,12 +519,12 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 	
 	public void acceptTask(Player p, int num) {
 		if (phase != GamePhase.SELECT_TASKS) {
-			Util.msgRaw(p, "&cYou can't do that during this phase!");
+			Util.displayError(p, "You can't do that during this phase!");
 			return;
 		}
 		
 		if (!turnOrder.get(turn).getPlayer().getUniqueId().equals(p.getUniqueId())) {
-			Util.msgRaw(p, "&cIt's not your turn right now!");
+			Util.displayError(p, "It's not your turn right now!");
 			return;
 		}
 		TheCrewPlayer tcp = players.get(p.getUsername().toLowerCase());
@@ -520,7 +532,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		// Special case for not allowing captain to choose captain comparison tasks
 		if (tasks.get(num) instanceof CompareWinsTask) {
 			if (((CompareWinsTask) tasks.get(num)).comparesCaptain() && captain.equals(tcp)) {
-				Util.msgRaw(p, "&cThe captain can't choose this task!");
+				Util.displayError(p, "The captain can't choose this task!");
 				return;
 			}
 		}
@@ -534,13 +546,13 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 				if (SharedUtil.isNumeric(resp)) {
 					int amount = Integer.parseInt(resp);
 					if (amount < 0 || amount > totalRounds) {
-						Util.msg(tcp.getPlayer(), "&cYour prediction must be a number between 0 and " + totalRounds + "!");
+						Util.displayError(tcp.getPlayer(), "Your prediction must be a number between 0 and " + totalRounds + "!");
 						return false;
 					}
 					completeAcceptTask(task, tcp);
 					return true;
 				}
-				Util.msg(tcp.getPlayer(), "&cYour prediction must be a number between 0 and " + totalRounds + "!");
+				Util.displayError(tcp.getPlayer(), "Your prediction must be a number between 0 and " + totalRounds + "!");
 				return false;
 			});
 			((WinTricksPredictTask) task).clone(tcp, this, 1);
@@ -552,7 +564,7 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 	}
 	
 	private void completeAcceptTask(TheCrewTask task, TheCrewPlayer tcp) {
-		broadcast("&e" + tcp.getName() + " &7has accepted task: &f" + task.getDisplay());
+		broadcast(SharedUtil.color("<yellow>" + tcp.getName() + " <gray>has accepted task: ").append(task.getDisplay()));
 		
 		if (tasks.isEmpty()) {
 			broadcast("Task assignment completed! Starting game...");
@@ -566,37 +578,37 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 	
 	public void passTask(Player p) {
 		if (phase != GamePhase.SELECT_TASKS) {
-			Util.msgRaw(p, "&cYou can't do that during this phase!");
+			Util.msgRaw(p, "<red>You can't do that during this phase!");
 			return;
 		}
 		
 		if (!turnOrder.get(turn).getPlayer().getUniqueId().equals(p.getUniqueId())) {
-			Util.msgRaw(p, "&cIt's not your turn right now!");
+			Util.msgRaw(p, "<red>It's not your turn right now!");
 			return;
 		}
 		
 		int remainingPlayers = players.size() - turn;
 		if (tasks.size() == remainingPlayers) {
-			Util.msgRaw(p, "&cAll remaining tasks must be accepted this round!");
+			Util.msgRaw(p, "<red>All remaining tasks must be accepted this round!");
 			return;
 		}
 		
-		broadcast("&e" + p.getUsername() + " &7has chosen not to accept a task.");
+		broadcast("<yellow>" + p.getUsername() + " <gray>has chosen not to accept a task.");
 		advanceTurn();
 	}
 	
 	public void acceptTasks(Player p) {
 		if (phase != GamePhase.ROLL_TASKS) {
-			Util.msgRaw(p, "&cYou can't do that during this phase!");
+			Util.displayError(p, "You can't do that during this phase!");
 			return;
 		}
 		
 		if (!captain.getPlayer().getUniqueId().equals(p.getUniqueId())) {
-			Util.msgRaw(p, "&cOnly the captain may reroll tasks!");
+			Util.displayError(p, "Only the captain may reroll tasks!");
 			return;
 		}
 		
-		broadcast("The captain chose to &aaccept &7the tasks!");
+		broadcast("The captain chose to <green>accept </green>the tasks!");
 		phase = GamePhase.SELECT_TASKS;
 		startRound(1);
 	}
@@ -630,22 +642,22 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		sch.buildTask(NeoTabletop.inst(), () -> {
 			phase = temp;
 			promptPlayer();
-			broadcast("&e" + turnOrder.get(turn).getName() + "&7's turn");
+			broadcast("<yellow>" + turnOrder.get(turn).getName() + "<gray>'s turn");
 		}).delay(time, TimeUnit.SECONDS);
 	}
 	
 	public void rerollTasks(Player p) {
 		if (phase != GamePhase.ROLL_TASKS) {
-			Util.msgRaw(p, "&cYou can't do that during this phase!");
+			Util.msgRaw(p, "<red>You can't do that during this phase!");
 			return;
 		}
 		
 		if (!captain.getPlayer().getUniqueId().equals(p.getUniqueId())) {
-			Util.msgRaw(p, "&cOnly the captain may reroll tasks!");
+			Util.msgRaw(p, "<red>Only the captain may reroll tasks!");
 			return;
 		}
 		
-		broadcast("The captain chose to &creroll &7the tasks!");
+		broadcast("The captain chose to <red>reroll </red>the tasks!");
 		phase = GamePhase.WAITING;
 		rollTasks(1);
 	}
@@ -660,7 +672,9 @@ public class TheCrewInstance extends GameInstance<TheCrewPlayer> {
 		tasks = getTasks();
 		for (TheCrewTask task : tasks) {
 			sch.buildTask(NeoTabletop.inst(), () -> {
-				broadcast("&7- &f" + task.getDisplay() + " &7(Difficulty: &e" + task.getDifficulty(players.size()) + "&7)");
+				Component ct = Component.text("- ", NamedTextColor.GRAY).append(task.getDisplay())
+						.append(SharedUtil.color(" (Difficulty: <yellow>" + task.getDifficulty(players.size()) + "</yellow>)"));
+				broadcast(ct);
 			}).delay(time++, TimeUnit.SECONDS);
 		}
 

@@ -52,7 +52,7 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 		}
 
 		invited.add(recipient.get().getUniqueId());
-		broadcast("&e" + recipient.get().getUsername() + " &7was invited to the lobby!");
+		broadcast("<yellow>" + recipient.get().getUsername() + " <gray>was invited to the lobby!");
 
 		Util.msg(recipient.get(), NeoCore.miniMessage()
 				.deserialize("<gray>You've been invited to lobby <yellow>" + name + " </yellow>for <yellow>" + game.getName() + "</yellow>!"));
@@ -83,7 +83,7 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 		GameManager.addToLobby(p, this);
 		players.add(p.getUniqueId());
 		displayInfo(p, p);
-		broadcast("&e" + p.getUsername() + " &7joined the lobby!");
+		broadcast("<yellow>" + p.getUsername() + " <gray>joined the lobby!");
 	}
 	
 	public void addPlayerForce(Player p) {
@@ -96,7 +96,7 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 		Player p = BungeeCore.proxy().getPlayer(name).get();
 		players.remove(p.getUniqueId());
 		GameManager.removeFromSession(p.getUniqueId());
-		broadcast("&e" + p.getUsername() + " &7was kicked from the lobby by an admin!");
+		broadcast("<yellow>" + p.getUsername() + " <gray>was kicked from the lobby by an admin!");
 	}
 
 	@Override
@@ -110,7 +110,7 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 		Optional<Player> opt = BungeeCore.proxy().getPlayer(name);
 
 		if (opt.isEmpty() || !players.contains(opt.get().getUniqueId())) {
-			Util.displayError(s, "&cThat player isn't in your lobby!");
+			Util.displayError(s, "That player isn't in your lobby!");
 			return;
 		}
 		Player p = opt.get();
@@ -228,14 +228,14 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 	
 	public void setParameter(Player p, String param, String str) {
 		if (!params.containsKey(param)) {
-			Util.displayError(p, "&cThat parameter doesn't exist!");
+			Util.displayError(p, "That parameter doesn't exist!");
 			return;
 		}
 		
 		boolean success = params.get(param).set(str);
 		if (success) {
 			Util.msg(p, SharedUtil.color("<gray>Successfully set parameter <yellow>" + param + " </yellow>to <yellow>" + str));
-			broadcast("&4[&c&lMLMC&4] &7The host has set parameter &e" + param + " &7to &e" + str);
+			broadcast("The host has set parameter <yellow>" + param + " </yellow>to <yellow>" + str);
 		}
 		else {
 			Util.displayError(p, "Failed to set parameter. Invalid value for parameter.");

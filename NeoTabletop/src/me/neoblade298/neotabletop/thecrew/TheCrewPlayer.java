@@ -192,13 +192,13 @@ public class TheCrewPlayer extends GamePlayer {
 	
 	public boolean useSonarToken(CardMatcher cm, SonarType stype) {
 		if (sonarTokens == 0) {
-			Util.msg(p, "&cYou don't have any sonar tokens!");
+			Util.displayError(p, "You don't have any sonar tokens!");
 			return false;
 		}
 		
 		for (TheCrewCardInstance card : revealedCards) {
 			if (cm.match(card)) {
-				Util.msg(p, "&cYou've already revealed this card!");
+				Util.displayError(p, "You've already revealed this card!");
 				return false;
 			}
 		}
@@ -211,13 +211,18 @@ public class TheCrewPlayer extends GamePlayer {
 		}
 		
 		if (card == null) {
-			Util.msg(p, "&cYou don't have this card!");
+			Util.displayError(p, "You don't have this card!");
 			return false;
 		}
 		
 		CardType type = card.getType();
-		inst.broadcast("&e" + getName() + "&f reveals that " + card.getDisplay() + " &fis their &e" +
-				stype.getDisplay() + type.getColor() + " " + type.getDisplay() + " &fcard.");
+		Component c = Component.text()
+				.append(SharedUtil.color("<yellow>" + getName() + "</yellow> reveals that "))
+				.append(card.getDisplay())
+				.append(SharedUtil.color(" is their <yellow>" + stype.getDisplay() + " "))
+				.append(Component.text(type.getDisplay(), type.getColor()))
+				.append(Component.text(" card.")).build();
+		inst.broadcast(c);
 		sonarTokens--;
 		revealedCards.add(card);
 		return true;

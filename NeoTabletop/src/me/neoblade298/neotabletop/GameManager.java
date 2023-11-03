@@ -82,7 +82,7 @@ public class GameManager {
 		for (UUID uuid : lob.getPlayers()) {
 			inSession.remove(uuid);
 		}
-		lob.broadcast("&4[&4&lMLMC&c] &7Due to the host leaving, lobby &e" + lob.getName() + " &7was disbanded.");
+		lob.broadcast("Due to the host leaving, lobby <yellow>" + lob.getName() + " </yellow>was disbanded.");
 		lobbies.remove(lob.getName().toLowerCase());
 	}
 	
@@ -90,7 +90,7 @@ public class GameManager {
 		for (GamePlayer gp : inst.getPlayers().values()) {
 			inSession.remove(gp.getUniqueId());
 		}
-		inst.broadcast("Due to " + reason + ", instance &e" + inst.getName() + " &7was disbanded.");
+		inst.broadcast("Due to " + reason + ", instance <yellow>" + inst.getName() + " </yellow>was disbanded.");
 		instances.remove(inst.getName().toLowerCase());
 	}
 	

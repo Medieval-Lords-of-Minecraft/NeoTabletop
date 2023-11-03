@@ -44,7 +44,7 @@ public class WinTrickTotalCompareTask extends TheCrewTask {
 		super(owner, src, inst);
 
 		this.total = inst.getPlayers().size();
-		display = SharedUtil.color("Win a trick with a total value " + (more ? "greater" : "less") + " than &e" + total + "&f. *No subs");
+		display = SharedUtil.color("Win a trick with a total value " + (more ? "greater" : "less") + " than <yellow>" + total + "</yellow>. *No subs");
 		this.total = src.total;
 		this.more = src.more;
 	}

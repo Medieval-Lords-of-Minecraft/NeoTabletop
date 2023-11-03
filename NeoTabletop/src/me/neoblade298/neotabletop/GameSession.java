@@ -53,7 +53,7 @@ public abstract class GameSession<T extends GamePlayer> {
 		}
 		
 		host = p.get().getUniqueId();
-		broadcast("&e" + cmdr.getUsername() + " &7set the game's host to &e" + p.get().getUsername());
+		broadcast("<yellow>" + cmdr.getUsername() + " <gray>set the game's host to </gray>" + p.get().getUsername());
 	}
 	public HashMap<String, GameParameter> getParameters() {
 		return params;
