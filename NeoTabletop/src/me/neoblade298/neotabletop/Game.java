@@ -39,14 +39,14 @@ public abstract class Game {
 		});
 		
 		GameManager.registerGame(this);
-		BungeeCore.logger().log(Level.INFO, "[NeoTabletop] Registering " + key + "...");
+		NeoTabletop.logger().log(Level.INFO, "Registering " + key + "...");
 		
 		header = Component.text("<< ", NamedTextColor.GRAY)
 				.append(Component.text(name, NamedTextColor.GOLD))
 				.append(Component.text(" >>", NamedTextColor.GRAY));
 		
 		String manualStr = "<dark_gray>[<gray><click:run_command:'/tt manual " +
-				name +"'><hover:show_text:'Click here to read the manual!'>Click to read the manual for the game!</hover></click></gray>]";
+				key +"'><hover:show_text:'Click here to read the manual!'>Click to read the manual for the game!</hover></click></gray>]";
 		manualButton = BungeeCore.miniMessage().deserialize(manualStr);
 	}
 	

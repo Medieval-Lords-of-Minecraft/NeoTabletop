@@ -34,6 +34,7 @@ public class CmdTabletopGames extends Subcommand {
 			c = c.hoverEvent(HoverEvent.showText(hover));
 			
 			c = c.clickEvent(ClickEvent.runCommand("/tt viewgame " + ent.getValue().getKey()));
+			b.append(c);
 		}
 		s.sendMessage(b.build());
 	}
