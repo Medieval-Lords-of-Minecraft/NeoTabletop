@@ -7,7 +7,6 @@ import java.util.logging.Level;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
 
-import me.neoblade298.neocore.bukkit.NeoCore;
 import me.neoblade298.neocore.bungee.BungeeCore;
 import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neocore.shared.chat.MiniMessageManager;
@@ -48,8 +47,9 @@ public abstract class Game {
 		
 		String manualStr = "<dark_gray>[<gray><click:run_command:'/tt manual " +
 				name +"'><hover:show_text:'Click here to read the manual!'>Click to read the manual for the game!</hover></click></gray>]";
-		manualButton = NeoCore.miniMessage().deserialize(manualStr);
+		manualButton = BungeeCore.miniMessage().deserialize(manualStr);
 	}
+	
 	public String getKey() {
 		return key;
 	}

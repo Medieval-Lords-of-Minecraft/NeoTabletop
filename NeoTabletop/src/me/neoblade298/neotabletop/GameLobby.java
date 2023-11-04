@@ -7,7 +7,6 @@ import java.util.UUID;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
 
-import me.neoblade298.neocore.bukkit.NeoCore;
 import me.neoblade298.neocore.bungee.BungeeCore;
 import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neocore.shared.util.SharedUtil;
@@ -31,7 +30,7 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 
 	public void startGame(Player s) {
 		if (game.getMinPlayers() > players.size()) {
-			Util.msgRaw(s, NeoCore.miniMessage().deserialize("<red>You need at least <yellow>" + game.getMinPlayers() + "</yellow> players to start!"));
+			Util.msgRaw(s, BungeeCore.miniMessage().deserialize("<red>You need at least <yellow>" + game.getMinPlayers() + "</yellow> players to start!"));
 			return;
 		}
 		GameManager.startGame(this, onStart());
@@ -54,7 +53,7 @@ public abstract class GameLobby<T extends GamePlayer> extends GameSession<T> {
 		invited.add(recipient.get().getUniqueId());
 		broadcast("<yellow>" + recipient.get().getUsername() + " <gray>was invited to the lobby!");
 
-		Util.msg(recipient.get(), NeoCore.miniMessage()
+		Util.msg(recipient.get(), BungeeCore.miniMessage()
 				.deserialize("<gray>You've been invited to lobby <yellow>" + name + " </yellow>for <yellow>" + game.getName() + "</yellow>!"));
 		
 		

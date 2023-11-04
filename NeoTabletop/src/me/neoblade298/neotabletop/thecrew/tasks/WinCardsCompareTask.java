@@ -2,7 +2,7 @@ package me.neoblade298.neotabletop.thecrew.tasks;
 
 import java.util.ArrayList;
 
-import me.neoblade298.neocore.bukkit.NeoCore;
+import me.neoblade298.neocore.bungee.BungeeCore;
 import me.neoblade298.neocore.bungee.util.Util;
 import me.neoblade298.neotabletop.thecrew.TheCrewCard;
 import me.neoblade298.neotabletop.thecrew.TheCrewCardInstance;
@@ -29,7 +29,7 @@ public class WinCardsCompareTask extends TheCrewTask {
 		amount = cfg.getInt("amount");
 		atLeast = cfg.getString("comparator").equals(">=");
 		String str = "Win " + (atLeast ? "at least " : "exactly ") + "<yellow>" + amount + " </yellow>";
-		display = NeoCore.miniMessage().deserialize(str).append(card.getDisplay());
+		display = BungeeCore.miniMessage().deserialize(str).append(card.getDisplay());
 	}
 	
 	public WinCardsCompareTask(TheCrewPlayer owner, WinCardsCompareTask src, TheCrewInstance inst) {
